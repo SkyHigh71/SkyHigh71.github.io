@@ -1,0 +1,234 @@
+the first post of mine
+======================
+
+A short memo to describe procedure how to host blog on github.
+
+github configuration
+--------------------
+
+Let's create public key and private key.
+
+.. code-block:: bash
+
+    ~$ ssh-keygen 
+    Generating public/private rsa key pair.
+    ...
+
+They are yielded under ~/.ssh directory or under current working directory in case that you do not specify its path.
+
+.. code-block:: bash
+
+    ~/.ssh$ file *
+    id_rsa.github:     PEM RSA private key
+    id_rsa.github.pub: OpenSSH RSA public key
+
+Configure ssh so that newly created private key will be applied for access against github.
+
+.. code-block:: bash
+
+    ~/.ssh$ more config 
+    Host github.com
+        HostName      github.com
+        IdentityFile  ~/.ssh/id_rsa.github
+        User          git
+
+Deploy public key on github.
+
+.. code-block:: bash
+
+    $ xclip -sel clip < ~/.ssh/id_rsa.github.pub
+
+Now let's make a test connection to github.
+
+.. code-block:: bash
+
+    $ ssh -v -T git@github.com
+
+Let's install git command.
+
+.. code-block:: bash
+
+    $ sudo apt-get install git
+
+Configure user name and e-mail address for github, 
+
+.. code-block:: bash
+
+    $ git config --global user.name SkyHigh71
+    $ git config --global user.email <your_email_address>
+
+which will be reflected into .gitconfig file under home directory.
+
+.. code-block:: ini
+
+    [user]
+	    name = SkyHigh71
+	    email = <your_email_address>
+
+Enable password cache so as to avoid repetition of password input.
+
+.. code-block:: bash
+
+    $ git config --global credential.helper cache
+    $ git config --global credential.helper 'cache --timeout=3600'
+
+These configurations will be reflected int .gitconfig file as well.
+Or you can write it by hand. (maybe)
+
+.. code-block:: ini
+
+    [credential]
+	    helper = cache --timeout=3600
+
+tinkerer configuration
+----------------------
+
+You can install tinkerer with pip command.
+
+.. code-block:: bash
+
+    $ sudo pip install tinkerer
+
+This command execution will install dependent modules like sphinx if not there.
+The installed version (on ubuntu 13.04) is as follows:
+
+.. code-block:: bash
+
+    $ tinker -v
+    Tinkerer version 1.2.1
+
+Create local directory to host blog.
+
+.. code-block:: bash
+
+    $ mkdir publicBlog
+
+Execute tinker command (not tinkerer) with setup option.
+
+.. code-block:: bash
+
+    $ tinker --setup
+    Your new blog is almost ready!
+    You just need to edit a couple of lines in conf.py
+    $ tree .
+        .
+        ├── _static
+        ├── _templates
+        │   ├── page.rst
+        │   └── post.rst
+        ├── conf.py
+        ├── drafts
+        ├── index.html
+        └── master.rst
+
+Configure configuration file, conf.py (same as sphinx's one) according to your appetite.
+
+.. code-block:: bash
+
+    $ diff conf.py.org conf.py
+    11c11
+    < project = 'My blog'
+    ---
+    > project = "SkyHigh71's blog"
+    14c14
+    < tagline = 'Add intelligent tagline here'
+    ---
+    > tagline = ''
+    17c17
+    < description = 'This is an awesome blog'
+    ---
+    > description = ''
+    20c20
+    < author = 'Winston Smith'
+    ---
+    > author = 'SkyHigh71'
+    23c23
+    < copyright = '1984, ' + author
+    ---
+    > copyright = '2013-, ' + author
+    26c26
+    < website = 'http://127.0.0.1/blog/html/'
+    ---
+    > website = 'http://skyhigh71.github.com'
+
+That's all you have to configure upon initial configuration on local side.
+And you can modify parameter(s) later on.
+
+Create a new repository named <account.github.io>, e.g.) SkyHigh71.github.io on github.
+
+On the other hand, create local directory to host HTML files for publication.
+
+.. code-block:: bash
+
+    $ mkdir publish
+    $ cd publish
+    $ git init
+    $ git remote add origin https://github.com/SkyHigh71/SkyHigh71.github.io.git
+
+github URL will be reflected in config file under .git directory.
+
+.. code-block:: ini
+
+    [remote "origin"]
+	    url = https://github.com/SkyHigh71/SkyHigh71.github.io.git
+
+Disable jekyll.
+
+.. code-block:: bash
+
+    $ touch .nojekyll
+
+write up a post and publish it
+------------------------------
+
+tinker command will create a RST file under YYYY/MM/DD directory:
+
+Start preparation for post frst as draft.
+This will create rst file under draft directory.
+
+.. code-block:: bash
+
+    $ tinker -d "the First Post of mine"
+    $ ls drafts
+    the_first_post_of_mine.rst
+
+After having finished editing your post and you are ready to post it, then it's time to post.
+Following command will move RST file from draft directory to YYYY/MM/DD directory and be reflected in master.rst file.
+
+.. code-block:: bash
+
+    $ tinker -p drafts/the_first_post_of_mine.rst
+
+And build it to yield html file. Or you can revert back to draft if you find something needs to be modified.
+
+.. code-block:: bash
+
+    $ LANG=C tinker -b
+
+This will create HTML files under blog/html directory.
+
+Copy files to publish directory and commit it.
+
+.. code-block:: bash
+
+    $ cd publish
+    $ rsync -av ../blog/html/ .
+
+    $ git add .
+    $ git commit -m "first post"
+
+Finally publish post to github.
+By the way, please be noted that you need to select not gh-pages branch but master branch for user's blog.
+(It seems that there is a confusion about which branch to choose)
+
+.. code-block:: bash
+
+    $ git push -u origin master
+
+Please be patient, as it takes several minutes until posted page will come up.
+After a while, you can access your blog with URL of http://<account>.github.io/.
+
+.. author:: default
+.. categories:: tinkerer sphinx github
+.. tags:: none
+.. comments:: 

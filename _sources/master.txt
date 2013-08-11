@@ -4,5 +4,6 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/08/11/the_first_post_of_mine
    2013/08/11/hello_world
 
