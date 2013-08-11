@@ -1,0 +1,1 @@
+Search.setIndex({envversion:42,terms:{how:0,you:0},objtypes:{},objnames:{},filenames:["2013/08/11/hello_world","master"],titles:["Hello World","Sitemap"],objects:{},titleterms:{world:0,hello:0,sitemap:1}})
