@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <title>Hello World &mdash; SkyHigh71&#39;s blog</title>
+        <title>swap Caps Lock key with Ctrl key &mdash; SkyHigh71&#39;s blog</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="prev" title="the first post of mine" href="the_first_post_of_mine.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="the first post of mine" href="../11/the_first_post_of_mine.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -62,30 +62,57 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
-            <span>August 11, 2013</span>
+            <span>August 21, 2013</span>
         </div>
-    <div class="section" id="hello-world">
-<h1>Hello World</h1>
-<p>How are you doing?</p>
+    <div class="section" id="swap-caps-lock-key-with-ctrl-key">
+<h1>swap Caps Lock key with Ctrl key</h1>
+<p>I have been using Happy Hacking Keyboard (HHK) for about decade.
+It&#8217;s really nice one, but it becomes lame at last and key touch is quite noisy.
+So I bought a cheap English layout keyboard at amazon. (good-by HHK)</p>
+<p>The problem here is that &#8220;caps lock&#8221; resides in the left-middle. <strong>This is quite inconvenient.</strong>
+So I replaced &#8220;caps lock&#8221; key with &#8220;control&#8221; by configuring keyboard mapping.</p>
+<p>Here is its procedure on ubuntu 13.04 (LXDE) to do so.</p>
+<p>Edit keyboard file and applying argument &#8220;ctrl:swapcaps&#8221; for XKBOPTIONS option.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /etc/default
+<span class="nv">$ </span>diff keyboard keyboard.org
+11,12c11
+&lt; <span class="c">#XKBOPTIONS=&quot;&quot;</span>
+&lt; <span class="nv">XKBOPTIONS</span><span class="o">=</span><span class="s2">&quot;ctrl:swapcaps&quot;</span>
+---
+&gt; <span class="nv">XKBOPTIONS</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Or you can specify &#8220;ctrl:nocaps&#8221; in case that you assign control key for both.</p>
+<p>Then execute dpkg-reconfigure command so that above change will take effect.
+Please be noted that rebooting system has no effect for this keyboard configuration change and it remains as they were.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo dpkg-reconfigure keyboard-configuration
+</pre></div>
+</div>
+<p>Answer to questions given by command and at last stage you will be prompted if you save above configuration change.</p>
+<p>Following <a class="reference external" href="http://www.emacswiki.org/emacs/MovingTheCtrlKey">emacs page</a> has quite comprehensive explanation for this sake, which helps must help you.</p>
 </div>
 
     <div class="postmeta">
         <div class="author">
             <span>Posted by SkyHigh71</span>
         </div>
-        
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="../../../categories/ubuntu.html">ubuntu</a></span>
+        </div>
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="the_first_post_of_mine.html">the first post of mine</a></li>
-            <li class="right"></li>
+            <li class="left"></li>
+            <li class="right"><a href="../11/the_first_post_of_mine.html">the first post of mine</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../21/swap_caps_lock_with_ctrl_rst.html">swap Caps Lock key with Ctrl key</a>
+            <a href="#">swap Caps Lock key with Ctrl key</a>
         </li><li>
-            <a href="the_first_post_of_mine.html">the first post of mine</a>
+            <a href="../11/the_first_post_of_mine.html">the first post of mine</a>
         </li><li>
-            <a href="#">Hello World</a>
+            <a href="../11/hello_world.html">Hello World</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">

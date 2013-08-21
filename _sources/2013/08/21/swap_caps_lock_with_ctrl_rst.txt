@@ -1,0 +1,43 @@
+swap Caps Lock key with Ctrl key
+================================
+
+I have been using Happy Hacking Keyboard (HHK) for about decade.
+It's really nice one, but it becomes lame at last and key touch is quite noisy.
+So I bought a cheap English layout keyboard at amazon. (good-by HHK) 
+
+The problem here is that "caps lock" resides in the left-middle. **This is quite inconvenient.**
+So I replaced "caps lock" key with "control" by configuring keyboard mapping.
+
+Here is its procedure on ubuntu 13.04 (LXDE) to do so.
+
+Edit keyboard file and applying argument "ctrl:swapcaps" for XKBOPTIONS option.
+
+.. code-block:: bash
+
+    $ cd /etc/default
+    $ diff keyboard keyboard.org 
+    11,12c11
+    < #XKBOPTIONS=""
+    < XKBOPTIONS="ctrl:swapcaps"
+    ---
+    > XKBOPTIONS=""
+
+Or you can specify "ctrl:nocaps" in case that you assign control key for both.
+
+Then execute dpkg-reconfigure command so that above change will take effect.
+Please be noted that rebooting system has no effect for this keyboard configuration change and it remains as they were.
+
+.. code-block:: bash
+
+    $ sudo dpkg-reconfigure keyboard-configuration
+
+Answer to questions given by command and at last stage you will be prompted if you save above configuration change.
+
+Following `emacs page`_ has quite comprehensive explanation for this sake, which helps must help you.
+
+.. _emacs page: http://www.emacswiki.org/emacs/MovingTheCtrlKey
+
+.. author:: default
+.. categories:: ubuntu
+.. tags:: none
+.. comments::
