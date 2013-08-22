@@ -223,12 +223,12 @@ By the way, please be noted that you need to select not gh-pages branch but mast
 
 .. code-block:: bash
 
-    $ git push -u origin master
+    $ git push origin master
 
 Please be patient, as it takes several minutes until posted page will come up.
 After a while, you can access your blog with URL of http://<account>.github.io/.
 
 .. author:: default
-.. categories:: tinkerer sphinx github
-.. tags:: none
+.. categories:: none
+.. tags:: tinkerer, github
 .. comments:: 

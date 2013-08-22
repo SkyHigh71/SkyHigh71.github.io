@@ -1,0 +1,42 @@
+enable sshd
+===========
+
+By default, sshd is disabled on ubuntu desktop. 
+Therefore you need to install & enable sshd if you would like to access host remotely via ssh.
+
+Here is short memo for this sake.
+
+First, search for sshd package via apt-cache command.
+
+.. code-block:: bash
+
+    $ sudo apt-cache search sshd
+    ...
+    openssh-server - secure shell (SSH) server, for secure access from remote machines
+    ...
+
+OK, openssh-server may be our target.
+
+.. code-block:: bash
+
+    $ sudo apt-get install openssh-server
+
+Installation will automatically start sshd daemon.
+
+.. code-block:: bash
+
+    $ sudo lsof -nPi:22
+    COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+    sshd    3557    root    3u  IPv4  35564      0t0  TCP *:22 (LISTEN)
+    sshd    3557    root    4u  IPv6  35566      0t0  TCP *:22 (LISTEN)
+
+    $ sudo service ssh status
+    ssh start/running, process 3557
+
+Please be noted, sshd daemon is registered not as sshd but as ssh.
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu
+.. comments::
+

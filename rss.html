@@ -5,11 +5,46 @@
         <link>http://skyhigh71.github.com/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Wed, 21 Aug 2013 00:00:00 +0900</pubDate>
+        <pubDate>Thu, 22 Aug 2013 00:00:00 +0900</pubDate>
         
         <item>
-            <link>http://skyhigh71.github.com/2013/08/21/swap_caps_lock_with_ctrl_rst.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/21/swap_caps_lock_with_ctrl_rst.html</guid>
+            <link>http://skyhigh71.github.com/2013/08/22/enable_sshd.html</link>
+            <guid>http://skyhigh71.github.com/2013/08/22/enable_sshd.html</guid>
+            <title><![CDATA[enable sshd]]></title>
+            <description><![CDATA[<div class="section" id="enable-sshd">
+<h1>enable sshd</h1>
+<p>By default, sshd is disabled on ubuntu desktop.
+Therefore you need to install &amp; enable sshd if you would like to access host remotely via ssh.</p>
+<p>Here is short memo for this sake.</p>
+<p>First, search for sshd package via apt-cache command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-cache search sshd
+...
+openssh-server - secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
+...
+</pre></div>
+</div>
+<p>OK, openssh-server may be our target.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install openssh-server
+</pre></div>
+</div>
+<p>Installation will automatically start sshd daemon.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lsof -nPi:22
+COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+sshd    3557    root    3u  IPv4  35564      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
+sshd    3557    root    4u  IPv6  35566      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
+
+<span class="nv">$ </span>sudo service ssh status
+ssh start/running, process 3557
+</pre></div>
+</div>
+<p>Please be noted, sshd daemon is registered not as sshd but as ssh.</p>
+</div>]]></description>
+             <pubDate>Thu, 22 Aug 2013 00:00:00 +0900</pubDate>
+        </item>
+    
+        <item>
+            <link>http://skyhigh71.github.com/2013/08/21/swap_caps_lock_with_ctrl.html</link>
+            <guid>http://skyhigh71.github.com/2013/08/21/swap_caps_lock_with_ctrl.html</guid>
             <title><![CDATA[swap Caps Lock key with Ctrl key]]></title>
             <description><![CDATA[<div class="section" id="swap-caps-lock-key-with-ctrl-key">
 <h1>swap Caps Lock key with Ctrl key</h1>
@@ -37,8 +72,8 @@ Please be noted that rebooting system has no effect for this keyboard configurat
 </div>
 <p>Answer to questions given by command and at last stage you will be prompted if you save above configuration change.</p>
 <p>Following <a class="reference external" href="http://www.emacswiki.org/emacs/MovingTheCtrlKey">emacs page</a> has quite comprehensive explanation for this sake, which helps must help you.</p>
+<p>Please be noted, above dpkg-reconfigure command updates initrd.img-<a href="#id1"><span class="problematic" id="id2">*</span></a>-generic file under /boot directory. Therefore in case that OS updates image file, then you have to re-execute dpkg-reconfigure command to reflect change onto image file.</p>
 </div>]]></description>
-            <category><![CDATA[ ubuntu ]]></category>
              <pubDate>Wed, 21 Aug 2013 00:00:00 +0900</pubDate>
         </item>
     
@@ -217,14 +252,13 @@ Following command will move RST file from draft directory to YYYY/MM/DD director
 <p>Finally publish post to github.
 By the way, please be noted that you need to select not gh-pages branch but master branch for user’s blog.
 (It seems that there is a confusion about which branch to choose)</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git push -u origin master
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git push origin master
 </pre></div>
 </div>
 <p>Please be patient, as it takes several minutes until posted page will come up.
 After a while, you can access your blog with URL of <a class="reference external" href="http:">http:/</a>/&lt;account&gt;.github.io/.</p>
 </div>
 </div>]]></description>
-            <category><![CDATA[ tinkerer sphinx github ]]></category>
              <pubDate>Sun, 11 Aug 2013 00:00:00 +0900</pubDate>
         </item>
     

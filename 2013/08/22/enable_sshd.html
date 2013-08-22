@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <title>Hello World &mdash; SkyHigh71&#39;s blog</title>
+        <title>enable sshd &mdash; SkyHigh71&#39;s blog</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="prev" title="the first post of mine" href="the_first_post_of_mine.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="swap Caps Lock key with Ctrl key" href="../21/swap_caps_lock_with_ctrl.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>August 11, 2013</span>
+            <span>August 22, 2013</span>
         </div>
     </div>
     
@@ -77,9 +77,33 @@
     
     </div>
     
-    <div class="section" id="hello-world">
-<h1>Hello World</h1>
-<p>How are you doing?</p>
+    <div class="section" id="enable-sshd">
+<h1>enable sshd</h1>
+<p>By default, sshd is disabled on ubuntu desktop.
+Therefore you need to install &amp; enable sshd if you would like to access host remotely via ssh.</p>
+<p>Here is short memo for this sake.</p>
+<p>First, search for sshd package via apt-cache command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-cache search sshd
+...
+openssh-server - secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
+...
+</pre></div>
+</div>
+<p>OK, openssh-server may be our target.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install openssh-server
+</pre></div>
+</div>
+<p>Installation will automatically start sshd daemon.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lsof -nPi:22
+COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+sshd    3557    root    3u  IPv4  35564      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
+sshd    3557    root    4u  IPv6  35566      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
+
+<span class="nv">$ </span>sudo service ssh status
+ssh start/running, process 3557
+</pre></div>
+</div>
+<p>Please be noted, sshd daemon is registered not as sshd but as ssh.</p>
 </div>
 
     <div class="postmeta">
@@ -87,22 +111,26 @@
             <span>Posted by SkyHigh71</span>
         </div>
         
-        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+        </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="the_first_post_of_mine.html">the first post of mine</a></li>
-            <li class="right"></li>
+            <li class="left"></li>
+            <li class="right"><a href="../21/swap_caps_lock_with_ctrl.html">swap Caps Lock key with Ctrl key</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../22/enable_sshd.html">enable sshd</a>
+            <a href="#">enable sshd</a>
         </li><li>
             <a href="../21/swap_caps_lock_with_ctrl.html">swap Caps Lock key with Ctrl key</a>
         </li><li>
-            <a href="the_first_post_of_mine.html">the first post of mine</a>
+            <a href="../11/the_first_post_of_mine.html">the first post of mine</a>
         </li><li>
-            <a href="#">Hello World</a>
+            <a href="../11/hello_world.html">Hello World</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
