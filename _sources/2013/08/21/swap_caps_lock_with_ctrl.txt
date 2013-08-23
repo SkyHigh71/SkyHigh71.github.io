@@ -37,7 +37,11 @@ Following `emacs page`_ has quite comprehensive explanation for this sake, which
 
 .. _emacs page: http://www.emacswiki.org/emacs/MovingTheCtrlKey
 
-Please be noted, above dpkg-reconfigure command updates initrd.img-*-generic file under /boot directory. Therefore in case that OS updates image file, then you have to re-execute dpkg-reconfigure command to reflect change onto image file.
+And following `debian page`_ has explanation as to keyboard configuration.
+
+.. _debian page: https://wiki.debian.org/Keyboard
+
+Please be noted, above dpkg-reconfigure command updates initrd.img-X.X.X-XX-generic file under /boot directory. Therefore in case that OS updates image file, then you have to re-execute dpkg-reconfigure command to reflect change onto image file.
 
 .. author:: default
 .. categories:: none

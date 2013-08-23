@@ -5,8 +5,94 @@
         <link>http://skyhigh71.github.com/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Thu, 22 Aug 2013 00:00:00 +0900</pubDate>
+        <pubDate>Fri, 23 Aug 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.com/2013/08/23/customize_tinker_page.html</link>
+            <guid>http://skyhigh71.github.com/2013/08/23/customize_tinker_page.html</guid>
+            <title><![CDATA[customize tinkerer page]]></title>
+            <description><![CDATA[<div class="section" id="customize-tinkerer-page">
+<h1>customize tinkerer page</h1>
+<div class="section" id="sidebar-items">
+<h2>sidebar items</h2>
+<p>You can customize items in sidebar (right side of this page) by modifying values in dictionary, html_sidebars.</p>
+<p>For example, if you would like to show tags, then add “tags.html” as follows.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Add templates to be rendered in sidebar here</span>
+<span class="n">html_sidebars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&quot;**&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;recent.html&quot;</span><span class="p">,</span> <span class="s">&quot;searchbox.html&quot;</span><span class="p">,</span> <span class="s">&quot;tags.html&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://tinkerer.me/doc/more_tinkering.html">tinkerer documentation</a> will help you configure customization.</p>
+</div>
+<div class="section" id="tweet-button">
+<h2>tweet button</h2>
+<p>You can add tweet button on each post.
+Here is sample code needed to be added in page.html file under _templates directory.</p>
+<div class="highlight-html"><div class="highlight"><pre><span class="c">&lt;!-- Twitter button --&gt;</span>
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;https://twitter.com/share&quot;</span> <span class="na">class=</span><span class="s">&quot;twitter-share-button&quot;</span><span class="nt">&gt;</span>Tweet<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;script&gt;</span><span class="o">!</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">id</span><span class="p">){</span><span class="kd">var</span> <span class="nx">js</span><span class="p">,</span><span class="nx">fjs</span><span class="o">=</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="nx">p</span><span class="o">=</span><span class="sr">/^http:/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">location</span><span class="p">)</span><span class="o">?</span><span class="s1">'http'</span><span class="o">:</span><span class="s1">'https'</span><span class="p">;</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">)){</span><span class="nx">js</span><span class="o">=</span><span class="nx">d</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span><span class="nx">js</span><span class="p">.</span><span class="nx">id</span><span class="o">=</span><span class="nx">id</span><span class="p">;</span><span class="nx">js</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">p</span><span class="o">+</span><span class="s1">'://platform.twitter.com/widgets.js'</span><span class="p">;</span><span class="nx">fjs</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">js</span><span class="p">,</span><span class="nx">fjs</span><span class="p">);}}(</span><span class="nb">document</span><span class="p">,</span> <span class="s1">'script'</span><span class="p">,</span> <span class="s1">'twitter-wjs'</span><span class="p">);</span><span class="nt">&lt;/script&gt;</span>
+</pre></div>
+</div>
+<p>This code can be created mannualy by referencing <a class="reference external" href="https://twitter.com/about/resources/buttons">twitter site</a>.</p>
+</div>
+<div class="section" id="google-analytics">
+<h2>google analytics</h2>
+<p>You can take statistics of your blog by google analytics.
+oN google analytics site create Tracking ID for your blog site, which yields javascript like this.</p>
+<p>Please be noted that <strong>you have to exclude &lt;script&gt; tags</strong>.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">o</span><span class="p">,</span><span class="nx">g</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">){</span>
+    <span class="nx">i</span><span class="p">[</span><span class="s1">'GoogleAnalyticsObject'</span><span class="p">]</span><span class="o">=</span><span class="nx">r</span><span class="p">;</span>
+    <span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">||</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="p">(</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">||</span><span class="p">[]).</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
+    <span class="p">},</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+    <span class="nx">a</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">o</span><span class="p">),</span><span class="nx">m</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="nx">a</span><span class="p">.</span><span class="nx">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+    <span class="nx">a</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">g</span><span class="p">;</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
+<span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
+
+<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-43440530-1'</span><span class="p">,</span> <span class="s1">'skyhigh71.github.io'</span><span class="p">);</span>
+<span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Save this code as google_analytics.js under _static directory.</p>
+<p>And add following lines into page.html so as to incorporate this javascript.</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span><span class="o">%</span> <span class="kr">extends</span> <span class="s2">&quot;!page.html&quot;</span> <span class="o">%</span><span class="p">}</span>
+
+<span class="p">{</span><span class="o">%</span> <span class="nx">set</span> <span class="nx">script_files</span> <span class="o">=</span> <span class="nx">script_files</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;_static/google_analytics.js&quot;</span><span class="p">]</span> <span class="o">%</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>With above configurations applied, you will see page.html as follows.</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;!page.html&quot; %}
+
+{% set script_files = script_files + [&quot;_static/google_analytics.js&quot;] %}
+
+{%- block body %}
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;section_head&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;timestamp_layout&quot;</span><span class="nt">&gt;</span>
+      {{ timestamp(metadata.formatted_date) }}
+    <span class="nt">&lt;/div&gt;</span>
+    {% block buttons %}
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>
+      <span class="c">&lt;!-- Twitter button --&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;https://twitter.com/share&quot;</span> <span class="na">class=</span><span class="s">&quot;twitter-share-button&quot;</span><span class="nt">&gt;</span>Tweet<span class="nt">&lt;/a&gt;</span>
+      <span class="nt">&lt;script&gt;</span><span class="o">!</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">id</span><span class="p">){</span><span class="kd">var</span> <span class="nx">js</span><span class="p">,</span><span class="nx">fjs</span><span class="o">=</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="nx">p</span><span class="o">=</span><span class="sr">/^http:/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">location</span><span class="p">)</span><span class="o">?</span><span class="s1">'http'</span><span class="o">:</span><span class="s1">'https'</span><span class="p">;</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">)){</span><span class="nx">js</span><span class="o">=</span><span class="nx">d</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span><span class="nx">js</span><span class="p">.</span><span class="nx">id</span><span class="o">=</span><span class="nx">id</span><span class="p">;</span><span class="nx">js</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">p</span><span class="o">+</span><span class="s1">'://platform.twitter.com/widgets.js'</span><span class="p">;</span><span class="nx">fjs</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">js</span><span class="p">,</span><span class="nx">fjs</span><span class="p">);}}(</span><span class="nb">document</span><span class="p">,</span> <span class="s1">'script'</span><span class="p">,</span> <span class="s1">'twitter-wjs'</span><span class="p">);</span><span class="nt">&lt;/script&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    {% endblock %}
+    <span class="nt">&lt;/div&gt;</span>
+    {{ link }}
+    {{ body }}
+    {{ post_meta(metadata) }}
+    {{ comments }}
+{% endblock %}
+</pre></div>
+</div>
+</div>
+</div>]]></description>
+             <pubDate>Fri, 23 Aug 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.com/2013/08/22/enable_sshd.html</link>
             <guid>http://skyhigh71.github.com/2013/08/22/enable_sshd.html</guid>
@@ -82,7 +168,8 @@ Please be noted that rebooting system has no effect for this keyboard configurat
 </div>
 <p>Answer to questions given by command and at last stage you will be prompted if you save above configuration change.</p>
 <p>Following <a class="reference external" href="http://www.emacswiki.org/emacs/MovingTheCtrlKey">emacs page</a> has quite comprehensive explanation for this sake, which helps must help you.</p>
-<p>Please be noted, above dpkg-reconfigure command updates initrd.img-<a href="#id1"><span class="problematic" id="id2">*</span></a>-generic file under /boot directory. Therefore in case that OS updates image file, then you have to re-execute dpkg-reconfigure command to reflect change onto image file.</p>
+<p>And following <a class="reference external" href="https://wiki.debian.org/Keyboard">debian page</a> has explanation as to keyboard configuration.</p>
+<p>Please be noted, above dpkg-reconfigure command updates initrd.img-X.X.X-XX-generic file under /boot directory. Therefore in case that OS updates image file, then you have to re-execute dpkg-reconfigure command to reflect change onto image file.</p>
 </div>]]></description>
              <pubDate>Wed, 21 Aug 2013 00:00:00 +0900</pubDate>
         </item>
