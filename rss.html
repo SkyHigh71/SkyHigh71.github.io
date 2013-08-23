@@ -18,12 +18,17 @@ Therefore you need to install &amp; enable sshd if you would like to access host
 <p>Here is short memo for this sake.</p>
 <p>First, search for sshd package via apt-cache command.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-cache search sshd
-...
 openssh-server - secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
+
+<span class="nv">$ </span>sudo apt-cache show openssh-server
+Package: openssh-server
 ...
+Description-en: secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
+...
+This package provides the sshd server.
 </pre></div>
 </div>
-<p>OK, openssh-server may be our target.</p>
+<p>OK, openssh-server seems to be what we are looking for.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install openssh-server
 </pre></div>
 </div>
@@ -38,6 +43,11 @@ ssh start/running, process 3557
 </pre></div>
 </div>
 <p>Please be noted, sshd daemon is registered not as sshd but as ssh.</p>
+<p>sshd configuration can be set in /etc/ssh/sshd_config.
+In case that you would like to disable remote root access, then change parameter PermitRootLogin value from yes to no.</p>
+<div class="highlight-bash"><div class="highlight"><pre>PermitRootLogin no
+</pre></div>
+</div>
 </div>]]></description>
              <pubDate>Thu, 22 Aug 2013 00:00:00 +0900</pubDate>
         </item>

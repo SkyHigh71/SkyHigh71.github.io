@@ -11,11 +11,16 @@ First, search for sshd package via apt-cache command.
 .. code-block:: bash
 
     $ sudo apt-cache search sshd
-    ...
     openssh-server - secure shell (SSH) server, for secure access from remote machines
+    
+    $ sudo apt-cache show openssh-server
+    Package: openssh-server
     ...
+    Description-en: secure shell (SSH) server, for secure access from remote machines
+    ...
+    This package provides the sshd server.
 
-OK, openssh-server may be our target.
+OK, openssh-server seems to be what we are looking for.
 
 .. code-block:: bash
 
@@ -34,6 +39,13 @@ Installation will automatically start sshd daemon.
     ssh start/running, process 3557
 
 Please be noted, sshd daemon is registered not as sshd but as ssh.
+
+sshd configuration can be set in /etc/ssh/sshd_config. 
+In case that you would like to disable remote root access, then change parameter PermitRootLogin value from yes to no.
+
+.. code-block:: bash
+
+    PermitRootLogin no
 
 .. author:: default
 .. categories:: none
