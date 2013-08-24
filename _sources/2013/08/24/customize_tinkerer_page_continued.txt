@@ -1,0 +1,65 @@
+customize tinkerer page continued
+=================================
+
+language
+--------
+
+LANG environment variable of my shell is configured to ja_JP.UTF-8.
+
+.. code-block:: bash
+
+    $ echo $LANG
+    ja_JP.UTF-8
+
+Therefore I first thought that I have to set LANG=C upon building html so as to obtain English output.
+
+.. code-block:: bash
+
+    $ LANG=C tinker -b
+
+But it's confirmed that language parameter in conf.py is valid for "en" as well.
+
+.. code-block:: python
+
+    language = "en"
+
+And if you would like to configure, say, German as default language of your blog, then configure it as "de".
+
+.. code-block:: python
+
+    language = "de"
+
+But localization is not perfect, for example, date seems to be yielded based upon LANG.
+So you would better to set LANG upon building html.
+
+.. code-block:: bash
+
+    $ LANG=de_DE.utf8 tinker -b
+
+theme
+-----
+
+You can select theme among following options and set theme in theme in conf.py.
+
+- flat (default)
+- modern5
+- minimal5
+- responsive
+- dark
+
+post per page
+-------------
+
+Sometimes you find that default post per page (10) seems to be too long.
+You can configure post per page by posts_per_page parameter.
+
+.. code-block:: python
+
+    # Number of blog posts per page
+    posts_per_page = 3
+
+
+.. author:: default
+.. categories:: none
+.. tags:: tinkerer
+.. comments::
