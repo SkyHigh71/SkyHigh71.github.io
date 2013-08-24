@@ -62,6 +62,68 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>August 24, 2013</span>
+        </div>
+        <div class="section" id="how-to-yield-core-file">
+<h1><a href="2013/08/24/how_to_yield_core_file.html">how to yield core file</a></h1>
+<p>By default, gdb is given on ubuntu desktop, so you can enjoy debugging applications (if you like :-)).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>which gdb
+/usr/bin/gdb
+<span class="nv">$ </span>gdb -v
+GNU gdb <span class="o">(</span>GDB<span class="o">)</span> 7.5.91.20130417-cvs-ubuntu
+</pre></div>
+</div>
+<p>But it seems that core file of application is not yielded (quite natural).
+Here is a memo to describe procedure how to configure system to yield core file.</p>
+<div class="section" id="ulimit">
+<h2>ulimit</h2>
+<p>Core file size is set to size zero.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">ulimit</span> -a
+core file size          <span class="o">(</span>blocks, -c<span class="o">)</span> 0
+</pre></div>
+</div>
+<p>You can change size to some value by ulimit command. If you would like to set permanently, then configure its value in /etc/security/limits.conf.</p>
+<div class="highlight-bash"><div class="highlight"><pre>*               soft    core            unlimited
+</pre></div>
+</div>
+<p>In this case, soft limit for default entry is set to unlimited.
+For details, please refer to man page of limits.conf.</p>
+</div>
+<div class="section" id="core-file-pattern">
+<h2>core file pattern</h2>
+<p>By default, application failures will be reported back to developers via <a class="reference external" href="https://wiki.ubuntu.com/Apport">apport</a>.</p>
+<p>application failure is passed to apport application via pipe as described in /proc/sys/kernel/core_pattern file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat /proc/sys/kernel/core_pattern
+|/usr/share/apport/apport %p %s %c
+</pre></div>
+</div>
+<p>Therefore you change output location of core file by manipulating core_pattern file.
+Following is the sample to configure core files will be yielded under /var/cores directory with file name of core.&lt;executable_name&gt;.&lt;PID&gt;.&lt;timestamp&gt;.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo mkdir /var/cores
+<span class="nv">$ </span>sudo chmod a+w /var/cores
+<span class="nv">$ </span>sudo bash -c <span class="s2">&quot;echo /var/cores/core.%e.%p.%t &gt; /proc/sys/kernel/core_pattern&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="summary">
+<h2>summary</h2>
+<p>Now you will see core files.
+Enjoy your debugging life.</p>
+<p>By the way, repetition of application failure will consume disk space.
+Please be careful and monitor free disk space.</p>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 23, 2013</span>
         </div>
         <div class="section" id="customize-tinkerer-page">
@@ -455,6 +517,8 @@ After a while, you can access your blog with URL of <a class="reference external
     </div></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/08/24/how_to_yield_core_file.html">how to yield core file</a>
+        </li><li>
             <a href="2013/08/23/customize_tinker_page.html">customize tinkerer page</a>
         </li><li>
             <a href="2013/08/22/enable_sshd.html">enable sshd</a>
@@ -473,7 +537,7 @@ After a while, you can access your blog with URL of <a class="reference external
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/github.html">github</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (2), <a href="tags/ubuntu.html">ubuntu</a> (2)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/github.html">github</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (2), <a href="tags/ubuntu.html">ubuntu</a> (3)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

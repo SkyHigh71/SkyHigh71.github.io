@@ -5,8 +5,64 @@
         <link>http://skyhigh71.github.com/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Fri, 23 Aug 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sat, 24 Aug 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.com/2013/08/24/how_to_yield_core_file.html</link>
+            <guid>http://skyhigh71.github.com/2013/08/24/how_to_yield_core_file.html</guid>
+            <title><![CDATA[how to yield core file]]></title>
+            <description><![CDATA[<div class="section" id="how-to-yield-core-file">
+<h1>how to yield core file</h1>
+<p>By default, gdb is given on ubuntu desktop, so you can enjoy debugging applications (if you like :-)).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>which gdb
+/usr/bin/gdb
+<span class="nv">$ </span>gdb -v
+GNU gdb <span class="o">(</span>GDB<span class="o">)</span> 7.5.91.20130417-cvs-ubuntu
+</pre></div>
+</div>
+<p>But it seems that core file of application is not yielded (quite natural).
+Here is a memo to describe procedure how to configure system to yield core file.</p>
+<div class="section" id="ulimit">
+<h2>ulimit</h2>
+<p>Core file size is set to size zero.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">ulimit</span> -a
+core file size          <span class="o">(</span>blocks, -c<span class="o">)</span> 0
+</pre></div>
+</div>
+<p>You can change size to some value by ulimit command. If you would like to set permanently, then configure its value in /etc/security/limits.conf.</p>
+<div class="highlight-bash"><div class="highlight"><pre>*               soft    core            unlimited
+</pre></div>
+</div>
+<p>In this case, soft limit for default entry is set to unlimited.
+For details, please refer to man page of limits.conf.</p>
+</div>
+<div class="section" id="core-file-pattern">
+<h2>core file pattern</h2>
+<p>By default, application failures will be reported back to developers via <a class="reference external" href="https://wiki.ubuntu.com/Apport">apport</a>.</p>
+<p>application failure is passed to apport application via pipe as described in /proc/sys/kernel/core_pattern file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat /proc/sys/kernel/core_pattern
+|/usr/share/apport/apport %p %s %c
+</pre></div>
+</div>
+<p>Therefore you change output location of core file by manipulating core_pattern file.
+Following is the sample to configure core files will be yielded under /var/cores directory with file name of core.&lt;executable_name&gt;.&lt;PID&gt;.&lt;timestamp&gt;.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo mkdir /var/cores
+<span class="nv">$ </span>sudo chmod a+w /var/cores
+<span class="nv">$ </span>sudo bash -c <span class="s2">&quot;echo /var/cores/core.%e.%p.%t &gt; /proc/sys/kernel/core_pattern&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="summary">
+<h2>summary</h2>
+<p>Now you will see core files.
+Enjoy your debugging life.</p>
+<p>By the way, repetition of application failure will consume disk space.
+Please be careful and monitor free disk space.</p>
+</div>
+</div>]]></description>
+             <pubDate>Sat, 24 Aug 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.com/2013/08/23/customize_tinker_page.html</link>
             <guid>http://skyhigh71.github.com/2013/08/23/customize_tinker_page.html</guid>

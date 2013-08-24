@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/08/24/how_to_yield_core_file
    2013/08/23/customize_tinker_page
    2013/08/22/enable_sshd
    2013/08/21/swap_caps_lock_with_ctrl
