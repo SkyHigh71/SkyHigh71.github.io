@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/08/25/add_favicon
    2013/08/24/customize_tinkerer_page_continued
    2013/08/24/how_to_yield_core_file
    2013/08/23/customize_tinker_page

@@ -1,0 +1,23 @@
+add favicon
+===========
+
+You can configure favicon for your blog.
+
+Prepare your favorite icon and place it under _static directory.
+
+.. code-block:: bash
+
+    $ file _static/skyhigh71.ico 
+    _static/skyhigh71.ico: MS Windows icon resource - 1 icon
+
+And point newly deployed icon file in conf.py.
+
+.. code-block:: python
+
+    # Change your favicon (new favicon goes in _static directory)
+    html_favicon = 'skyhigh71.ico'
+
+.. author:: default
+.. categories:: none
+.. tags:: tinkerer
+.. comments::
