@@ -62,6 +62,68 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>August 24, 2013</span>
+        </div>
+        <div class="section" id="how-to-yield-core-file">
+<h1><a href="2013/08/24/how_to_yield_core_file.html">how to yield core file</a></h1>
+<p>By default, gdb is given on ubuntu desktop, so you can enjoy debugging applications (if you like :-)).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>which gdb
+/usr/bin/gdb
+<span class="nv">$ </span>gdb -v
+GNU gdb <span class="o">(</span>GDB<span class="o">)</span> 7.5.91.20130417-cvs-ubuntu
+</pre></div>
+</div>
+<p>But it seems that core file of application is not yielded (quite natural).
+Here is a memo to describe procedure how to configure system to yield core file.</p>
+<div class="section" id="ulimit">
+<h2>ulimit</h2>
+<p>Core file size is set to size zero.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">ulimit</span> -a
+core file size          <span class="o">(</span>blocks, -c<span class="o">)</span> 0
+</pre></div>
+</div>
+<p>You can change size to some value by ulimit command. If you would like to set permanently, then configure its value in /etc/security/limits.conf.</p>
+<div class="highlight-bash"><div class="highlight"><pre>*               soft    core            unlimited
+</pre></div>
+</div>
+<p>In this case, soft limit for default entry is set to unlimited.
+For details, please refer to man page of limits.conf.</p>
+</div>
+<div class="section" id="core-file-pattern">
+<h2>core file pattern</h2>
+<p>By default, application failures will be reported back to developers via <a class="reference external" href="https://wiki.ubuntu.com/Apport">apport</a>.</p>
+<p>application failure is passed to apport application via pipe as described in /proc/sys/kernel/core_pattern file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat /proc/sys/kernel/core_pattern
+|/usr/share/apport/apport %p %s %c
+</pre></div>
+</div>
+<p>Therefore you change output location of core file by manipulating core_pattern file.
+Following is the sample to configure core files will be yielded under /var/cores directory with file name of core.&lt;executable_name&gt;.&lt;PID&gt;.&lt;timestamp&gt;.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo mkdir /var/cores
+<span class="nv">$ </span>sudo chmod a+w /var/cores
+<span class="nv">$ </span>sudo bash -c <span class="s2">&quot;echo /var/cores/core.%e.%p.%t &gt; /proc/sys/kernel/core_pattern&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="summary">
+<h2>summary</h2>
+<p>Now you will see core files.
+Enjoy your debugging life.</p>
+<p>By the way, repetition of application failure will consume disk space.
+Please be careful and monitor free disk space.</p>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 23, 2013</span>
         </div>
         <div class="section" id="customize-tinkerer-page">
@@ -204,48 +266,6 @@ In case that you would like to disable remote root access, then change parameter
                 Tags:
                 <a href="tags/ubuntu.html">ubuntu</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 21, 2013</span>
-        </div>
-        <div class="section" id="swap-caps-lock-key-with-ctrl-key">
-<h1><a href="2013/08/21/swap_caps_lock_with_ctrl.html">swap Caps Lock key with Ctrl key</a></h1>
-<p>I have been using Happy Hacking Keyboard (HHK) for about decade.
-It’s really nice one, but it becomes lame at last and key touch is quite noisy.
-So I bought a cheap English layout keyboard at amazon. (good-by HHK)</p>
-<p>The problem here is that “caps lock” resides in the left-middle. <strong>This is quite inconvenient.</strong>
-So I replaced “caps lock” key with “control” by configuring keyboard mapping.</p>
-<p>Here is its procedure on ubuntu 13.04 (LXDE) to do so.</p>
-<p>Edit keyboard file and applying argument “ctrl:swapcaps” for XKBOPTIONS option.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /etc/default
-<span class="nv">$ </span>diff keyboard keyboard.org
-11,12c11
-&lt; <span class="c">#XKBOPTIONS=&quot;&quot;</span>
-&lt; <span class="nv">XKBOPTIONS</span><span class="o">=</span><span class="s2">&quot;ctrl:swapcaps&quot;</span>
----
-&gt; <span class="nv">XKBOPTIONS</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-</pre></div>
-</div>
-<p>Or you can specify “ctrl:nocaps” in case that you assign control key for both.</p>
-<p>Then execute dpkg-reconfigure command so that above change will take effect.
-Please be noted that rebooting system has no effect for this keyboard configuration change and it remains as they were.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo dpkg-reconfigure keyboard-configuration
-</pre></div>
-</div>
-<p>Answer to questions given by command and at last stage you will be prompted if you save above configuration change.</p>
-<p>Following <a class="reference external" href="http://www.emacswiki.org/emacs/MovingTheCtrlKey">emacs page</a> has quite comprehensive explanation for this sake, which helps must help you.</p>
-<p>And following <a class="reference external" href="https://wiki.debian.org/Keyboard">debian page</a> has explanation as to keyboard configuration.</p>
-<p>Please be noted, above dpkg-reconfigure command updates initrd.img-X.X.X-XX-generic file under /boot directory. Therefore in case that OS updates image file, then you have to re-execute dpkg-reconfigure command to reflect change onto image file.</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/ubuntu.html">ubuntu</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -254,6 +274,8 @@ Please be noted that rebooting system has no effect for this keyboard configurat
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/08/25/how_to_play_minecraft_on_ubuntu.html">how to play minecraft on ubuntu</a>
+        </li><li>
             <a href="2013/08/25/add_favicon.html">add favicon</a>
         </li><li>
             <a href="2013/08/24/customize_tinkerer_page_continued.html">customize tinkerer page continued</a>
@@ -278,7 +300,7 @@ Please be noted that rebooting system has no effect for this keyboard configurat
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/github.html">github</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (4), <a href="tags/ubuntu.html">ubuntu</a> (3)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/github.html">github</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (4), <a href="tags/ubuntu.html">ubuntu</a> (4)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
