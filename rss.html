@@ -5,8 +5,87 @@
         <link>http://skyhigh71.github.com/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Sun, 25 Aug 2013 00:00:00 +0900</pubDate>
+        <pubDate>Mon, 26 Aug 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.com/2013/08/26/automatic_yum_update.html</link>
+            <guid>http://skyhigh71.github.com/2013/08/26/automatic_yum_update.html</guid>
+            <title><![CDATA[automatic yum update]]></title>
+            <description><![CDATA[<div class="section" id="automatic-yum-update">
+<h1>automatic yum update</h1>
+<p>Sometime you would like to configure Scientific Linux to update packages automatically without manual intervention.
+You can configure system as you wish and here is a short memo to achieve such.</p>
+<div class="section" id="yum-cron">
+<h2>yum-cron</h2>
+<p>You can configure cron to start yum command on daily basis to check for update.
+First install yum-cron command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo yum install yum-cron
+</pre></div>
+</div>
+<p>Installation will place 0yum.cron file under /etc/cron.daily directory.
+And cron executes yum-cron on daily basis.</p>
+<p>You can control yum-cron’s behavior by modifying configuration file, /etc/sysconfig/yum-cron.
+I hereby quote some parameters in which you may be interested.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="c1"># Don't install, just check (valid: yes|no)</span>
+<span class="na">CHECK_ONLY</span><span class="o">=</span><span class="s">no</span>
+
+<span class="c1"># Don't install, just check and download (valid: yes|no)</span>
+<span class="na">DOWNLOAD_ONLY</span><span class="o">=</span><span class="s">no</span>
+</pre></div>
+</div>
+<p>And start service for now.
+And configure system to start yum-cron service upon restart.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>/etc/init.d/yum-cron start
+<span class="nv">$ </span>sudo chkconfig yum-cron on
+</pre></div>
+</div>
+</div>
+<div class="section" id="history">
+<h2>history</h2>
+<p>You can check if cron has started or not by referencing /var/log/cron* logs.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Aug 26 03:16:01 &lt;hostname&gt; run-parts<span class="o">(</span>/etc/cron.daily<span class="o">)[</span>24221<span class="o">]</span>: starting 0yum.cron
+Aug 26 04:07:46 &lt;hostname&gt; run-parts<span class="o">(</span>/etc/cron.daily<span class="o">)[</span>24421<span class="o">]</span>: finished 0yum.cron
+</pre></div>
+</div>
+<p>Log message are yielded in /var/log/yum.log file</p>
+<div class="highlight-bash"><div class="highlight"><pre>Aug 09 04:09:11 Updated: nss-softokn-devel-3.14.3-3.el6_4.i686
+Aug 09 04:09:12 Updated: nss-devel-3.14.3-4.el6_4.i686
+Aug 09 04:09:13 Updated: nss-tools-3.14.3-4.el6_4.i686
+Aug 14 03:36:46 Updated: httpd-tools-2.2.15-29.sl6.i686
+Aug 14 03:36:48 Updated: httpd-2.2.15-29.sl6.i686
+</pre></div>
+</div>
+<p>as specified in yum’s configuration file, /etc/yum.conf.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[main]</span>
+<span class="na">debuglevel</span><span class="o">=</span><span class="s">2</span>
+<span class="na">logfile</span><span class="o">=</span><span class="s">/var/log/yum.log</span>
+</pre></div>
+</div>
+<p>Or you can check history by yum history command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo yum <span class="nb">history</span>
+Loaded plugins: auto-update-debuginfo, downloadonly, fastestmirror, refresh-packagekit, security
+ID     | Login user               | Date and <span class="nb">time</span>    | Action<span class="o">(</span>s<span class="o">)</span>      | Altered
+-------------------------------------------------------------------------------
+   138 | root &lt;root&gt;              | 2013-08-14 03:36 | Update         |    2
+   137 | root &lt;root&gt;              | 2013-08-09 04:09 | Update         |   12
+...
+</pre></div>
+</div>
+<p>And You can check more details of update with “yum history &lt;ID&gt;”.</p>
+</div>
+<div class="section" id="sigh">
+<h2>sigh</h2>
+<p>Ah...</p>
+<p>By default, SL has similar functionality yum-autoupdate, which is enabled and executed on daily basis. So above configuration is duplicate and not necessary.</p>
+<p>You can disable yum-autoupdate by configuring /etc/sysconfig/yum-autoupdate file.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="na">ENABLED</span><span class="o">=</span><span class="s">&quot;false&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>]]></description>
+             <pubDate>Mon, 26 Aug 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.com/2013/08/25/how_to_play_minecraft_on_ubuntu.html</link>
             <guid>http://skyhigh71.github.com/2013/08/25/how_to_play_minecraft_on_ubuntu.html</guid>
@@ -386,6 +465,7 @@ Please be noted that rebooting system has no effect for this keyboard configurat
 <p>Following <a class="reference external" href="http://www.emacswiki.org/emacs/MovingTheCtrlKey">emacs page</a> has quite comprehensive explanation for this sake, which helps must help you.</p>
 <p>And following <a class="reference external" href="https://wiki.debian.org/Keyboard">debian page</a> has explanation as to keyboard configuration.</p>
 <p>Please be noted, above dpkg-reconfigure command updates initrd.img-X.X.X-XX-generic file under /boot directory. Therefore in case that OS updates image file, then you have to re-execute dpkg-reconfigure command to reflect change onto image file.</p>
+<p><strong>Please be noted that there seems to be more work to be done, as change of configuration is lost after rebooting system. sorry...</strong></p>
 </div>]]></description>
              <pubDate>Wed, 21 Aug 2013 00:00:00 +0900</pubDate>
         </item>

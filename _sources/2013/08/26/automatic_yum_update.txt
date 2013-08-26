@@ -1,0 +1,97 @@
+automatic yum update
+====================
+
+Sometime you would like to configure Scientific Linux to update packages automatically without manual intervention.
+You can configure system as you wish and here is a short memo to achieve such.
+
+yum-cron
+--------
+
+You can configure cron to start yum command on daily basis to check for update.
+First install yum-cron command.
+
+.. code-block:: bash
+
+    $ sudo yum install yum-cron
+
+Installation will place 0yum.cron file under /etc/cron.daily directory.
+And cron executes yum-cron on daily basis.
+
+You can control yum-cron's behavior by modifying configuration file, /etc/sysconfig/yum-cron.
+I hereby quote some parameters in which you may be interested.
+
+.. code-block:: ini
+
+    # Don't install, just check (valid: yes|no)
+    CHECK_ONLY=no
+    
+    # Don't install, just check and download (valid: yes|no)
+    DOWNLOAD_ONLY=no
+
+And start service for now.
+And configure system to start yum-cron service upon restart.
+
+.. code-block:: bash
+
+    $ /etc/init.d/yum-cron start
+    $ sudo chkconfig yum-cron on
+
+history
+-------
+
+You can check if cron has started or not by referencing /var/log/cron* logs.
+
+.. code-block:: bash
+
+    Aug 26 03:16:01 <hostname> run-parts(/etc/cron.daily)[24221]: starting 0yum.cron
+    Aug 26 04:07:46 <hostname> run-parts(/etc/cron.daily)[24421]: finished 0yum.cron
+
+Log message are yielded in /var/log/yum.log file 
+
+.. code-block:: bash
+
+    Aug 09 04:09:11 Updated: nss-softokn-devel-3.14.3-3.el6_4.i686
+    Aug 09 04:09:12 Updated: nss-devel-3.14.3-4.el6_4.i686
+    Aug 09 04:09:13 Updated: nss-tools-3.14.3-4.el6_4.i686
+    Aug 14 03:36:46 Updated: httpd-tools-2.2.15-29.sl6.i686
+    Aug 14 03:36:48 Updated: httpd-2.2.15-29.sl6.i686
+
+as specified in yum's configuration file, /etc/yum.conf.
+
+.. code-block:: ini
+
+    [main]
+    debuglevel=2
+    logfile=/var/log/yum.log
+
+Or you can check history by yum history command.
+
+.. code-block:: bash
+
+    $ sudo yum history
+    Loaded plugins: auto-update-debuginfo, downloadonly, fastestmirror, refresh-packagekit, security
+    ID     | Login user               | Date and time    | Action(s)      | Altered
+    -------------------------------------------------------------------------------
+       138 | root <root>              | 2013-08-14 03:36 | Update         |    2   
+       137 | root <root>              | 2013-08-09 04:09 | Update         |   12 
+    ...
+
+And You can check more details of update with "yum history <ID>".
+
+sigh
+----
+
+Ah...
+
+By default, SL has similar functionality yum-autoupdate, which is enabled and executed on daily basis. So above configuration is duplicate and not necessary.
+
+You can disable yum-autoupdate by configuring /etc/sysconfig/yum-autoupdate file.
+
+.. code-block:: ini
+
+    ENABLED="false"
+
+.. author:: default
+.. categories:: none
+.. tags:: sl
+.. comments::

@@ -43,6 +43,8 @@ And following `debian page`_ has explanation as to keyboard configuration.
 
 Please be noted, above dpkg-reconfigure command updates initrd.img-X.X.X-XX-generic file under /boot directory. Therefore in case that OS updates image file, then you have to re-execute dpkg-reconfigure command to reflect change onto image file.
 
+**Please be noted that there seems to be more work to be done, as change of configuration is lost after rebooting system. sorry...**
+
 .. author:: default
 .. categories:: none
 .. tags:: ubuntu
