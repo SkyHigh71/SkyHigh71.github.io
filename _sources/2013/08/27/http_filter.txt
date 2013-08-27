@@ -1,0 +1,21 @@
+filter packet based upon URI
+============================
+
+Wireshark is your good friend.
+You can find fun time of examining packets with wireshark.
+
+Sometimes you would like to filter packets and extract packets only for specific URL, say, "www.google.com". Wireshark provides content filter for HTTP as well.
+
+Specify filter as follows.
+
+.. code-block:: bash
+    http contains "www.google.com"
+
+`filter manual`_ will help you guide through details of filter configuration.
+
+.. _filter manual: http://www.wireshark.org/docs/man-pages/wireshark-filter.html
+
+.. author:: default
+.. categories:: wireshark
+.. tags:: none
+.. comments::

@@ -62,6 +62,27 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>August 27, 2013</span>
+        </div>
+        <div class="section" id="filter-packet-based-upon-uri">
+<h1><a href="2013/08/27/http_filter.html">filter packet based upon URI</a></h1>
+<p>Wireshark is your good friend.
+You can find fun time of examining packets with wireshark.</p>
+<p>Sometimes you would like to filter packets and extract packets only for specific URL, say, “www.google.com”. Wireshark provides content filter for HTTP as well.</p>
+<p>Specify filter as follows.</p>
+<p><a class="reference external" href="http://www.wireshark.org/docs/man-pages/wireshark-filter.html">filter manual</a> will help you guide through details of filter configuration.</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        <div class="categories">
+            <span>
+                Filed under:
+                <a href="categories/wireshark.html">wireshark</a></span>
+        </div>
+        
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 26, 2013</span>
         </div>
         <div class="section" id="automatic-yum-update">
@@ -236,33 +257,6 @@ java -Xmx1024M -Xms512M -cp minecraft.jar net.minecraft.LauncherFrame &gt;&gt; <
                 Tags:
                 <a href="tags/minecraft.html">minecraft</a>, <a href="tags/ubuntu.html">ubuntu</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 25, 2013</span>
-        </div>
-        <div class="section" id="add-favicon">
-<h1><a href="2013/08/25/add_favicon.html">add favicon</a></h1>
-<p>You can configure favicon for your blog.</p>
-<p>Prepare your favorite icon and place it under _static directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file _static/skyhigh71.ico
-_static/skyhigh71.ico: MS Windows icon resource - 1 icon
-</pre></div>
-</div>
-<p>And point newly deployed icon file in conf.py.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Change your favicon (new favicon goes in _static directory)</span>
-<span class="n">html_favicon</span> <span class="o">=</span> <span class="s">'skyhigh71.ico'</span>
-</pre></div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/tinkerer.html">tinkerer</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -271,6 +265,8 @@ _static/skyhigh71.ico: MS Windows icon resource - 1 icon
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/08/27/http_filter.html">filter packet based upon URI</a>
+        </li><li>
             <a href="2013/08/26/automatic_yum_update.html">automatic yum update</a>
         </li><li>
             <a href="2013/08/25/how_to_play_minecraft_on_ubuntu.html">how to play minecraft on ubuntu</a>
@@ -288,8 +284,6 @@ _static/skyhigh71.ico: MS Windows icon resource - 1 icon
             <a href="2013/08/21/swap_caps_lock_with_ctrl.html">swap Caps Lock key with Ctrl key</a>
         </li><li>
             <a href="2013/08/11/the_first_post_of_mine.html">the first post of mine</a>
-        </li><li>
-            <a href="2013/08/11/hello_world.html">Hello World</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
