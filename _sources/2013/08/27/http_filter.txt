@@ -9,6 +9,7 @@ Sometimes you would like to filter packets and extract packets only for specific
 Specify filter as follows.
 
 .. code-block:: bash
+
     http contains "www.google.com"
 
 `filter manual`_ will help you guide through details of filter configuration.
