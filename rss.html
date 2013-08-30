@@ -5,8 +5,50 @@
         <link>http://skyhigh71.github.com/</link>
         <description></description>
         <language>en-us</language>
-        <pubDate>Tue, 27 Aug 2013 00:00:00 +0900</pubDate>
+        <pubDate>Fri, 30 Aug 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.com/2013/08/30/prevent_broken_pipe_during_ssh_session.html</link>
+            <guid>http://skyhigh71.github.com/2013/08/30/prevent_broken_pipe_during_ssh_session.html</guid>
+            <title><![CDATA[prevent broken pipe during ssh session]]></title>
+            <description><![CDATA[<div class="section" id="prevent-broken-pipe-during-ssh-session">
+<h1>prevent broken pipe during ssh session</h1>
+<p>From time to time, you may encounter ssh session lost with following error.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Write failed: Broken pipe
+</pre></div>
+</div>
+<p>It means that write() system call failed against File Descriptor for socket of ssh session.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>man -s2 write
+...
+EPIPE  fd is connected to a pipe or socket whose reading end is closed.  When this  happens  the  writing
+       process  will  also  receive  a SIGPIPE signal.  <span class="o">(</span>Thus, the write <span class="k">return </span>value is seen only <span class="k">if </span>the
+       program catches, blocks or ignores this signal.<span class="o">)</span>
+</pre></div>
+</div>
+<p>You may be able to avoid this connection lost by keeping connection alive.</p>
+<div class="section" id="client">
+<h2>client</h2>
+<p>You can configure ssh client to send request a response from sshd in the background.
+You can set interval with unit in second (~/.ssh/config).</p>
+<p>With following configuration sample, requests are sent every 2 minutes.</p>
+<div class="highlight-bash"><div class="highlight"><pre>ServerAliveInterval 120
+</pre></div>
+</div>
+<p>For details, please refer to “man ssh_config”.</p>
+</div>
+<div class="section" id="server">
+<h2>server</h2>
+<p>Same as client, sshd can be configured to send request on regular basis.
+sshd configuraiton file is /etc/ssh/sshd_config.</p>
+<div class="highlight-bash"><div class="highlight"><pre>ClientAliveInterval 120
+</pre></div>
+</div>
+<p>For details, please refer to “man sshd_config”.</p>
+</div>
+</div>]]></description>
+             <pubDate>Fri, 30 Aug 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.com/2013/08/27/http_filter.html</link>
             <guid>http://skyhigh71.github.com/2013/08/27/http_filter.html</guid>
@@ -485,6 +527,7 @@ Please be noted that rebooting system has no effect for this keyboard configurat
 <p>And following <a class="reference external" href="https://wiki.debian.org/Keyboard">debian page</a> has explanation as to keyboard configuration.</p>
 <p>Please be noted, above dpkg-reconfigure command updates initrd.img-X.X.X-XX-generic file under /boot directory. Therefore in case that OS updates image file, then you have to re-execute dpkg-reconfigure command to reflect change onto image file.</p>
 <p><strong>Please be noted that there seems to be more work to be done, as change of configuration is lost after rebooting system. sorry...</strong></p>
+<p>It seems that following <a class="reference external" href="http://ubuntuforums.org/showthread.php?t=1793250">thread</a> shall be similar issue of this.</p>
 </div>]]></description>
              <pubDate>Wed, 21 Aug 2013 00:00:00 +0900</pubDate>
         </item>

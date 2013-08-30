@@ -45,6 +45,10 @@ Please be noted, above dpkg-reconfigure command updates initrd.img-X.X.X-XX-gene
 
 **Please be noted that there seems to be more work to be done, as change of configuration is lost after rebooting system. sorry...**
 
+It seems that following `thread`_ shall be similar issue of this.
+
+.. _thread: http://ubuntuforums.org/showthread.php?t=1793250
+
 .. author:: default
 .. categories:: none
 .. tags:: ubuntu

@@ -1,0 +1,52 @@
+prevent broken pipe during ssh session
+======================================
+
+From time to time, you may encounter ssh session lost with following error.
+
+.. code-block:: bash
+
+    Write failed: Broken pipe
+
+It means that write() system call failed against File Descriptor for socket of ssh session. 
+
+.. code-block:: bash
+    
+    $ man -s2 write
+    ...
+    EPIPE  fd is connected to a pipe or socket whose reading end is closed.  When this  happens  the  writing
+           process  will  also  receive  a SIGPIPE signal.  (Thus, the write return value is seen only if the
+           program catches, blocks or ignores this signal.)
+
+You may be able to avoid this connection lost by keeping connection alive.
+
+client
+------
+
+You can configure ssh client to send request a response from sshd in the background.
+You can set interval with unit in second (~/.ssh/config). 
+
+With following configuration sample, requests are sent every 2 minutes.
+
+.. code-block:: bash
+
+    ServerAliveInterval 120
+    
+For details, please refer to "man ssh_config".
+
+server
+------
+
+Same as client, sshd can be configured to send request on regular basis.
+sshd configuraiton file is /etc/ssh/sshd_config.
+
+.. code-block:: bash
+
+    ClientAliveInterval 120
+
+For details, please refer to "man sshd_config".
+
+.. author:: default
+.. categories:: none
+.. tags:: ssh
+.. comments::
+
