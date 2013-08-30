@@ -1,0 +1,48 @@
+chart in blog post
+==================
+
+Same as sphinx, you can make use of blockdiag as extension in tinkerer.
+That is, you can draw chart in your blog by blockdiag.`
+
+Here is a quick setup procedure.
+
+First install sphinxcontrib-blockdiag package.
+
+.. code-block:: bash
+
+    $ sudo pip install sphinxcontrib-blockdiag
+
+Then add 'sphinxcontrib.blockdiag' in the list of extensions in conf.py.
+
+.. code-block:: python
+
+    extensions = ['tinkerer.ext.blog', 'tinkerer.ext.disqus', 'sphinxcontrib.blockdiag']
+
+You can specify font of your choice used in blockdiag.
+Search for path of your font.
+
+.. code-block:: bash
+
+    $ fc-list
+
+And specify font paht as value of blockdiag_fontpath.
+
+.. code-block:: python
+
+    blockdiag_fontpath = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'
+
+Now it's ready for usage.
+
+For example,
+
+.. blockdiag::
+
+    blockdiag flow {
+        Plan -> Disaster -> Chaos -> Ahhh -> Plan;
+    }
+
+.. author:: default
+.. categories:: none
+.. tags:: tinkerer, blockdiag
+.. comments::
+

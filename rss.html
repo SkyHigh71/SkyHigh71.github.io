@@ -8,6 +8,41 @@
         <pubDate>Fri, 30 Aug 2013 00:00:00 +0900</pubDate>
         
         <item>
+            <link>http://skyhigh71.github.com/2013/08/30/blockdiag_in_tinkerer.html</link>
+            <guid>http://skyhigh71.github.com/2013/08/30/blockdiag_in_tinkerer.html</guid>
+            <title><![CDATA[chart in blog post]]></title>
+            <description><![CDATA[<div class="section" id="chart-in-blog-post">
+<h1>chart in blog post</h1>
+<p>Same as sphinx, you can make use of blockdiag as extension in tinkerer.
+That is, you can draw chart in your blog by blockdiag.`</p>
+<p>Here is a quick setup procedure.</p>
+<p>First install sphinxcontrib-blockdiag package.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo pip install sphinxcontrib-blockdiag
+</pre></div>
+</div>
+<p>Then add ‘sphinxcontrib.blockdiag’ in the list of extensions in conf.py.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">'tinkerer.ext.blog'</span><span class="p">,</span> <span class="s">'tinkerer.ext.disqus'</span><span class="p">,</span> <span class="s">'sphinxcontrib.blockdiag'</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>You can specify font of your choice used in blockdiag.
+Search for path of your font.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">fc</span>-list
+</pre></div>
+</div>
+<p>And specify font paht as value of blockdiag_fontpath.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">blockdiag_fontpath</span> <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
+</pre></div>
+</div>
+<p>Now it’s ready for usage.</p>
+<p>For example,</p>
+<p class="blockdiag">
+<img alt="None" height="120" src="http://skyhigh71.github.com/_images/blockdiag-5e17e9707844be2c89d327c8de892f31f2754539.png" width="832"/>
+</p>
+</div>]]></description>
+             <pubDate>Fri, 30 Aug 2013 00:00:00 +0900</pubDate>
+        </item>
+    
+        <item>
             <link>http://skyhigh71.github.com/2013/08/30/prevent_broken_pipe_during_ssh_session.html</link>
             <guid>http://skyhigh71.github.com/2013/08/30/prevent_broken_pipe_during_ssh_session.html</guid>
             <title><![CDATA[prevent broken pipe during ssh session]]></title>
