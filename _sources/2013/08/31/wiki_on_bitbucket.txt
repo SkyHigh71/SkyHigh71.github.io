@@ -1,0 +1,98 @@
+memo on bitbucket
+=================
+
+I would like to have place where I can put some static content created by sphinx.
+I hereby demonstrate procedure to deploy html files onto bitbucket.
+
+Create a repository under the name, <username>.bitbucket.org.
+This repository could either be public or private. And you can select mercurial or git as your tool.
+In this scenario, I use hg as my tool.
+
+Create sphinx project to host your content.
+
+.. code-block:: bash
+    
+    $ mkdir wiki && cd wiki
+    $ sphinx-quickstart
+
+Write up your content and build it as usual.
+
+.. code-block:: bash
+    
+    $ make html
+
+Copy content from build/html directory.
+
+.. code-block:: bash
+
+    $ mkdir publish
+    $ cd publish/
+    $ rsync -av ../build/html/ .
+
+Now the content is ready for upload, so prepare for publication.
+
+Install mercurial if you still do not have one at your hand.
+
+.. code-block:: bash
+
+    $ sudo apt-get install python-dev
+    $ sudo pip install mercurial
+    $ which hg
+    /usr/local/bin/hg
+    
+OK, now we have hg.
+
+Create .hgrc file under home directory.
+
+.. code-block:: ini
+
+    [ui]
+    username = Fist LAST <your_mail_address>
+    verbose = True
+
+Create ssh key for bitbucket.
+
+.. code-block:: bash
+
+    $ ssh-keygen
+
+    ~/.ssh$ ls id_rsa.bitbucket*
+    id_rsa.bitbucket  id_rsa.bitbucket.pub
+
+Configure ~/.ssh/config file so that newly created ssh key be referenced for bitbucket access.
+
+.. code-block:: menuconfig
+
+    Host bitbucket.org
+        HostName        bitbucket.org
+        IdentityFile    ~/.ssh/id_rsa.bitbucket.org
+        User            hg
+        
+And deploy your public key onto bitbucket.
+
+.. code-block:: bash
+
+    $ xclip -sel clip < id_rsa.bitbucket.pub
+
+And place another .hgrc file under .hg directory of publish directory so that push target shall be specified.
+
+.. code-block:: ini
+
+    [paths]
+    default=ssh://hg@bitbucket.org/<userid>/<userid>.bitbucket.org
+
+And push your content onto bitbucket.
+
+.. code-block:: bash
+
+    $ rsync -av ../build/html .
+    $ hg add .
+    $ hg commit -m "my first post of mine"
+    $ hg push
+
+Now you can access your content by http://<userid>.bitbucket.org.
+
+.. author:: default
+.. categories:: none
+.. tags:: hg, sphinx, bitbucket
+.. comments::

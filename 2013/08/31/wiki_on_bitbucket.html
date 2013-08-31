@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <title>customize tinkerer page continued &mdash; sakana</title>
+        <title>memo on bitbucket &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="how to yield core file" href="how_to_yield_core_file.html" /><link rel="prev" title="add favicon" href="../25/add_favicon.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="chart in blog post" href="../30/blockdiag_in_tinkerer.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>August 24, 2013</span>
+            <span>August 31, 2013</span>
         </div>
     </div>
     
@@ -77,53 +77,74 @@
     
     </div>
     
-    <div class="section" id="customize-tinkerer-page-continued">
-<h1>customize tinkerer page continued</h1>
-<div class="section" id="language">
-<h2>language</h2>
-<p>LANG environment variable of my shell is configured to ja_JP.UTF-8.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$LANG</span>
-ja_JP.UTF-8
+    <div class="section" id="memo-on-bitbucket">
+<h1>memo on bitbucket</h1>
+<p>I would like to have place where I can put some static content created by sphinx.
+I hereby demonstrate procedure to deploy html files onto bitbucket.</p>
+<p>Create a repository under the name, &lt;username&gt;.bitbucket.org.
+This repository could either be public or private. And you can select mercurial or git as your tool.
+In this scenario, I use hg as my tool.</p>
+<p>Create sphinx project to host your content.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir wiki <span class="o">&amp;&amp;</span> <span class="nb">cd </span>wiki
+<span class="nv">$ </span>sphinx-quickstart
 </pre></div>
 </div>
-<p>Therefore I first thought that I have to set LANG=C upon building html so as to obtain English output.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ LANG</span><span class="o">=</span>C tinker -b
+<p>Write up your content and build it as usual.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make html
 </pre></div>
 </div>
-<p>But it&#8217;s confirmed that language parameter in conf.py is valid for &#8220;en&#8221; as well.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">language</span> <span class="o">=</span> <span class="s">&quot;en&quot;</span>
+<p>Copy content from build/html directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir publish
+<span class="nv">$ </span><span class="nb">cd </span>publish/
+<span class="nv">$ </span>rsync -av ../build/html/ .
 </pre></div>
 </div>
-<p>And if you would like to configure, say, German as default language of your blog, then configure it as &#8220;de&#8221;.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">language</span> <span class="o">=</span> <span class="s">&quot;de&quot;</span>
+<p>Now the content is ready for upload, so prepare for publication.</p>
+<p>Install mercurial if you still do not have one at your hand.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install python-dev
+<span class="nv">$ </span>sudo pip install mercurial
+<span class="nv">$ </span>which hg
+/usr/local/bin/hg
 </pre></div>
 </div>
-<p>But localization is not perfect, for example, date seems to be yielded based upon LANG.
-So you would better to set LANG upon building html.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ LANG</span><span class="o">=</span>de_DE.utf8 tinker -b
+<p>OK, now we have hg.</p>
+<p>Create .hgrc file under home directory.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[ui]</span>
+<span class="na">username</span> <span class="o">=</span> <span class="s">Fist LAST &lt;your_mail_address&gt;</span>
+<span class="na">verbose</span> <span class="o">=</span> <span class="s">True</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="theme">
-<h2>theme</h2>
-<p>You can select theme among following options and set theme in theme in conf.py.</p>
-<ul class="simple">
-<li>flat (default)</li>
-<li>modern5</li>
-<li>minimal5</li>
-<li>responsive</li>
-<li>dark</li>
-</ul>
-</div>
-<div class="section" id="post-per-page">
-<h2>post per page</h2>
-<p>Sometimes you find that default post per page (10) seems to be too long.
-You can configure post per page by posts_per_page parameter.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Number of blog posts per page</span>
-<span class="n">posts_per_page</span> <span class="o">=</span> <span class="mi">3</span>
+<p>Create ssh key for bitbucket.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh-keygen
+
+~/.ssh<span class="nv">$ </span>ls id_rsa.bitbucket*
+id_rsa.bitbucket  id_rsa.bitbucket.pub
 </pre></div>
 </div>
+<p>Configure ~/.ssh/config file so that newly created ssh key be referenced for bitbucket access.</p>
+<div class="highlight-menuconfig"><div class="highlight"><pre>Host bitbucket.org
+    HostName        bitbucket.org
+    IdentityFile    ~/.ssh/id_rsa.bitbucket.org
+    User            hg
+</pre></div>
 </div>
+<p>And deploy your public key onto bitbucket.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>xclip -sel clip &lt; id_rsa.bitbucket.pub
+</pre></div>
+</div>
+<p>And place another .hgrc file under .hg directory of publish directory so that push target shall be specified.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[paths]</span>
+<span class="na">default</span><span class="o">=</span><span class="s">ssh://hg@bitbucket.org/&lt;userid&gt;/&lt;userid&gt;.bitbucket.org</span>
+</pre></div>
+</div>
+<p>And push your content onto bitbucket.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>rsync -av ../build/html .
+<span class="nv">$ </span>hg add .
+<span class="nv">$ </span>hg commit -m <span class="s2">&quot;my first post of mine&quot;</span>
+<span class="nv">$ </span>hg push
+</pre></div>
+</div>
+<p>Now you can access your content by <a class="reference external" href="http:/">http:/</a>/&lt;userid&gt;.bitbucket.org.</p>
 </div>
 
     <div class="postmeta">
@@ -134,17 +155,17 @@ You can configure post per page by posts_per_page parameter.</p>
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/tinkerer.html">tinkerer</a></span>
+                <a href="../../../tags/hg.html">hg</a>, <a href="../../../tags/sphinx.html">sphinx</a>, <a href="../../../tags/bitbucket.html">bitbucket</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../25/add_favicon.html">add favicon</a></li>
-            <li class="right"><a href="how_to_yield_core_file.html">how to yield core file</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../30/blockdiag_in_tinkerer.html">chart in blog post</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../31/wiki_on_bitbucket.html">memo on bitbucket</a>
+            <a href="#">memo on bitbucket</a>
         </li><li>
             <a href="../30/blockdiag_in_tinkerer.html">chart in blog post</a>
         </li><li>
@@ -158,9 +179,9 @@ You can configure post per page by posts_per_page parameter.</p>
         </li><li>
             <a href="../25/add_favicon.html">add favicon</a>
         </li><li>
-            <a href="#">customize tinkerer page continued</a>
+            <a href="../24/customize_tinkerer_page_continued.html">customize tinkerer page continued</a>
         </li><li>
-            <a href="how_to_yield_core_file.html">how to yield core file</a>
+            <a href="../24/how_to_yield_core_file.html">how to yield core file</a>
         </li><li>
             <a href="../23/customize_tinker_page.html">customize tinkerer page</a>
         </li></ul>
