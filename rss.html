@@ -5,8 +5,33 @@
         <link>http://skyhigh71.github.com/</link>
         <description>SkyHigh71's blog</description>
         <language>en-us</language>
-        <pubDate>Sat, 31 Aug 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sun, 01 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.com/2013/09/01/try_sphinx_better_theme.html</link>
+            <guid>http://skyhigh71.github.com/2013/09/01/try_sphinx_better_theme.html</guid>
+            <title><![CDATA[try sphinx better theme]]></title>
+            <description><![CDATA[<div class="section" id="try-sphinx-better-theme">
+<h1>try sphinx better theme</h1>
+<p>Found a <a class="reference external" href="https://github.com/irskep/sphinx-better-theme">new theme</a> for sphinx.</p>
+<p><a class="reference external" href="https://sphinx-better-theme.readthedocs.org/en/latest/demos.html">Demo site</a> looks nice &amp; simple.</p>
+<p>Let’s apply and see what kind of effect will have on my documentation.</p>
+<p>Application procedure is quite simple.
+Install sphinx-better-theme package.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo pip install sphinx-better-theme
+</pre></div>
+</div>
+<p>Apply theme by modifying conf.py.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">better</span> <span class="kn">import</span> <span class="n">better_theme_path</span>
+<span class="n">html_theme_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">better_theme_path</span><span class="p">]</span>
+<span class="n">html_theme</span> <span class="o">=</span> <span class="s">'better'</span>
+</pre></div>
+</div>
+<p>Ok, stay with this theme.</p>
+</div>]]></description>
+             <pubDate>Sun, 01 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.com/2013/08/31/wiki_on_bitbucket.html</link>
             <guid>http://skyhigh71.github.com/2013/08/31/wiki_on_bitbucket.html</guid>
@@ -66,7 +91,7 @@ id_rsa.bitbucket  id_rsa.bitbucket.pub
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>xclip -sel clip &lt; id_rsa.bitbucket.pub
 </pre></div>
 </div>
-<p>And place another .hgrc file under .hg directory of publish directory so that push target shall be specified.</p>
+<p>And place hgrc file under .hg directory of publish directory so that push target shall be specified.</p>
 <div class="highlight-ini"><div class="highlight"><pre><span class="k">[paths]</span>
 <span class="na">default</span><span class="o">=</span><span class="s">ssh://hg@bitbucket.org/&lt;userid&gt;/&lt;userid&gt;.bitbucket.org</span>
 </pre></div>

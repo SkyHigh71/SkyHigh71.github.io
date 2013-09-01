@@ -74,7 +74,7 @@ And deploy your public key onto bitbucket.
 
     $ xclip -sel clip < id_rsa.bitbucket.pub
 
-And place another .hgrc file under .hg directory of publish directory so that push target shall be specified.
+And place hgrc file under .hg directory of publish directory so that push target shall be specified.
 
 .. code-block:: ini
 

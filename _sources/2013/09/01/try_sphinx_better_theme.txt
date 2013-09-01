@@ -1,0 +1,34 @@
+try sphinx better theme
+=======================
+
+Found a `new theme`_ for sphinx.
+
+.. _new theme: https://github.com/irskep/sphinx-better-theme
+
+`Demo site`_ looks nice & simple.
+
+.. _Demo site: https://sphinx-better-theme.readthedocs.org/en/latest/demos.html
+
+Let's apply and see what kind of effect will have on my documentation.
+
+Application procedure is quite simple.
+Install sphinx-better-theme package.
+
+.. code-block:: bash
+
+    $ sudo pip install sphinx-better-theme
+
+Apply theme by modifying conf.py.
+
+.. code-block:: python
+
+    from better import better_theme_path
+    html_theme_path = [better_theme_path]
+    html_theme = 'better'
+
+Ok, stay with this theme.
+
+.. author:: default
+.. categories:: none
+.. tags:: sphinx
+.. comments::
