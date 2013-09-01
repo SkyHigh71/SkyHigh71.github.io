@@ -8,6 +8,44 @@
         <pubDate>Sun, 01 Sep 2013 00:00:00 +0900</pubDate>
         
         <item>
+            <link>http://skyhigh71.github.com/2013/09/01/google_anlytics_in_sphinx.html</link>
+            <guid>http://skyhigh71.github.com/2013/09/01/google_anlytics_in_sphinx.html</guid>
+            <title><![CDATA[google anlytics in sphinx]]></title>
+            <description><![CDATA[<div class="section" id="google-anlytics-in-sphinx">
+<h1>google anlytics in sphinx</h1>
+<p>If you would like to analyze statics of access to your site built with sphinx, then you can embed google analytics code in it.</p>
+<p>Prepare layout.html file under source/_templates directory.
+Insert javascript code obtained at google analytics site.</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;!layout.html&quot; %}
+
+{% block footer %}
+{{ super() }}
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>This page uses <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://analytics.google.com/&quot;</span><span class="nt">&gt;</span>
+Google Analytics<span class="nt">&lt;/a&gt;</span> to collect statistics. You can disable it by blocking
+the JavaScript coming from www.google-analytics.com.
+<span class="nt">&lt;script&gt;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">o</span><span class="p">,</span><span class="nx">g</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">){</span>
+    <span class="nx">i</span><span class="p">[</span><span class="s1">'GoogleAnalyticsObject'</span><span class="p">]</span><span class="o">=</span><span class="nx">r</span><span class="p">;</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">||</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="p">(</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">||</span><span class="p">[]).</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
+    <span class="p">},</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+    <span class="nx">a</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">o</span><span class="p">),</span><span class="nx">m</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="nx">a</span><span class="p">.</span><span class="nx">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="nx">a</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">g</span><span class="p">;</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
+ <span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
+<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-xxxxxxxxx-2'</span><span class="p">,</span> <span class="s1">'&lt;site_name&gt;'</span><span class="p">);</span>
+<span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+<p>And rebuild html and deploy it onto site.</p>
+<p>For details, please refer to <a class="reference external" href="http://sphinx-doc.org/faq.html">sphinx FAQ</a>.</p>
+</div>]]></description>
+             <pubDate>Sun, 01 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
+        <item>
             <link>http://skyhigh71.github.com/2013/09/01/back_up_files_onto_dropbox.html</link>
             <guid>http://skyhigh71.github.com/2013/09/01/back_up_files_onto_dropbox.html</guid>
             <title><![CDATA[back up files onto dropbox]]></title>
@@ -600,7 +638,7 @@ oN google analytics site create Tracking ID for your blog site, which yields jav
     <span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
 <span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
 
-<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-43440530-1'</span><span class="p">,</span> <span class="s1">'skyhigh71.github.io'</span><span class="p">);</span>
+<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-xxxxxxxx-1'</span><span class="p">,</span> <span class="s1">'&lt;your_site&gt;'</span><span class="p">);</span>
 <span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
 </pre></div>
 </div>
