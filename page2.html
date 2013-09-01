@@ -64,6 +64,47 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>August 30, 2013</span>
         </div>
+        <div class="section" id="chart-in-blog-post">
+<h1><a href="2013/08/30/blockdiag_in_tinkerer.html">chart in blog post</a></h1>
+<p>Same as sphinx, you can make use of blockdiag as extension in tinkerer.
+That is, you can draw chart in your blog by blockdiag.`</p>
+<p>Here is a quick setup procedure.</p>
+<p>First install sphinxcontrib-blockdiag package.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo pip install sphinxcontrib-blockdiag
+</pre></div>
+</div>
+<p>Then add ‘sphinxcontrib.blockdiag’ in the list of extensions in conf.py.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">'tinkerer.ext.blog'</span><span class="p">,</span> <span class="s">'tinkerer.ext.disqus'</span><span class="p">,</span> <span class="s">'sphinxcontrib.blockdiag'</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>You can specify font of your choice used in blockdiag.
+Search for path of your font.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">fc</span>-list
+</pre></div>
+</div>
+<p>And specify font paht as value of blockdiag_fontpath.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">blockdiag_fontpath</span> <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
+</pre></div>
+</div>
+<p>Now it’s ready for usage.</p>
+<p>For example,</p>
+<p class="blockdiag">
+<img alt="None" height="120" src="_images/blockdiag-5e17e9707844be2c89d327c8de892f31f2754539.png" width="832"/>
+</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/tinkerer.html">tinkerer</a>, <a href="tags/blockdiag.html">blockdiag</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 30, 2013</span>
+        </div>
         <div class="section" id="prevent-broken-pipe-during-ssh-session">
 <h1><a href="2013/08/30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a></h1>
 <p>From time to time, you may encounter ssh session lost with following error.</p>
@@ -133,91 +174,6 @@ You can find fun time of examining packets with wireshark.</p>
                 <a href="categories/wireshark.html">wireshark</a></span>
         </div>
         
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 26, 2013</span>
-        </div>
-        <div class="section" id="automatic-yum-update">
-<h1><a href="2013/08/26/automatic_yum_update.html">automatic yum update</a></h1>
-<p>Sometime you would like to configure Scientific Linux to update packages automatically without manual intervention.
-You can configure system as you wish and here is a short memo to achieve such.</p>
-<div class="section" id="yum-cron">
-<h2>yum-cron</h2>
-<p>You can configure cron to start yum command on daily basis to check for update.
-First install yum-cron command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo yum install yum-cron
-</pre></div>
-</div>
-<p>Installation will place 0yum.cron file under /etc/cron.daily directory.
-And cron executes yum-cron on daily basis.</p>
-<p>You can control yum-cron’s behavior by modifying configuration file, /etc/sysconfig/yum-cron.
-I hereby quote some parameters in which you may be interested.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="c1"># Don't install, just check (valid: yes|no)</span>
-<span class="na">CHECK_ONLY</span><span class="o">=</span><span class="s">no</span>
-
-<span class="c1"># Don't install, just check and download (valid: yes|no)</span>
-<span class="na">DOWNLOAD_ONLY</span><span class="o">=</span><span class="s">no</span>
-</pre></div>
-</div>
-<p>And start service for now.
-And configure system to start yum-cron service upon restart.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>/etc/init.d/yum-cron start
-<span class="nv">$ </span>sudo chkconfig yum-cron on
-</pre></div>
-</div>
-</div>
-<div class="section" id="history">
-<h2>history</h2>
-<p>You can check if cron has started or not by referencing /var/log/cron* logs.</p>
-<div class="highlight-bash"><div class="highlight"><pre>Aug 26 03:16:01 &lt;hostname&gt; run-parts<span class="o">(</span>/etc/cron.daily<span class="o">)[</span>24221<span class="o">]</span>: starting 0yum.cron
-Aug 26 04:07:46 &lt;hostname&gt; run-parts<span class="o">(</span>/etc/cron.daily<span class="o">)[</span>24421<span class="o">]</span>: finished 0yum.cron
-</pre></div>
-</div>
-<p>Log message are yielded in /var/log/yum.log file</p>
-<div class="highlight-bash"><div class="highlight"><pre>Aug 09 04:09:11 Updated: nss-softokn-devel-3.14.3-3.el6_4.i686
-Aug 09 04:09:12 Updated: nss-devel-3.14.3-4.el6_4.i686
-Aug 09 04:09:13 Updated: nss-tools-3.14.3-4.el6_4.i686
-Aug 14 03:36:46 Updated: httpd-tools-2.2.15-29.sl6.i686
-Aug 14 03:36:48 Updated: httpd-2.2.15-29.sl6.i686
-</pre></div>
-</div>
-<p>as specified in yum’s configuration file, /etc/yum.conf.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[main]</span>
-<span class="na">debuglevel</span><span class="o">=</span><span class="s">2</span>
-<span class="na">logfile</span><span class="o">=</span><span class="s">/var/log/yum.log</span>
-</pre></div>
-</div>
-<p>Or you can check history by yum history command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo yum <span class="nb">history</span>
-Loaded plugins: auto-update-debuginfo, downloadonly, fastestmirror, refresh-packagekit, security
-ID     | Login user               | Date and <span class="nb">time</span>    | Action<span class="o">(</span>s<span class="o">)</span>      | Altered
--------------------------------------------------------------------------------
-   138 | root &lt;root&gt;              | 2013-08-14 03:36 | Update         |    2
-   137 | root &lt;root&gt;              | 2013-08-09 04:09 | Update         |   12
-...
-</pre></div>
-</div>
-<p>And You can check more details of update with “yum history &lt;ID&gt;”.</p>
-</div>
-<div class="section" id="sigh">
-<h2>sigh</h2>
-<p>Ah...</p>
-<p>By default, SL has similar functionality yum-autoupdate, which is enabled and executed on daily basis. So above configuration is duplicate and not necessary.</p>
-<p>You can disable yum-autoupdate by configuring /etc/sysconfig/yum-autoupdate file.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="na">ENABLED</span><span class="o">=</span><span class="s">&quot;false&quot;</span>
-</pre></div>
-</div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/sl.html">sl</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -226,6 +182,8 @@ ID     | Login user               | Date and <span class="nb">time</span>    | A
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
+        </li><li>
             <a href="2013/09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
         </li><li>
             <a href="2013/08/31/wiki_on_bitbucket.html">memo on bitbucket</a>
@@ -243,8 +201,6 @@ ID     | Login user               | Date and <span class="nb">time</span>    | A
             <a href="2013/08/25/add_favicon.html">add favicon</a>
         </li><li>
             <a href="2013/08/24/customize_tinkerer_page_continued.html">customize tinkerer page continued</a>
-        </li><li>
-            <a href="2013/08/24/how_to_yield_core_file.html">how to yield core file</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -254,7 +210,7 @@ ID     | Login user               | Date and <span class="nb">time</span>    | A
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (1), <a href="tags/github.html">github</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (2), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (4)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (1), <a href="tags/github.html">github</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (2), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (5)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

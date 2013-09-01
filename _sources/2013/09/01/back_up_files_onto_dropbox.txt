@@ -1,0 +1,45 @@
+back up files onto dropbox
+==========================
+
+All machine, which includes Hard Disks, are to break some day.
+Let's back up your precious content onto dropbox with encrypted on regular basis.
+
+create backup directory in dropbox.
+
+.. code-block:: bash
+
+    $ mkdir ~/Dropbox/backup
+
+Prepare backup script kicked by cron on regular interval.
+Create directory where backup script resides:
+
+.. code-block:: bash
+
+    $ mkdir ~/Documents/cron
+
+Deploy following :download:`backup script <backup.sh>` under cron directory:
+
+.. literalinclude:: backup.sh
+    :language: bash
+
+Please be noted that you have to add execution permission for this script.
+And test it if it works or not.
+
+.. code-block:: bash
+
+    $ bash -xv backup.sh
+
+Register cron job to start script on regular basis by "crontab -e".
+With following example, backup script is executed every one hour at \*:00.
+
+.. code-block:: bash
+
+    0 * * * * ~/Documents/cron/backup.sh
+
+On ubuntu, cron activity is recorded in /var/log/syslog. 
+Monitor syslog if cron works as expected.
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu
+.. comments::

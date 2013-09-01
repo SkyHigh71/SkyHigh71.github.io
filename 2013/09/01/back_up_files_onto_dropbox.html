@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <title>Hello World &mdash; sakana</title>
+        <title>back up files onto dropbox &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="prev" title="the first post of mine" href="the_first_post_of_mine.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="try sphinx better theme" href="try_sphinx_better_theme.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>August 11, 2013</span>
+            <span>September 01, 2013</span>
         </div>
     </div>
     
@@ -77,9 +77,54 @@
     
     </div>
     
-    <div class="section" id="hello-world">
-<h1>Hello World</h1>
-<p>How are you doing?</p>
+    <div class="section" id="back-up-files-onto-dropbox">
+<h1>back up files onto dropbox</h1>
+<p>All machine, which includes Hard Disks, are to break some day.
+Let&#8217;s back up your precious content onto dropbox with encrypted on regular basis.</p>
+<p>create backup directory in dropbox.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir ~/Dropbox/backup
+</pre></div>
+</div>
+<p>Prepare backup script kicked by cron on regular interval.
+Create directory where backup script resides:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir ~/Documents/cron
+</pre></div>
+</div>
+<p>Deploy following <a class="reference download internal" href="../../../_downloads/backup.sh"><span class="xref download docutils literal"><span class="pre">backup</span> <span class="pre">script</span></span></a> under cron directory:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="c"># we use day of week as file name</span>
+<span class="nv">LANG</span><span class="o">=</span>C
+<span class="nv">NAME</span><span class="o">=</span><span class="sb">`</span>date <span class="s2">&quot;+%A&quot;</span><span class="sb">`</span>
+<span class="c"># please specify password for encryption in case that you encrypt backup file</span>
+<span class="nv">PASSWD</span><span class="o">=</span>xxxxxx
+<span class="c"># we create backup file under temporary directory on local host</span>
+<span class="c"># so as to avoid latency</span>
+<span class="nv">TEMP</span><span class="o">=</span>/tmp
+<span class="nv">BACKUP_DIR</span><span class="o">=</span>~/Dropbox/backup
+
+<span class="nb">cd</span> ~/Documents
+<span class="k">if </span><span class="nb">true</span>
+<span class="k">then</span>
+<span class="k">    </span>find . -exec zip -P <span class="nv">$PASSWD</span> <span class="nv">$TEMP</span>/<span class="nv">$NAME</span>.zip <span class="o">{}</span> <span class="se">\;</span> 1&gt;/dev/null 2&gt;&amp;1
+<span class="k">else</span>
+<span class="k">    </span>find . -exec zip <span class="nv">$TEMP</span>/<span class="nv">$NAME</span>.zip <span class="o">{}</span> <span class="se">\;</span> 1&gt;/dev/null 2&gt;&amp;1
+<span class="k">fi</span>
+mv <span class="nv">$TEMP</span>/<span class="nv">$NAME</span>.zip <span class="nv">$BACKUP_DIR</span>
+</pre></div>
+</div>
+<p>Please be noted that you have to add execution permission for this script.
+And test it if it works or not.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>bash -xv backup.sh
+</pre></div>
+</div>
+<p>Register cron job to start script on regular basis by &#8220;crontab -e&#8221;.
+With following example, backup script is executed every one hour at *:00.</p>
+<div class="highlight-bash"><div class="highlight"><pre>0 * * * * ~/Documents/cron/backup.sh
+</pre></div>
+</div>
+<p>On ubuntu, cron activity is recorded in /var/log/syslog.
+Monitor syslog if cron works as expected.</p>
 </div>
 
     <div class="postmeta">
@@ -87,34 +132,38 @@
             <span>Posted by SkyHigh71</span>
         </div>
         
-        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+        </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="the_first_post_of_mine.html">the first post of mine</a></li>
-            <li class="right"></li>
+            <li class="left"></li>
+            <li class="right"><a href="try_sphinx_better_theme.html">try sphinx better theme</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
+            <a href="#">back up files onto dropbox</a>
         </li><li>
-            <a href="../../09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
+            <a href="try_sphinx_better_theme.html">try sphinx better theme</a>
         </li><li>
-            <a href="../31/wiki_on_bitbucket.html">memo on bitbucket</a>
+            <a href="../../08/31/wiki_on_bitbucket.html">memo on bitbucket</a>
         </li><li>
-            <a href="../30/blockdiag_in_tinkerer.html">chart in blog post</a>
+            <a href="../../08/30/blockdiag_in_tinkerer.html">chart in blog post</a>
         </li><li>
-            <a href="../30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a>
+            <a href="../../08/30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a>
         </li><li>
-            <a href="../27/http_filter.html">filter packet based upon URI</a>
+            <a href="../../08/27/http_filter.html">filter packet based upon URI</a>
         </li><li>
-            <a href="../26/automatic_yum_update.html">automatic yum update</a>
+            <a href="../../08/26/automatic_yum_update.html">automatic yum update</a>
         </li><li>
-            <a href="../25/how_to_play_minecraft_on_ubuntu.html">how to play minecraft on ubuntu</a>
+            <a href="../../08/25/how_to_play_minecraft_on_ubuntu.html">how to play minecraft on ubuntu</a>
         </li><li>
-            <a href="../25/add_favicon.html">add favicon</a>
+            <a href="../../08/25/add_favicon.html">add favicon</a>
         </li><li>
-            <a href="../24/customize_tinkerer_page_continued.html">customize tinkerer page continued</a>
+            <a href="../../08/24/customize_tinkerer_page_continued.html">customize tinkerer page continued</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
