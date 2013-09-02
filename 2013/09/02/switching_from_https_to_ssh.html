@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <title>switching from https to ssh &mdash; sakana</title>
+        <title>switching from HTTPS to SSH &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -78,21 +78,21 @@
     </div>
     
     <div class="section" id="switching-from-https-to-ssh">
-<h1>switching from https to ssh</h1>
-<p>By default, communication protocol used for github is not ssh but https.
-You can change protocol to ssh so that ssh key is used for authentication and you can avoid password authentication.</p>
-<p>Url, which includes protocol, is specified in .git/config file.</p>
+<h1>switching from HTTPS to SSH</h1>
+<p>Communication protocol for github can either be SSH or HTTPS.
+You switch change protocol to SSH so that ssh key is used for authentication and you can avoid password authentication.</p>
+<p>URL, which includes protocol, is specified in .git/config file.</p>
 <div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
-        <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
+    <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
 </pre></div>
 </div>
-<p>So as to change url, use &#8220;git remote set-url&#8221; command.</p>
+<p>So as to change URL, use &#8220;git remote set-url&#8221; command.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git remote <span class="nb">set</span>-url origin git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git
 </pre></div>
 </div>
 <p>Url in config file shall be updated as specified in argument.</p>
 <div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
-        <span class="na">url</span> <span class="o">=</span> <span class="s">git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
+    <span class="na">url</span> <span class="o">=</span> <span class="s">git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
 </pre></div>
 </div>
 </div>
@@ -115,7 +115,7 @@ You can change protocol to ssh so that ssh key is used for authentication and yo
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="#">switching from https to ssh</a>
+            <a href="#">switching from HTTPS to SSH</a>
         </li><li>
             <a href="../01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
         </li><li>
