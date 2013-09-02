@@ -2,14 +2,14 @@
 <rss version="2.0">
     <channel>
         <title>sakana</title>
-        <link>http://skyhigh71.github.com/</link>
-        <description>SkyHigh71's blog</description>
+        <link>http://skyhigh71.github.io/</link>
+        <description>short memo by SkyHigh71</description>
         <language>en-us</language>
         <pubDate>Sun, 01 Sep 2013 00:00:00 +0900</pubDate>
         
         <item>
-            <link>http://skyhigh71.github.com/2013/09/01/google_anlytics_in_sphinx.html</link>
-            <guid>http://skyhigh71.github.com/2013/09/01/google_anlytics_in_sphinx.html</guid>
+            <link>http://skyhigh71.github.io/2013/09/01/google_anlytics_in_sphinx.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/01/google_anlytics_in_sphinx.html</guid>
             <title><![CDATA[google anlytics in sphinx]]></title>
             <description><![CDATA[<div class="section" id="google-anlytics-in-sphinx">
 <h1>google anlytics in sphinx</h1>
@@ -20,9 +20,7 @@ Insert javascript code obtained at google analytics site.</p>
 
 {% block footer %}
 {{ super() }}
-<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>This page uses <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://analytics.google.com/&quot;</span><span class="nt">&gt;</span>
-Google Analytics<span class="nt">&lt;/a&gt;</span> to collect statistics. You can disable it by blocking
-the JavaScript coming from www.google-analytics.com.
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
 <span class="nt">&lt;script&gt;</span>
 <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">o</span><span class="p">,</span><span class="nx">g</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">){</span>
     <span class="nx">i</span><span class="p">[</span><span class="s1">'GoogleAnalyticsObject'</span><span class="p">]</span><span class="o">=</span><span class="nx">r</span><span class="p">;</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">||</span><span class="kd">function</span><span class="p">(){</span>
@@ -32,7 +30,7 @@ the JavaScript coming from www.google-analytics.com.
     <span class="nx">a</span><span class="p">.</span><span class="nx">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="nx">a</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">g</span><span class="p">;</span>
     <span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
  <span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
-<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-xxxxxxxxx-2'</span><span class="p">,</span> <span class="s1">'&lt;site_name&gt;'</span><span class="p">);</span>
+<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-xxxxxxxxx-x'</span><span class="p">,</span> <span class="s1">'&lt;site_name&gt;'</span><span class="p">);</span>
 <span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
 <span class="nt">&lt;/script&gt;</span>
 <span class="nt">&lt;/div&gt;</span>
@@ -46,8 +44,8 @@ the JavaScript coming from www.google-analytics.com.
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/09/01/back_up_files_onto_dropbox.html</link>
-            <guid>http://skyhigh71.github.com/2013/09/01/back_up_files_onto_dropbox.html</guid>
+            <link>http://skyhigh71.github.io/2013/09/01/back_up_files_onto_dropbox.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/01/back_up_files_onto_dropbox.html</guid>
             <title><![CDATA[back up files onto dropbox]]></title>
             <description><![CDATA[<div class="section" id="back-up-files-onto-dropbox">
 <h1>back up files onto dropbox</h1>
@@ -62,7 +60,7 @@ Create directory where backup script resides:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir ~/Documents/cron
 </pre></div>
 </div>
-<p>Deploy following <a class="reference download internal" href="http://skyhigh71.github.com/_downloads/backup.sh"><span class="xref download docutils literal"><span class="pre">backup</span> <span class="pre">script</span></span></a> under cron directory:</p>
+<p>Deploy following <a class="reference download internal" href="http://skyhigh71.github.io/_downloads/backup.sh"><span class="xref download docutils literal"><span class="pre">backup</span> <span class="pre">script</span></span></a> under cron directory:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
 
 <span class="c"># we use day of week as file name</span>
@@ -102,8 +100,8 @@ Monitor syslog if cron works as expected.</p>
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/09/01/try_sphinx_better_theme.html</link>
-            <guid>http://skyhigh71.github.com/2013/09/01/try_sphinx_better_theme.html</guid>
+            <link>http://skyhigh71.github.io/2013/09/01/try_sphinx_better_theme.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/01/try_sphinx_better_theme.html</guid>
             <title><![CDATA[try sphinx better theme]]></title>
             <description><![CDATA[<div class="section" id="try-sphinx-better-theme">
 <h1>try sphinx better theme</h1>
@@ -127,8 +125,8 @@ Install sphinx-better-theme package.</p>
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/31/wiki_on_bitbucket.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/31/wiki_on_bitbucket.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/31/wiki_on_bitbucket.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/31/wiki_on_bitbucket.html</guid>
             <title><![CDATA[memo on bitbucket]]></title>
             <description><![CDATA[<div class="section" id="memo-on-bitbucket">
 <h1>memo on bitbucket</h1>
@@ -203,8 +201,8 @@ id_rsa.bitbucket  id_rsa.bitbucket.pub
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/30/blockdiag_in_tinkerer.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/30/blockdiag_in_tinkerer.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/30/blockdiag_in_tinkerer.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/30/blockdiag_in_tinkerer.html</guid>
             <title><![CDATA[chart in blog post]]></title>
             <description><![CDATA[<div class="section" id="chart-in-blog-post">
 <h1>chart in blog post</h1>
@@ -231,15 +229,15 @@ Search for path of your font.</p>
 <p>Now it’s ready for usage.</p>
 <p>For example,</p>
 <p class="blockdiag">
-<img alt="None" height="120" src="http://skyhigh71.github.com/_images/blockdiag-5e17e9707844be2c89d327c8de892f31f2754539.png" width="832"/>
+<img alt="None" height="120" src="http://skyhigh71.github.io/_images/blockdiag-5e17e9707844be2c89d327c8de892f31f2754539.png" width="832"/>
 </p>
 </div>]]></description>
              <pubDate>Fri, 30 Aug 2013 00:00:00 +0900</pubDate>
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/30/prevent_broken_pipe_during_ssh_session.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/30/prevent_broken_pipe_during_ssh_session.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/30/prevent_broken_pipe_during_ssh_session.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/30/prevent_broken_pipe_during_ssh_session.html</guid>
             <title><![CDATA[prevent broken pipe during ssh session]]></title>
             <description><![CDATA[<div class="section" id="prevent-broken-pipe-during-ssh-session">
 <h1>prevent broken pipe during ssh session</h1>
@@ -280,8 +278,8 @@ sshd configuraiton file is /etc/ssh/sshd_config.</p>
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/27/http_filter.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/27/http_filter.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/27/http_filter.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/27/http_filter.html</guid>
             <title><![CDATA[filter packet based upon URI]]></title>
             <description><![CDATA[<div class="section" id="filter-packet-based-upon-uri">
 <h1>filter packet based upon URI</h1>
@@ -299,8 +297,8 @@ You can find fun time of examining packets with wireshark.</p>
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/26/automatic_yum_update.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/26/automatic_yum_update.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/26/automatic_yum_update.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/26/automatic_yum_update.html</guid>
             <title><![CDATA[automatic yum update]]></title>
             <description><![CDATA[<div class="section" id="automatic-yum-update">
 <h1>automatic yum update</h1>
@@ -378,8 +376,8 @@ ID     | Login user               | Date and <span class="nb">time</span>    | A
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/25/how_to_play_minecraft_on_ubuntu.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/25/how_to_play_minecraft_on_ubuntu.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/25/how_to_play_minecraft_on_ubuntu.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/25/how_to_play_minecraft_on_ubuntu.html</guid>
             <title><![CDATA[how to play minecraft on ubuntu]]></title>
             <description><![CDATA[<div class="section" id="how-to-play-minecraft-on-ubuntu">
 <h1>how to play minecraft on ubuntu</h1>
@@ -462,8 +460,8 @@ java -Xmx1024M -Xms512M -cp minecraft.jar net.minecraft.LauncherFrame &gt;&gt; <
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/25/add_favicon.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/25/add_favicon.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/25/add_favicon.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/25/add_favicon.html</guid>
             <title><![CDATA[add favicon]]></title>
             <description><![CDATA[<div class="section" id="add-favicon">
 <h1>add favicon</h1>
@@ -483,8 +481,8 @@ _static/skyhigh71.ico: MS Windows icon resource - 1 icon
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/24/customize_tinkerer_page_continued.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/24/customize_tinkerer_page_continued.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/24/customize_tinkerer_page_continued.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/24/customize_tinkerer_page_continued.html</guid>
             <title><![CDATA[customize tinkerer page continued]]></title>
             <description><![CDATA[<div class="section" id="customize-tinkerer-page-continued">
 <h1>customize tinkerer page continued</h1>
@@ -538,8 +536,8 @@ You can configure post per page by posts_per_page parameter.</p>
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/24/how_to_yield_core_file.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/24/how_to_yield_core_file.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/24/how_to_yield_core_file.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/24/how_to_yield_core_file.html</guid>
             <title><![CDATA[how to yield core file]]></title>
             <description><![CDATA[<div class="section" id="how-to-yield-core-file">
 <h1>how to yield core file</h1>
@@ -594,8 +592,8 @@ Please be careful and monitor free disk space.</p>
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/23/customize_tinker_page.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/23/customize_tinker_page.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/23/customize_tinker_page.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/23/customize_tinker_page.html</guid>
             <title><![CDATA[customize tinkerer page]]></title>
             <description><![CDATA[<div class="section" id="customize-tinkerer-page">
 <h1>customize tinkerer page</h1>
@@ -680,8 +678,8 @@ oN google analytics site create Tracking ID for your blog site, which yields jav
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/22/enable_sshd.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/22/enable_sshd.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/22/enable_sshd.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/22/enable_sshd.html</guid>
             <title><![CDATA[enable sshd]]></title>
             <description><![CDATA[<div class="section" id="enable-sshd">
 <h1>enable sshd</h1>
@@ -725,8 +723,8 @@ In case that you would like to disable remote root access, then change parameter
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/21/swap_caps_lock_with_ctrl.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/21/swap_caps_lock_with_ctrl.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/21/swap_caps_lock_with_ctrl.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/21/swap_caps_lock_with_ctrl.html</guid>
             <title><![CDATA[swap Caps Lock key with Ctrl key]]></title>
             <description><![CDATA[<div class="section" id="swap-caps-lock-key-with-ctrl-key">
 <h1>swap Caps Lock key with Ctrl key</h1>
@@ -763,8 +761,8 @@ Please be noted that rebooting system has no effect for this keyboard configurat
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/11/the_first_post_of_mine.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/11/the_first_post_of_mine.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/11/the_first_post_of_mine.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/11/the_first_post_of_mine.html</guid>
             <title><![CDATA[the first post of mine]]></title>
             <description><![CDATA[<div class="section" id="the-first-post-of-mine">
 <h1>the first post of mine</h1>
@@ -948,8 +946,8 @@ After a while, you can access your blog with URL of <a class="reference external
         </item>
     
         <item>
-            <link>http://skyhigh71.github.com/2013/08/11/hello_world.html</link>
-            <guid>http://skyhigh71.github.com/2013/08/11/hello_world.html</guid>
+            <link>http://skyhigh71.github.io/2013/08/11/hello_world.html</link>
+            <guid>http://skyhigh71.github.io/2013/08/11/hello_world.html</guid>
             <title><![CDATA[Hello World]]></title>
             <description><![CDATA[<div class="section" id="hello-world">
 <h1>Hello World</h1>
