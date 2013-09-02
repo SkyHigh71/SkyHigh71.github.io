@@ -62,6 +62,38 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>September 02, 2013</span>
+        </div>
+        <div class="section" id="switching-from-https-to-ssh">
+<h1><a href="2013/09/02/switching_from_https_to_ssh.html">switching from https to ssh</a></h1>
+<p>By default, communication protocol used for github is not ssh but https.
+You can change protocol to ssh so that ssh key is used for authentication and you can avoid password authentication.</p>
+<p>Url, which includes protocol, is specified in .git/config file.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
+        <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
+</pre></div>
+</div>
+<p>So as to change url, use “git remote set-url” command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git remote <span class="nb">set</span>-url origin git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git
+</pre></div>
+</div>
+<p>Url in config file shall be updated as specified in argument.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
+        <span class="na">url</span> <span class="o">=</span> <span class="s">git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
+</pre></div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/github.html">github</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>September 01, 2013</span>
         </div>
         <div class="section" id="google-anlytics-in-sphinx">
@@ -165,37 +197,6 @@ Monitor syslog if cron works as expected.</p>
                 Tags:
                 <a href="tags/ubuntu.html">ubuntu</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>September 01, 2013</span>
-        </div>
-        <div class="section" id="try-sphinx-better-theme">
-<h1><a href="2013/09/01/try_sphinx_better_theme.html">try sphinx better theme</a></h1>
-<p>Found a <a class="reference external" href="https://github.com/irskep/sphinx-better-theme">new theme</a> for sphinx.</p>
-<p><a class="reference external" href="https://sphinx-better-theme.readthedocs.org/en/latest/demos.html">Demo site</a> looks nice &amp; simple.</p>
-<p>Let’s apply and see what kind of effect will have on my documentation.</p>
-<p>Application procedure is quite simple.
-Install sphinx-better-theme package.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo pip install sphinx-better-theme
-</pre></div>
-</div>
-<p>Apply theme by modifying conf.py.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">better</span> <span class="kn">import</span> <span class="n">better_theme_path</span>
-<span class="n">html_theme_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">better_theme_path</span><span class="p">]</span>
-<span class="n">html_theme</span> <span class="o">=</span> <span class="s">'better'</span>
-</pre></div>
-</div>
-<p>Ok, stay with this theme.</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/sphinx.html">sphinx</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -204,6 +205,8 @@ Install sphinx-better-theme package.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/02/switching_from_https_to_ssh.html">switching from https to ssh</a>
+        </li><li>
             <a href="2013/09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
         </li><li>
             <a href="2013/09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
@@ -221,8 +224,6 @@ Install sphinx-better-theme package.</p>
             <a href="2013/08/26/automatic_yum_update.html">automatic yum update</a>
         </li><li>
             <a href="2013/08/25/how_to_play_minecraft_on_ubuntu.html">how to play minecraft on ubuntu</a>
-        </li><li>
-            <a href="2013/08/25/add_favicon.html">add favicon</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -232,7 +233,7 @@ Install sphinx-better-theme package.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (1), <a href="tags/github.html">github</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (3), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (5)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (3), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (5)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

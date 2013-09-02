@@ -1,0 +1,31 @@
+switching from https to ssh
+===========================
+
+By default, communication protocol used for github is not ssh but https.
+You can change protocol to ssh so that ssh key is used for authentication and you can avoid password authentication.
+
+Url, which includes protocol, is specified in .git/config file.
+
+.. code-block:: ini
+
+    [remote "origin"]
+	    url = https://github.com/<USERNAME>/<REPO>.git
+
+So as to change url, use "git remote set-url" command.
+
+.. code-block:: bash
+
+    $ git remote set-url origin git@github.com:<USERNAME>/<REPO>.git
+
+Url in config file shall be updated as specified in argument.
+
+.. code-block:: ini
+
+    [remote "origin"]
+	    url = git@github.com:<USERNAME>/<REPO>.git
+
+
+.. author:: default
+.. categories:: none
+.. tags:: github
+.. comments::

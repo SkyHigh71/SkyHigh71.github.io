@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <title>how to play minecraft on ubuntu &mdash; sakana</title>
+        <title>switching from https to ssh &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="add favicon" href="add_favicon.html" /><link rel="prev" title="automatic yum update" href="../26/automatic_yum_update.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="google anlytics in sphinx" href="../01/google_anlytics_in_sphinx.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>August 25, 2013</span>
+            <span>September 02, 2013</span>
         </div>
     </div>
     
@@ -77,81 +77,23 @@
     
     </div>
     
-    <div class="section" id="how-to-play-minecraft-on-ubuntu">
-<h1>how to play minecraft on ubuntu</h1>
-<p>My daughter would like to play her favorite game, minecraft on her ubuntu box.
-Here is a short memo to summarize procedure to setup environment to play minecraft on ubuntu.</p>
-<div class="section" id="jvm">
-<h2>JVM</h2>
-<p>minecraft client is a jar file and you would better to have hotspot VM.
-You can install hotpost VM as follows:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo add-apt-repository ppa:webupd8team/java
-<span class="nv">$ </span>sudo apt-get update
-<span class="nv">$ </span>sudo apt-get install oracle-java7-installer
+    <div class="section" id="switching-from-https-to-ssh">
+<h1>switching from https to ssh</h1>
+<p>By default, communication protocol used for github is not ssh but https.
+You can change protocol to ssh so that ssh key is used for authentication and you can avoid password authentication.</p>
+<p>Url, which includes protocol, is specified in .git/config file.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
+        <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="search-path">
-<h2>search path</h2>
-<p>As with default configuration shared object libjawt.so can not be found.
-You have to configure environment variable LD_LIBRARY_PATH so that libjawt.so can be searched for.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/usr/lib/jvm/java-7-oracle/jre/lib/i386/
+<p>So as to change url, use &#8220;git remote set-url&#8221; command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git remote <span class="nb">set</span>-url origin git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git
 </pre></div>
 </div>
-</div>
-<div class="section" id="key-input">
-<h2>key input</h2>
-<p>As ibus interrupts key input on minecraft and You can not input any word on minecraft.
-You can avoid this problem by configuring following environment variable:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">XMODIFIERS</span><span class="o">=</span>@im<span class="o">=</span>none
+<p>Url in config file shall be updated as specified in argument.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
+        <span class="na">url</span> <span class="o">=</span> <span class="s">git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
 </pre></div>
-</div>
-</div>
-<div class="section" id="script">
-<h2>script</h2>
-<p>Here is sample script to launch minecraft.
-If you would like to speak something upon start-up, please install TTS engine, festival.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
-
-<span class="nv">LANG</span><span class="o">=</span>C
-<span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/usr/lib/jvm/java-7-oracle/jre/lib/i386/
-<span class="nv">XMODIFIERS</span><span class="o">=</span>@im<span class="o">=</span>none
-<span class="nb">export </span>LANG LD_LIBRARY_PATH XMODIFIERS
-
-<span class="nv">MINE_HOME</span><span class="o">=</span>~/minecraft
-<span class="nb">cd</span> <span class="nv">$MINE_HOME</span>
-
-<span class="nv">START_MSG</span><span class="o">=</span><span class="s2">&quot;start minecraft&quot;</span>
-<span class="nb">echo</span> <span class="nv">$START_MSG</span>|festival --tts
-
-<span class="nv">LOG</span><span class="o">=</span>play.<span class="sb">`</span>date <span class="s2">&quot;+%Y%m%d&quot;</span><span class="sb">`</span>.log
-
-<span class="nb">echo</span> <span class="s2">&quot;START: &quot;</span> <span class="sb">`</span>date<span class="sb">`</span> &gt;&gt; <span class="nv">$LOG</span>
-java -Xmx1024M -Xms512M -cp minecraft.jar net.minecraft.LauncherFrame &gt;&gt; <span class="nv">$LOG</span> 2&gt;&amp;1
-<span class="nb">echo</span> <span class="s2">&quot;FINISH: &quot;</span> <span class="sb">`</span>date<span class="sb">`</span> &gt;&gt; <span class="nv">$LOG</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="register-unity-panel">
-<h2>register unity panel</h2>
-<p>You can launch above script directly from unity panel.</p>
-<ul class="simple">
-<li>desktop file</li>
-</ul>
-<p>Create desktop configuration file (e.g. minecraft.desktop) so that unity can evaluate how to launch application.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">[Desktop</span> <span class="s">Entry]</span>
-<span class="s">Type=Application</span>
-<span class="s">Terminal=false</span>
-<span class="s">Name=minecraft</span>
-<span class="s">Icon=/PATH_TO_ICON_DIR/minecraft.ico</span>
-<span class="s">Exec=/PATH_TO_SCRIPT_DIR/minecraft.sh</span>
-</pre></div>
-</div>
-<p>Put this desktop configuration file under /usr/share/applications directory.</p>
-<ul class="simple">
-<li>unity panel</li>
-</ul>
-<p>And drag &amp; drop this desktop configuration file onto unity panel.</p>
 </div>
 </div>
 
@@ -163,35 +105,35 @@ java -Xmx1024M -Xms512M -cp minecraft.jar net.minecraft.LauncherFrame &gt;&gt; <
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/minecraft.html">minecraft</a>, <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+                <a href="../../../tags/github.html">github</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../26/automatic_yum_update.html">automatic yum update</a></li>
-            <li class="right"><a href="add_favicon.html">add favicon</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../09/02/switching_from_https_to_ssh.html">switching from https to ssh</a>
+            <a href="#">switching from https to ssh</a>
         </li><li>
-            <a href="../../09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
+            <a href="../01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
         </li><li>
-            <a href="../../09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
+            <a href="../01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
         </li><li>
-            <a href="../../09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
+            <a href="../01/try_sphinx_better_theme.html">try sphinx better theme</a>
         </li><li>
-            <a href="../31/wiki_on_bitbucket.html">memo on bitbucket</a>
+            <a href="../../08/31/wiki_on_bitbucket.html">memo on bitbucket</a>
         </li><li>
-            <a href="../30/blockdiag_in_tinkerer.html">chart in blog post</a>
+            <a href="../../08/30/blockdiag_in_tinkerer.html">chart in blog post</a>
         </li><li>
-            <a href="../30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a>
+            <a href="../../08/30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a>
         </li><li>
-            <a href="../27/http_filter.html">filter packet based upon URI</a>
+            <a href="../../08/27/http_filter.html">filter packet based upon URI</a>
         </li><li>
-            <a href="../26/automatic_yum_update.html">automatic yum update</a>
+            <a href="../../08/26/automatic_yum_update.html">automatic yum update</a>
         </li><li>
-            <a href="#">how to play minecraft on ubuntu</a>
+            <a href="../../08/25/how_to_play_minecraft_on_ubuntu.html">how to play minecraft on ubuntu</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
