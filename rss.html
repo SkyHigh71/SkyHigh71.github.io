@@ -3,7 +3,7 @@
     <channel>
         <title>sakana</title>
         <link>http://skyhigh71.github.io/</link>
-        <description>short memo by SkyHigh71</description>
+        <description>short short memo</description>
         <language>en-us</language>
         <pubDate>Mon, 02 Sep 2013 00:00:00 +0900</pubDate>
         
@@ -24,11 +24,12 @@ You switch change protocol to SSH so that ssh key is used for authentication and
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git remote <span class="nb">set</span>-url origin git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git
 </pre></div>
 </div>
-<p>Url in config file shall be updated as specified in argument.</p>
+<p>URL in config file shall be updated as specified in argument abvoe.</p>
 <div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
     <span class="na">url</span> <span class="o">=</span> <span class="s">git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
 </pre></div>
 </div>
+<p>Therefore you may be able to configure URL directly by modifying value in config file (not tested. probably :-)).</p>
 </div>]]></description>
              <pubDate>Mon, 02 Sep 2013 00:00:00 +0900</pubDate>
         </item>
@@ -796,13 +797,13 @@ Please be noted that rebooting system has no effect for this keyboard configurat
 <div class="section" id="github-configuration">
 <h2>github configuration</h2>
 <p>Let’s create public key and private key.</p>
-<div class="highlight-bash"><div class="highlight"><pre>~<span class="nv">$ </span>ssh-keygen
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh-keygen
 Generating public/private rsa key pair.
 ...
 </pre></div>
 </div>
 <p>They are yielded under ~/.ssh directory or under current working directory in case that you do not specify its path.</p>
-<div class="highlight-bash"><div class="highlight"><pre>~/.ssh<span class="nv">$ </span>file *
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file *
 id_rsa.github:     PEM RSA private key
 id_rsa.github.pub: OpenSSH RSA public key
 </pre></div>
@@ -828,14 +829,14 @@ Host github.com
 </pre></div>
 </div>
 <p>Configure user name and e-mail address for github,</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git config --global user.name SkyHigh71
-<span class="nv">$ </span>git config --global user.email &lt;your_email_address&gt;
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git config --global user.name &lt;USERNAME&gt;
+<span class="nv">$ </span>git config --global user.email &lt;YOUR_EMAIL_ADDRESS&gt;
 </pre></div>
 </div>
 <p>which will be reflected into .gitconfig file under home directory.</p>
 <div class="highlight-ini"><div class="highlight"><pre><span class="k">[user]</span>
-        <span class="na">name</span> <span class="o">=</span> <span class="s">SkyHigh71</span>
-<span class="s">        email = &lt;your_email_address&gt;</span>
+        <span class="na">name</span> <span class="o">=</span> <span class="s">&lt;USERNAME&gt;</span>
+<span class="s">        email = &lt;YOUR_EMAIL_ADDRESS&gt;</span>
 </pre></div>
 </div>
 <p>Enable password cache so as to avoid repetition of password input.</p>
@@ -863,7 +864,7 @@ Tinkerer version 1.2.1
 </pre></div>
 </div>
 <p>Create local directory to host blog.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir publicBlog
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir blog
 </pre></div>
 </div>
 <p>Execute tinker command (not tinkerer) with setup option.</p>
@@ -887,15 +888,11 @@ You just need to edit a couple of lines in conf.py
 11c11
 &lt; <span class="nv">project</span> <span class="o">=</span> <span class="s1">'My blog'</span>
 ---
-&gt; <span class="nv">project</span> <span class="o">=</span> <span class="s2">&quot;SkyHigh71's blog&quot;</span>
+&gt; <span class="nv">project</span> <span class="o">=</span> <span class="s2">&quot;sakana&quot;</span>
 14c14
 &lt; <span class="nv">tagline</span> <span class="o">=</span> <span class="s1">'Add intelligent tagline here'</span>
 ---
-&gt; <span class="nv">tagline</span> <span class="o">=</span> <span class="s1">''</span>
-17c17
-&lt; <span class="nv">description</span> <span class="o">=</span> <span class="s1">'This is an awesome blog'</span>
----
-&gt; <span class="nv">description</span> <span class="o">=</span> <span class="s1">''</span>
+&gt; <span class="nv">tagline</span> <span class="o">=</span> <span class="s1">'short memo by SkyHigh71'</span>
 20c20
 &lt; <span class="nv">author</span> <span class="o">=</span> <span class="s1">'Winston Smith'</span>
 ---

@@ -17,13 +17,14 @@ So as to change URL, use "git remote set-url" command.
 
     $ git remote set-url origin git@github.com:<USERNAME>/<REPO>.git
 
-Url in config file shall be updated as specified in argument.
+URL in config file shall be updated as specified in argument abvoe.
 
 .. code-block:: ini
 
     [remote "origin"]
         url = git@github.com:<USERNAME>/<REPO>.git
 
+Therefore you may be able to configure URL directly by modifying value in config file (not tested. probably :-)).
 
 .. author:: default
 .. categories:: none

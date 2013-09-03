@@ -10,7 +10,7 @@ Let's create public key and private key.
 
 .. code-block:: bash
 
-    ~$ ssh-keygen 
+    $ ssh-keygen 
     Generating public/private rsa key pair.
     ...
 
@@ -18,7 +18,7 @@ They are yielded under ~/.ssh directory or under current working directory in ca
 
 .. code-block:: bash
 
-    ~/.ssh$ file *
+    $ file *
     id_rsa.github:     PEM RSA private key
     id_rsa.github.pub: OpenSSH RSA public key
 
@@ -54,16 +54,16 @@ Configure user name and e-mail address for github,
 
 .. code-block:: bash
 
-    $ git config --global user.name SkyHigh71
-    $ git config --global user.email <your_email_address>
+    $ git config --global user.name <USERNAME>
+    $ git config --global user.email <YOUR_EMAIL_ADDRESS>
 
 which will be reflected into .gitconfig file under home directory.
 
 .. code-block:: ini
 
     [user]
-	    name = SkyHigh71
-	    email = <your_email_address>
+	    name = <USERNAME>
+	    email = <YOUR_EMAIL_ADDRESS>
 
 Enable password cache so as to avoid repetition of password input.
 
@@ -101,7 +101,7 @@ Create local directory to host blog.
 
 .. code-block:: bash
 
-    $ mkdir publicBlog
+    $ mkdir blog
 
 Execute tinker command (not tinkerer) with setup option.
 
@@ -129,15 +129,11 @@ Configure configuration file, conf.py (same as sphinx's one) according to your a
     11c11
     < project = 'My blog'
     ---
-    > project = "SkyHigh71's blog"
+    > project = "sakana"
     14c14
     < tagline = 'Add intelligent tagline here'
     ---
-    > tagline = ''
-    17c17
-    < description = 'This is an awesome blog'
-    ---
-    > description = ''
+    > tagline = 'short memo by SkyHigh71'
     20c20
     < author = 'Winston Smith'
     ---
