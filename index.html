@@ -67,7 +67,8 @@
         <div class="section" id="switching-from-https-to-ssh">
 <h1><a href="2013/09/02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a></h1>
 <p>Communication protocol for github can either be SSH or HTTPS.
-You switch change protocol to SSH so that ssh key is used for authentication and you can avoid password authentication.</p>
+You can configure protocol to SSH so that ssh key shall be used for authentication.
+And you do not have to enter password every time you communicate with github.</p>
 <p>URL, which includes protocol, is specified in .git/config file.</p>
 <div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
     <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
@@ -82,7 +83,7 @@ You switch change protocol to SSH so that ssh key is used for authentication and
     <span class="na">url</span> <span class="o">=</span> <span class="s">git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
 </pre></div>
 </div>
-<p>Therefore you may be able to configure URL directly by modifying value in config file (not tested. probably :-)).</p>
+<p>Therefore you may be able to configure URL directly by modifying value in config file (not tested though :-)).</p>
 </div>
         <div class="postmeta">
         <div class="author">

@@ -2,7 +2,8 @@ switching from HTTPS to SSH
 ===========================
 
 Communication protocol for github can either be SSH or HTTPS.
-You switch change protocol to SSH so that ssh key is used for authentication and you can avoid password authentication.
+You can configure protocol to SSH so that ssh key shall be used for authentication.
+And you do not have to enter password every time you communicate with github.
 
 URL, which includes protocol, is specified in .git/config file.
 
@@ -24,7 +25,7 @@ URL in config file shall be updated as specified in argument abvoe.
     [remote "origin"]
         url = git@github.com:<USERNAME>/<REPO>.git
 
-Therefore you may be able to configure URL directly by modifying value in config file (not tested. probably :-)).
+Therefore you may be able to configure URL directly by modifying value in config file (not tested though :-)).
 
 .. author:: default
 .. categories:: none
