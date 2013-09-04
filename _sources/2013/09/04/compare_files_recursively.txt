@@ -1,0 +1,21 @@
+compare files recursively
+=========================
+
+I have to confess that I'm so ignorant... 
+
+You can compare all the files under 2 directories recursively by diff command with -r option.
+
+For example,
+
+.. code-block:: bash
+
+    $ diff -r <DIR_A> <DIR_B>
+
+So easy.
+sigh...
+
+.. author:: default
+.. categories:: none
+.. tags:: gnu
+.. comments::
+

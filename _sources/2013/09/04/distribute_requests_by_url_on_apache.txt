@@ -1,0 +1,65 @@
+distribute requests by URL on apache
+====================================
+
+what's in your mind?
+--------------------
+
+Suppose that you have contents built on sphinx. 
+And you have already deployed it on apache instance.
+
+Suppose that you would like to deploy another content.
+That is, you started blogging and would like to publish it on identical instance of apache.
+
+You can configure apache instance so that it distributes content by given URL.
+
+Let's get started
+-----------------
+
+You can create symbolic link to target directory under documentation root directory though, it seems to be quite raw. 
+You can make use of "LocationMatch" directive.
+
+Create configuration file, e.g. tinker.conf under /etc/httpd/conf.d directory so that httpd can evaluate request.
+
+.. code-block:: apache
+
+    Alias /blog <TINKER_ROOT>/blog/html/
+    <LocationMatch "/blog/.*">
+        AuthType Basic
+        AuthName "Open Sesame!"
+        AuthUserFile <PATH_TO_PASS>/htpasswd
+        Require user lupin
+    </LocationMatch>
+
+All request for <SERVER>/blog/* will be routed to contents under <TINKER_ROOT>/blog/html directory.
+Replace <TINKER_ROOT> and <PATH_TO_PASS> as appropriate to meet your environment.
+
+In this sample, we apply basic authentication for access to this content.
+And user "lupin" can view content if authentication succeeds.
+
+Create password file for lupin by htpasswd command.
+
+.. code-block:: bash
+
+    $ htpasswd -c htpasswd lupin
+
+If you would like to allow access for other users, then add accounts to user list.
+You can append user names by separating them with white space.
+
+.. code-block:: apache
+
+        Require user lupin fujiko jigen
+
+And restart httpd so as to reflect changes above.
+
+.. code-block:: bash
+
+    $ sudo service httpd restart
+
+**Enjoy!**
+
+
+.. author:: default
+.. categories:: none
+.. tags:: apache
+.. comments::
+

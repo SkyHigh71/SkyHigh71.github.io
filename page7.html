@@ -15,28 +15,28 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>the first post of mine &mdash; sakana</title>
-            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
-            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
-            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
-            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
-            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-            <link rel="stylesheet" href="../../../_static/webfont.css" type="text/css">
-        <link rel="shortcut icon" href="../../../_static/skyhigh71.ico" /><!-- Load modernizr and JQuery -->
-        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <title>Page 7 &mdash; sakana</title>
+            <link rel="stylesheet" href="_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="_static/main.css" type="text/css">
+            <link rel="stylesheet" href="_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="_static/webfont.css" type="text/css">
+        <link rel="shortcut icon" href="_static/skyhigh71.ico" /><!-- Load modernizr and JQuery -->
+        <script src="_static/vendor/modernizr-2.6.2.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
-        <script src="../../../_static/plugins.js"></script>
-        <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Hello World" href="hello_world.html" /><link rel="prev" title="swap Caps Lock key with Ctrl key" href="../21/swap_caps_lock_with_ctrl.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="_static/plugins.js"></script>
+        <script src="_static/main.js"></script>
+        <link rel="prev" title="Newer" href="page6.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
+        URL_ROOT:    './',
         VERSION:     '1.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script><script type="text/javascript" src="../../../_static/google_analytics.js"></script>
+    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script><script type="text/javascript" src="_static/google_analytics.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -54,35 +54,22 @@
 
       <div id="container"><header>
             <hgroup>
-              <h1><a href="../../../index.html">sakana</a></h1><h2>short short memo</h2></hgroup>
+              <h1><a href="index.html">sakana</a></h1><h2>short short memo</h2></hgroup>
           </header>
       <nav>
             <ul><li class="main-nav">
-                  <a href="../../../index.html">Home</a>
+                  <a href="index.html">Home</a>
                 </li>
               </ul>
-          </nav><div class="main-container"><div class="main wrapper clearfix"><article>
-    <div class="section_head">
-    <div class="timestamp_layout">
-      <div class="timestamp postmeta">
+          </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>August 11, 2013</span>
         </div>
-    </div>
-    
-    <div class="buttons">
-      <!-- Twitter button -->
-      <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
-      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-    </div>
-    
-    </div>
-    
-    <div class="section" id="the-first-post-of-mine">
-<h1>the first post of mine</h1>
+        <div class="section" id="the-first-post-of-mine">
+<h1><a href="2013/08/11/the_first_post_of_mine.html">the first post of mine</a></h1>
 <p>A short memo to describe procedure how to host blog on github.</p>
 <div class="section" id="github-configuration">
 <h2>github configuration</h2>
-<p>Let&#8217;s create public key and private key.</p>
+<p>Let’s create public key and private key.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh-keygen
 Generating public/private rsa key pair.
 ...
@@ -106,11 +93,11 @@ Host github.com
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>xclip -sel clip &lt; ~/.ssh/id_rsa.github.pub
 </pre></div>
 </div>
-<p>Now let&#8217;s make a test connection to github.</p>
+<p>Now let’s make a test connection to github.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh -v -T git@github.com
 </pre></div>
 </div>
-<p>Let&#8217;s install git command.</p>
+<p>Let’s install git command.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install git
 </pre></div>
 </div>
@@ -127,7 +114,7 @@ Host github.com
 </div>
 <p>Enable password cache so as to avoid repetition of password input.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git config --global credential.helper cache
-<span class="nv">$ </span>git config --global credential.helper <span class="s1">&#39;cache --timeout=3600&#39;</span>
+<span class="nv">$ </span>git config --global credential.helper <span class="s1">'cache --timeout=3600'</span>
 </pre></div>
 </div>
 <p>These configurations will be reflected int .gitconfig file as well.
@@ -169,31 +156,31 @@ You just need to edit a couple of lines in conf.py
     └── master.rst
 </pre></div>
 </div>
-<p>Configure configuration file, conf.py (same as sphinx&#8217;s one) according to your appetite.</p>
+<p>Configure configuration file, conf.py (same as sphinx’s one) according to your appetite.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>diff conf.py.org conf.py
 11c11
-&lt; <span class="nv">project</span> <span class="o">=</span> <span class="s1">&#39;My blog&#39;</span>
+&lt; <span class="nv">project</span> <span class="o">=</span> <span class="s1">'My blog'</span>
 ---
 &gt; <span class="nv">project</span> <span class="o">=</span> <span class="s2">&quot;sakana&quot;</span>
 14c14
-&lt; <span class="nv">tagline</span> <span class="o">=</span> <span class="s1">&#39;Add intelligent tagline here&#39;</span>
+&lt; <span class="nv">tagline</span> <span class="o">=</span> <span class="s1">'Add intelligent tagline here'</span>
 ---
-&gt; <span class="nv">tagline</span> <span class="o">=</span> <span class="s1">&#39;short memo by SkyHigh71&#39;</span>
+&gt; <span class="nv">tagline</span> <span class="o">=</span> <span class="s1">'short memo by SkyHigh71'</span>
 20c20
-&lt; <span class="nv">author</span> <span class="o">=</span> <span class="s1">&#39;Winston Smith&#39;</span>
+&lt; <span class="nv">author</span> <span class="o">=</span> <span class="s1">'Winston Smith'</span>
 ---
-&gt; <span class="nv">author</span> <span class="o">=</span> <span class="s1">&#39;SkyHigh71&#39;</span>
+&gt; <span class="nv">author</span> <span class="o">=</span> <span class="s1">'SkyHigh71'</span>
 23c23
-&lt; <span class="nv">copyright</span> <span class="o">=</span> <span class="s1">&#39;1984, &#39;</span> + author
+&lt; <span class="nv">copyright</span> <span class="o">=</span> <span class="s1">'1984, '</span> + author
 ---
-&gt; <span class="nv">copyright</span> <span class="o">=</span> <span class="s1">&#39;2013-, &#39;</span> + author
+&gt; <span class="nv">copyright</span> <span class="o">=</span> <span class="s1">'2013-, '</span> + author
 26c26
-&lt; <span class="nv">website</span> <span class="o">=</span> <span class="s1">&#39;http://127.0.0.1/blog/html/&#39;</span>
+&lt; <span class="nv">website</span> <span class="o">=</span> <span class="s1">'http://127.0.0.1/blog/html/'</span>
 ---
-&gt; <span class="nv">website</span> <span class="o">=</span> <span class="s1">&#39;http://skyhigh71.github.com&#39;</span>
+&gt; <span class="nv">website</span> <span class="o">=</span> <span class="s1">'http://skyhigh71.github.com'</span>
 </pre></div>
 </div>
-<p>That&#8217;s all you have to configure upon initial configuration on local side.
+<p>That’s all you have to configure upon initial configuration on local side.
 And you can modify parameter(s) later on.</p>
 <p>Create a new repository named &lt;account.github.io&gt;, e.g.) SkyHigh71.github.io on github.</p>
 <p>On the other hand, create local directory to host HTML files for publication.</p>
@@ -223,7 +210,7 @@ This will create rst file under draft directory.</p>
 the_first_post_of_mine.rst
 </pre></div>
 </div>
-<p>After having finished editing your post and you are ready to post it, then it&#8217;s time to post.
+<p>After having finished editing your post and you are ready to post it, then it’s time to post.
 Following command will move RST file from draft directory to YYYY/MM/DD directory and be reflected in master.rst file.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tinker -p drafts/the_first_post_of_mine.rst
 </pre></div>
@@ -242,17 +229,16 @@ Following command will move RST file from draft directory to YYYY/MM/DD director
 </pre></div>
 </div>
 <p>Finally publish post to github.
-By the way, please be noted that you need to select not gh-pages branch but master branch for user&#8217;s blog.
+By the way, please be noted that you need to select not gh-pages branch but master branch for user’s blog.
 (It seems that there is a confusion about which branch to choose)</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git push origin master
 </pre></div>
 </div>
 <p>Please be patient, as it takes several minutes until posted page will come up.
-After a while, you can access your blog with URL of <a class="reference external" href="http:/">http:/</a>/&lt;account&gt;.github.io/.</p>
+After a while, you can access your blog with URL of <a class="reference external" href="http:">http:/</a>/&lt;account&gt;.github.io/.</p>
 </div>
 </div>
-
-    <div class="postmeta">
+        <div class="postmeta">
         <div class="author">
             <span>Posted by SkyHigh71</span>
         </div>
@@ -260,45 +246,58 @@ After a while, you can access your blog with URL of <a class="reference external
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/tinkerer.html">tinkerer</a>, <a href="../../../tags/github.html">github</a></span>
+                <a href="tags/tinkerer.html">tinkerer</a>, <a href="tags/github.html">github</a></span>
         </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>August 11, 2013</span>
         </div>
-    
-<ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../21/swap_caps_lock_with_ctrl.html">swap Caps Lock key with Ctrl key</a></li>
-            <li class="right"><a href="hello_world.html">Hello World</a> &raquo; </li>
+        <div class="section" id="hello-world">
+<h1><a href="2013/08/11/hello_world.html">Hello World</a></h1>
+<p>How are you doing?</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        
+        </div><div class="archive_link">
+        <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
+    </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="page6.html">Newer</a></li>
+            <li class="right"></li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../09/04/compare_files_recursively.html">compare files recursively</a>
+            <a href="2013/09/04/compare_files_recursively.html">compare files recursively</a>
         </li><li>
-            <a href="../../09/04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
+            <a href="2013/09/04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
         </li><li>
-            <a href="../../09/02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
+            <a href="2013/09/02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
         </li><li>
-            <a href="../../09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
+            <a href="2013/09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
         </li><li>
-            <a href="../../09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
+            <a href="2013/09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
         </li><li>
-            <a href="../../09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
+            <a href="2013/09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
         </li><li>
-            <a href="../31/wiki_on_bitbucket.html">memo on bitbucket</a>
+            <a href="2013/08/31/wiki_on_bitbucket.html">memo on bitbucket</a>
         </li><li>
-            <a href="../30/blockdiag_in_tinkerer.html">chart in blog post</a>
+            <a href="2013/08/30/blockdiag_in_tinkerer.html">chart in blog post</a>
         </li><li>
-            <a href="../30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a>
+            <a href="2013/08/30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a>
         </li><li>
-            <a href="../27/http_filter.html">filter packet based upon URI</a>
+            <a href="2013/08/27/http_filter.html">filter packet based upon URI</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
     <h1>Search</h1>
-    <form action="../../../search.html" method="get">
+    <form action="search.html" method="get">
         <input type="text" name="q" />
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="../../../tags/apache.html">apache</a> (1), <a href="../../../tags/bitbucket.html">bitbucket</a> (1), <a href="../../../tags/blockdiag.html">blockdiag</a> (1), <a href="../../../tags/github.html">github</a> (2), <a href="../../../tags/gnu.html">gnu</a> (1), <a href="../../../tags/hg.html">hg</a> (1), <a href="../../../tags/minecraft.html">minecraft</a> (1), <a href="../../../tags/sl.html">sl</a> (1), <a href="../../../tags/sphinx.html">sphinx</a> (3), <a href="../../../tags/ssh.html">ssh</a> (1), <a href="../../../tags/tinkerer.html">tinkerer</a> (5), <a href="../../../tags/ubuntu.html">ubuntu</a> (5)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gnu.html">gnu</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (3), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (5)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

@@ -5,8 +5,77 @@
         <link>http://skyhigh71.github.io/</link>
         <description>short short memo</description>
         <language>en-us</language>
-        <pubDate>Mon, 02 Sep 2013 00:00:00 +0900</pubDate>
+        <pubDate>Wed, 04 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/04/compare_files_recursively.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/04/compare_files_recursively.html</guid>
+            <title><![CDATA[compare files recursively]]></title>
+            <description><![CDATA[<div class="section" id="compare-files-recursively">
+<h1>compare files recursively</h1>
+<p>I have to confess that I’m so ignorant...</p>
+<p>You can compare all the files under 2 directories recursively by diff command with -r option.</p>
+<p>For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>diff -r &lt;DIR_A&gt; &lt;DIR_B&gt;
+</pre></div>
+</div>
+<p>So easy.
+sigh...</p>
+</div>]]></description>
+             <pubDate>Wed, 04 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/04/distribute_requests_by_url_on_apache.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/04/distribute_requests_by_url_on_apache.html</guid>
+            <title><![CDATA[distribute requests by URL on apache]]></title>
+            <description><![CDATA[<div class="section" id="distribute-requests-by-url-on-apache">
+<h1>distribute requests by URL on apache</h1>
+<div class="section" id="what-s-in-your-mind">
+<h2>what’s in your mind?</h2>
+<p>Suppose that you have contents built on sphinx.
+And you have already deployed it on apache instance.</p>
+<p>Suppose that you would like to deploy another content.
+That is, you started blogging and would like to publish it on identical instance of apache.</p>
+<p>You can configure apache instance so that it distributes content by given URL.</p>
+</div>
+<div class="section" id="let-s-get-started">
+<h2>Let’s get started</h2>
+<p>You can create symbolic link to target directory under documentation root directory though, it seems to be quite raw.
+You can make use of “LocationMatch” directive.</p>
+<p>Create configuration file, e.g. tinker.conf under /etc/httpd/conf.d directory so that httpd can evaluate request.</p>
+<div class="highlight-apache"><div class="highlight"><pre><span class="nb">Alias</span> <span class="sx">/blog</span> &lt;TINKER_ROOT&gt;/blog/html/
+<span class="nt">&lt;LocationMatch</span> <span class="s">&quot;/blog/.*&quot;</span><span class="nt">&gt;</span>
+    <span class="nb">AuthType</span> Basic
+    <span class="nb">AuthName</span> <span class="s2">&quot;Open Sesame!&quot;</span>
+    <span class="nb">AuthUserFile</span> &lt;PATH_TO_PASS&gt;/htpasswd
+    <span class="nb">Require</span> <span class="k">user</span> lupin
+<span class="nt">&lt;/LocationMatch&gt;</span>
+</pre></div>
+</div>
+<p>All request for &lt;SERVER&gt;/blog/* will be routed to contents under &lt;TINKER_ROOT&gt;/blog/html directory.
+Replace &lt;TINKER_ROOT&gt; and &lt;PATH_TO_PASS&gt; as appropriate to meet your environment.</p>
+<p>In this sample, we apply basic authentication for access to this content.
+And user “lupin” can view content if authentication succeeds.</p>
+<p>Create password file for lupin by htpasswd command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>htpasswd -c htpasswd lupin
+</pre></div>
+</div>
+<p>If you would like to allow access for other users, then add accounts to user list.
+You can append user names by separating them with white space.</p>
+<div class="highlight-apache"><div class="highlight"><pre><span class="nb">Require</span> <span class="k">user</span> lupin fujiko jigen
+</pre></div>
+</div>
+<p>And restart httpd so as to reflect changes above.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo service httpd restart
+</pre></div>
+</div>
+<p><strong>Enjoy!</strong></p>
+</div>
+</div>]]></description>
+             <pubDate>Wed, 04 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/02/switching_from_https_to_ssh.html</link>
             <guid>http://skyhigh71.github.io/2013/09/02/switching_from_https_to_ssh.html</guid>
