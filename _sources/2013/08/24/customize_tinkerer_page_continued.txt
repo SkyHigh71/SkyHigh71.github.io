@@ -17,7 +17,8 @@ Therefore I first thought that I have to set LANG=C upon building html so as to 
 
     $ LANG=C tinker -b
 
-But it's confirmed that language parameter in conf.py is valid for "en" as well.
+*But it's confirmed that language parameter in conf.py is valid for "en" as well.*
+**value "en" does not work. You will encounter error stating that "loading translations [en]... locale not available" sorry...**
 
 .. code-block:: python
 
