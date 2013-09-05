@@ -45,7 +45,7 @@ application failure is passed to apport application via pipe as described in /pr
 .. code-block:: bash
 
     $ cat /proc/sys/kernel/core_pattern
-    |/usr/share/apport/apport %p %s %c
+    \|/usr/share/apport/apport %p %s %c
 
 Therefore you change output location of core file by manipulating core_pattern file.
 Following is the sample to configure core files will be yielded under /var/cores directory with file name of core.<executable_name>.<PID>.<timestamp>.
@@ -56,6 +56,34 @@ Following is the sample to configure core files will be yielded under /var/cores
     $ sudo chmod a+w /var/cores
     $ sudo bash -c "echo /var/cores/core.%e.%p.%t > /proc/sys/kernel/core_pattern"
 
+permanent change
+----------------
+
+Above change will be lost upon system reboot.
+So as to make change reflected over reboot, add following line in /etc/sysctl.conf.
+
+.. code-block:: ini
+
+    kernel.core_pattern=/var/cores/core.%e.%p.%t
+
+Please be noted that apport will overwrite this kernel parameter as follows (/etc/init/apport.conf).
+
+.. code-block:: bash
+
+    echo "\|/usr/share/apport/apport %p %s %c" > /proc/sys/kernel/core_pattern
+
+This phenomenon seems to have already been discussed in `bug #1080978`_.
+
+.. _bug #1080978: https://bugs.launchpad.net/ubuntu/+source/apport/+bug/1080978
+
+As temporary measure to avoid this overwrite, let us disable apport for now (/etc/default/apport).
+
+.. code-block:: ini
+
+    #enabled=1
+    enabled=0
+
+    
 summary
 -------
 

@@ -667,7 +667,7 @@ For details, please refer to man page of limits.conf.</p>
 <p>By default, application failures will be reported back to developers via <a class="reference external" href="https://wiki.ubuntu.com/Apport">apport</a>.</p>
 <p>application failure is passed to apport application via pipe as described in /proc/sys/kernel/core_pattern file.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat /proc/sys/kernel/core_pattern
-|/usr/share/apport/apport %p %s %c
+<span class="se">\|</span>/usr/share/apport/apport %p %s %c
 </pre></div>
 </div>
 <p>Therefore you change output location of core file by manipulating core_pattern file.
@@ -675,6 +675,24 @@ Following is the sample to configure core files will be yielded under /var/cores
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo mkdir /var/cores
 <span class="nv">$ </span>sudo chmod a+w /var/cores
 <span class="nv">$ </span>sudo bash -c <span class="s2">&quot;echo /var/cores/core.%e.%p.%t &gt; /proc/sys/kernel/core_pattern&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="permanent-change">
+<h2>permanent change</h2>
+<p>Above change will be lost upon system reboot.
+So as to make change reflected over reboot, add following line in /etc/sysctl.conf.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="na">kernel.core_pattern</span><span class="o">=</span><span class="s">/var/cores/core.%e.%p.%t</span>
+</pre></div>
+</div>
+<p>Please be noted that apport will overwrite this kernel parameter as follows (/etc/init/apport.conf).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">echo</span> <span class="s2">&quot;\|/usr/share/apport/apport %p %s %c&quot;</span> &gt; /proc/sys/kernel/core_pattern
+</pre></div>
+</div>
+<p>This phenomenon seems to have already been discussed in <a class="reference external" href="https://bugs.launchpad.net/ubuntu/+source/apport/+bug/1080978">bug #1080978</a>.</p>
+<p>As temporary measure to avoid this overwrite, let us disable apport for now (/etc/default/apport).</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="c1">#enabled=1</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">0</span>
 </pre></div>
 </div>
 </div>
