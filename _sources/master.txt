@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/09/06/python_tools_invocation
    2013/09/04/compare_files_recursively
    2013/09/04/distribute_requests_by_url_on_apache
    2013/09/02/switching_from_https_to_ssh

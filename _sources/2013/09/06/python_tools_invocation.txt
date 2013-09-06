@@ -1,0 +1,65 @@
+python tools invocation
+=======================
+
+There are many tools (e.g. yum/hg), which are written in python, on Linux platform.
+For example, on my ubuntu 13.04 box there are 45 python scripts under /usr/local/bin directory.
+
+.. code-block:: bash
+
+    $ file /usr/local/bin/*|grep -ic python
+    45
+
+So I should say that one can not live without them.
+
+How are these python tools invoked?
+
+Take tikerer as example.
+
+.. code-block:: bash
+
+    $ which tinker
+    /usr/local/bin/tinker
+    $ file /usr/local/bin/tinker
+    /usr/local/bin/tinker: Python script, ASCII text executable
+
+So executing tinker command will hook python package.
+
+.. code-block:: python
+
+    #!/usr/bin/python
+    # EASY-INSTALL-ENTRY-SCRIPT: 'Tinkerer==1.2.1','console_scripts','tinker'
+    __requires__ = 'Tinkerer==1.2.1'
+    import sys
+    from pkg_resources import load_entry_point
+
+    if __name__ == '__main__':
+        sys.exit(
+            load_entry_point('Tinkerer==1.2.1', 'console_scripts', 'tinker')()
+        )
+
+Where does this package come from?
+Let's search for its location with primitive way.
+
+.. code-block:: bash
+
+    $ strace -o test.txt -e open tinker -d "test"
+    $ grep tinker test.txt |grep -iv enoent
+    ...
+    open("/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.py", O_RDONLY|O_LARGEFILE) = 3
+    open("/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.pyc", O_RDONLY|O_LARGEFILE) = 4
+
+Ok, here is the location where relevant python package resides.
+
+.. code-block:: bash
+
+    $ ls /usr/local/lib/python2.7/dist-packages/tinkerer 
+    __init__.py   __templates  cmdline.pyc	draft.pyc  master.py   page.py	 paths.py   post.py   static  utils.py	 writer.py
+    __init__.pyc  cmdline.py   draft.py	ext	   master.pyc  page.pyc  paths.pyc  post.pyc  themes  utils.pyc  writer.pyc
+
+So when one installs python package, say, with pip command, packages will be deployed under dist-packages directory.
+And at the same time, a wrapper script will be deployed on search path so that it invokes relevant package by making use of pkg_resources.
+
+.. author:: default
+.. categories:: none
+.. tags:: python
+.. comments::

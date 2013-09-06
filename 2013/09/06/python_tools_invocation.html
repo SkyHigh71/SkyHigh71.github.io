@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>customize tinkerer page continued &mdash; sakana</title>
+        <title>python tools invocation &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="how to yield core file" href="how_to_yield_core_file.html" /><link rel="prev" title="add favicon" href="../25/add_favicon.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="compare files recursively" href="../04/compare_files_recursively.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>August 24, 2013</span>
+            <span>September 06, 2013</span>
         </div>
     </div>
     
@@ -77,54 +77,53 @@
     
     </div>
     
-    <div class="section" id="customize-tinkerer-page-continued">
-<h1>customize tinkerer page continued</h1>
-<div class="section" id="language">
-<h2>language</h2>
-<p>LANG environment variable of my shell is configured to ja_JP.UTF-8.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$LANG</span>
-ja_JP.UTF-8
+    <div class="section" id="python-tools-invocation">
+<h1>python tools invocation</h1>
+<p>There are many tools (e.g. yum/hg), which are written in python, on Linux platform.
+For example, on my ubuntu 13.04 box there are 45 python scripts under /usr/local/bin directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/local/bin/*|grep -ic python
+45
 </pre></div>
 </div>
-<p>Therefore I first thought that I have to set LANG=C upon building html so as to obtain English output.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ LANG</span><span class="o">=</span>C tinker -b
+<p>So I should say that one can not live without them.</p>
+<p>How are these python tools invoked?</p>
+<p>Take tikerer as example.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>which tinker
+/usr/local/bin/tinker
+<span class="nv">$ </span>file /usr/local/bin/tinker
+/usr/local/bin/tinker: Python script, ASCII text executable
 </pre></div>
 </div>
-<p><em>But it&#8217;s confirmed that language parameter in conf.py is valid for &#8220;en&#8221; as well.</em>
-<strong>value &#8220;en&#8221; does not work. You will encounter error stating that &#8220;loading translations [en]... locale not available&#8221; sorry...</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">language</span> <span class="o">=</span> <span class="s">&quot;en&quot;</span>
+<p>So executing tinker command will hook python package.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="c"># EASY-INSTALL-ENTRY-SCRIPT: &#39;Tinkerer==1.2.1&#39;,&#39;console_scripts&#39;,&#39;tinker&#39;</span>
+<span class="n">__requires__</span> <span class="o">=</span> <span class="s">&#39;Tinkerer==1.2.1&#39;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">load_entry_point</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
+        <span class="n">load_entry_point</span><span class="p">(</span><span class="s">&#39;Tinkerer==1.2.1&#39;</span><span class="p">,</span> <span class="s">&#39;console_scripts&#39;</span><span class="p">,</span> <span class="s">&#39;tinker&#39;</span><span class="p">)()</span>
+    <span class="p">)</span>
 </pre></div>
 </div>
-<p>And if you would like to configure, say, German as default language of your blog, then configure it as &#8220;de&#8221;.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">language</span> <span class="o">=</span> <span class="s">&quot;de&quot;</span>
+<p>Where does this package come from?
+Let&#8217;s search for its location with primitive way.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>strace -o test.txt -e open tinker -d <span class="s2">&quot;test&quot;</span>
+<span class="nv">$ </span>grep tinker test.txt |grep -iv enoent
+...
+open<span class="o">(</span><span class="s2">&quot;/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.py&quot;</span>, O_RDONLY|O_LARGEFILE<span class="o">)</span> <span class="o">=</span> 3
+open<span class="o">(</span><span class="s2">&quot;/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.pyc&quot;</span>, O_RDONLY|O_LARGEFILE<span class="o">)</span> <span class="o">=</span> 4
 </pre></div>
 </div>
-<p>But localization is not perfect, for example, date seems to be yielded based upon LANG.
-So you would better to set LANG upon building html.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ LANG</span><span class="o">=</span>de_DE.utf8 tinker -b
+<p>Ok, here is the location where relevant python package resides.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls /usr/local/lib/python2.7/dist-packages/tinkerer
+__init__.py   __templates  cmdline.pyc      draft.pyc  master.py   page.py   paths.py   post.py   static  utils.py   writer.py
+__init__.pyc  cmdline.py   draft.py ext        master.pyc  page.pyc  paths.pyc  post.pyc  themes  utils.pyc  writer.pyc
 </pre></div>
 </div>
-</div>
-<div class="section" id="theme">
-<h2>theme</h2>
-<p>You can select theme among following options and set theme in theme in conf.py.</p>
-<ul class="simple">
-<li>flat (default)</li>
-<li>modern5</li>
-<li>minimal5</li>
-<li>responsive</li>
-<li>dark</li>
-</ul>
-</div>
-<div class="section" id="post-per-page">
-<h2>post per page</h2>
-<p>Sometimes you find that default post per page (10) seems to be too long.
-You can configure post per page by posts_per_page parameter.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Number of blog posts per page</span>
-<span class="n">posts_per_page</span> <span class="o">=</span> <span class="mi">3</span>
-</pre></div>
-</div>
-</div>
+<p>So when one installs python package, say, with pip command, packages will be deployed under dist-packages directory.
+And at the same time, a wrapper script will be deployed on search path so that it invokes relevant package by making use of pkg_resources.</p>
 </div>
 
     <div class="postmeta">
@@ -135,35 +134,35 @@ You can configure post per page by posts_per_page parameter.</p>
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/tinkerer.html">tinkerer</a></span>
+                <a href="../../../tags/python.html">python</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../25/add_favicon.html">add favicon</a></li>
-            <li class="right"><a href="how_to_yield_core_file.html">how to yield core file</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../04/compare_files_recursively.html">compare files recursively</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../09/06/python_tools_invocation.html">python tools invocation</a>
+            <a href="#">python tools invocation</a>
         </li><li>
-            <a href="../../09/04/compare_files_recursively.html">compare files recursively</a>
+            <a href="../04/compare_files_recursively.html">compare files recursively</a>
         </li><li>
-            <a href="../../09/04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
+            <a href="../04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
         </li><li>
-            <a href="../../09/02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
+            <a href="../02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
         </li><li>
-            <a href="../../09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
+            <a href="../01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
         </li><li>
-            <a href="../../09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
+            <a href="../01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
         </li><li>
-            <a href="../../09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
+            <a href="../01/try_sphinx_better_theme.html">try sphinx better theme</a>
         </li><li>
-            <a href="../31/wiki_on_bitbucket.html">memo on bitbucket</a>
+            <a href="../../08/31/wiki_on_bitbucket.html">memo on bitbucket</a>
         </li><li>
-            <a href="../30/blockdiag_in_tinkerer.html">chart in blog post</a>
+            <a href="../../08/30/blockdiag_in_tinkerer.html">chart in blog post</a>
         </li><li>
-            <a href="../30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a>
+            <a href="../../08/30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">

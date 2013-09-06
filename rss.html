@@ -5,8 +5,63 @@
         <link>http://skyhigh71.github.io/</link>
         <description>short short memo</description>
         <language>en-us</language>
-        <pubDate>Wed, 04 Sep 2013 00:00:00 +0900</pubDate>
+        <pubDate>Fri, 06 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/06/python_tools_invocation.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/06/python_tools_invocation.html</guid>
+            <title><![CDATA[python tools invocation]]></title>
+            <description><![CDATA[<div class="section" id="python-tools-invocation">
+<h1>python tools invocation</h1>
+<p>There are many tools (e.g. yum/hg), which are written in python, on Linux platform.
+For example, on my ubuntu 13.04 box there are 45 python scripts under /usr/local/bin directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/local/bin/*|grep -ic python
+45
+</pre></div>
+</div>
+<p>So I should say that one can not live without them.</p>
+<p>How are these python tools invoked?</p>
+<p>Take tikerer as example.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>which tinker
+/usr/local/bin/tinker
+<span class="nv">$ </span>file /usr/local/bin/tinker
+/usr/local/bin/tinker: Python script, ASCII text executable
+</pre></div>
+</div>
+<p>So executing tinker command will hook python package.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="c"># EASY-INSTALL-ENTRY-SCRIPT: 'Tinkerer==1.2.1','console_scripts','tinker'</span>
+<span class="n">__requires__</span> <span class="o">=</span> <span class="s">'Tinkerer==1.2.1'</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">load_entry_point</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
+        <span class="n">load_entry_point</span><span class="p">(</span><span class="s">'Tinkerer==1.2.1'</span><span class="p">,</span> <span class="s">'console_scripts'</span><span class="p">,</span> <span class="s">'tinker'</span><span class="p">)()</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Where does this package come from?
+Let’s search for its location with primitive way.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>strace -o test.txt -e open tinker -d <span class="s2">&quot;test&quot;</span>
+<span class="nv">$ </span>grep tinker test.txt |grep -iv enoent
+...
+open<span class="o">(</span><span class="s2">&quot;/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.py&quot;</span>, O_RDONLY|O_LARGEFILE<span class="o">)</span> <span class="o">=</span> 3
+open<span class="o">(</span><span class="s2">&quot;/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.pyc&quot;</span>, O_RDONLY|O_LARGEFILE<span class="o">)</span> <span class="o">=</span> 4
+</pre></div>
+</div>
+<p>Ok, here is the location where relevant python package resides.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls /usr/local/lib/python2.7/dist-packages/tinkerer
+__init__.py   __templates  cmdline.pyc      draft.pyc  master.py   page.py   paths.py   post.py   static  utils.py   writer.py
+__init__.pyc  cmdline.py   draft.py ext        master.pyc  page.pyc  paths.pyc  post.pyc  themes  utils.pyc  writer.pyc
+</pre></div>
+</div>
+<p>So when one installs python package, say, with pip command, packages will be deployed under dist-packages directory.
+And at the same time, a wrapper script will be deployed on search path so that it invokes relevant package by making use of pkg_resources.</p>
+</div>]]></description>
+             <pubDate>Fri, 06 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/04/compare_files_recursively.html</link>
             <guid>http://skyhigh71.github.io/2013/09/04/compare_files_recursively.html</guid>
