@@ -31,6 +31,8 @@ vmware-modconfig logs ends up as follows.
     Failed to find /lib/modules/3.8.0-30-generic/build/include/linux/version.h
     /lib/modules/3.8.0-30-generic/build/include/linux/version.h not found, looking for generated/uapi/linux/version.h instead.
 
+Omitting stack here though, process exits by receiving SEGV.
+
 workaround
 ----------
 
@@ -53,8 +55,7 @@ Procedure is as follows.
     $ sudo ln -s /usr/src/linux-headers-`uname -r`/include/generated/uapi/linux/version.h /usr/src/linux-headers-`uname -r`/include/linux/version.h
     $ sudo vmware-modconfig --console --install-all
 
-Now you can start vmplayer again.
-
+Now you can enjoy vmplayer again.
 
 remark
 ------
