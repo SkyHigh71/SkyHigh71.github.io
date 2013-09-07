@@ -5,8 +5,75 @@
         <link>http://skyhigh71.github.io/</link>
         <description>short short memo</description>
         <language>en-us</language>
-        <pubDate>Fri, 06 Sep 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sat, 07 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/07/vmplayer_abnormal_exit_on_ubuntu.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/07/vmplayer_abnormal_exit_on_ubuntu.html</guid>
+            <title><![CDATA[vmplayer abnormal exit on ubuntu]]></title>
+            <description><![CDATA[<div class="section" id="vmplayer-abnormal-exit-on-ubuntu">
+<h1>vmplayer abnormal exit on ubuntu</h1>
+<p>These days on my ubuntu box I encounter abnormal exit of vmplayer upon start-up.
+Specifically speaking vmplayer asks for me to update kernel modules and it fails.</p>
+<p>sigh.</p>
+<div class="section" id="problem-description">
+<h2>problem description</h2>
+<p>It goes as follows.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vmplayer
+Logging to /tmp/vmware-ayamada/vmware-modconfig-12999.log
+... <span class="s2">&quot;VMWare Kernel Module Updater&quot;</span> windows comes up ...
+<span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$?</span>
+1
+</pre></div>
+</div>
+<p>vmware-modconfig logs ends up as follows.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Got gcc version <span class="s2">&quot;4.7&quot;</span>.
+The GCC version matches the kernel GCC minor version like a glove.
+Trying to find a suitable PBM <span class="nb">set </span><span class="k">for </span>kernel <span class="s2">&quot;3.8.0-30-generic&quot;</span>.
+No matching PBM <span class="nb">set </span>was found <span class="k">for </span>kernel <span class="s2">&quot;3.8.0-30-generic&quot;</span>.
+Validating path <span class="s2">&quot;/lib/modules/3.8.0-30-generic/build/include&quot;</span> <span class="k">for </span>kernel release <span class="s2">&quot;3.8.0-30-generic&quot;</span>.
+Failed to find /lib/modules/3.8.0-30-generic/build/include/linux/version.h
+/lib/modules/3.8.0-30-generic/build/include/linux/version.h not found, looking <span class="k">for </span>generated/uapi/linux/version.h instead.
+</pre></div>
+</div>
+</div>
+<div class="section" id="workaround">
+<h2>workaround</h2>
+<p>It seems to be known issue.
+Please refer to <a class="reference external" href="http://askubuntu.com/questions/247547/vmware-player-5-0-1-and-kernel-3-7-will-not-complile">following thread</a> in askubuntu.</p>
+<p>So workaround is to:</p>
+<ol class="arabic simple">
+<li>create symbolic link of version.h header for current kernel revision</li>
+<li>compile</li>
+</ol>
+<p>Procedure is as follows.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>uname -r
+3.8.0-30-generic
+<span class="nv">$ </span>sudo ln -s /usr/src/linux-headers-<span class="sb">`</span>uname -r<span class="sb">`</span>/include/generated/uapi/linux/version.h /usr/src/linux-headers-<span class="sb">`</span>uname -r<span class="sb">`</span>/include/linux/version.h
+<span class="nv">$ </span>sudo vmware-modconfig --console --install-all
+</pre></div>
+</div>
+<p>Now you can start vmplayer again.</p>
+</div>
+<div class="section" id="remark">
+<h2>remark</h2>
+<p>There are so many headers...</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls -ld /usr/src/linux-headers-3.8.0-*-generic
+drwxr-xr-x 7 root root 4096 May 18 14:34 /usr/src/linux-headers-3.8.0-21-generic
+drwxr-xr-x 7 root root 4096 May 25 08:59 /usr/src/linux-headers-3.8.0-22-generic
+drwxr-xr-x 7 root root 4096 May 31 09:59 /usr/src/linux-headers-3.8.0-23-generic
+drwxr-xr-x 7 root root 4096 Jun 19 10:01 /usr/src/linux-headers-3.8.0-25-generic
+drwxr-xr-x 7 root root 4096 Jul  5 09:58 /usr/src/linux-headers-3.8.0-26-generic
+drwxr-xr-x 7 root root 4096 Jul 31 09:22 /usr/src/linux-headers-3.8.0-27-generic
+drwxr-xr-x 7 root root 4096 Aug 21 10:07 /usr/src/linux-headers-3.8.0-29-generic
+drwxr-xr-x 7 root root 4096 Sep  6 09:52 /usr/src/linux-headers-3.8.0-30-generic
+</pre></div>
+</div>
+</div>
+</div>]]></description>
+             <pubDate>Sat, 07 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/06/python_tools_invocation.html</link>
             <guid>http://skyhigh71.github.io/2013/09/06/python_tools_invocation.html</guid>

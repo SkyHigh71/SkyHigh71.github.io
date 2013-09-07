@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>enable sshd &mdash; sakana</title>
+        <title>vmplayer abnormal exit on ubuntu &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="swap Caps Lock key with Ctrl key" href="../21/swap_caps_lock_with_ctrl.html" /><link rel="prev" title="customize tinkerer page" href="../23/customize_tinker_page.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="python tools invocation" href="../06/python_tools_invocation.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>August 22, 2013</span>
+            <span>September 07, 2013</span>
         </div>
     </div>
     
@@ -77,42 +77,64 @@
     
     </div>
     
-    <div class="section" id="enable-sshd">
-<h1>enable sshd</h1>
-<p>By default, sshd is disabled on ubuntu desktop.
-Therefore you need to install &amp; enable sshd if you would like to access host remotely via ssh.</p>
-<p>Here is short memo for this sake.</p>
-<p>First, search for sshd package via apt-cache command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-cache search sshd
-openssh-server - secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
-
-<span class="nv">$ </span>sudo apt-cache show openssh-server
-Package: openssh-server
-...
-Description-en: secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
-...
-This package provides the sshd server.
+    <div class="section" id="vmplayer-abnormal-exit-on-ubuntu">
+<h1>vmplayer abnormal exit on ubuntu</h1>
+<p>These days on my ubuntu box I encounter abnormal exit of vmplayer upon start-up.
+Specifically speaking vmplayer asks for me to update kernel modules and it fails.</p>
+<p>sigh.</p>
+<div class="section" id="problem-description">
+<h2>problem description</h2>
+<p>It goes as follows.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>vmplayer
+Logging to /tmp/vmware-ayamada/vmware-modconfig-12999.log
+... <span class="s2">&quot;VMWare Kernel Module Updater&quot;</span> windows comes up ...
+<span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$?</span>
+1
 </pre></div>
 </div>
-<p>OK, openssh-server seems to be what we are looking for.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install openssh-server
+<p>vmware-modconfig logs ends up as follows.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Got gcc version <span class="s2">&quot;4.7&quot;</span>.
+The GCC version matches the kernel GCC minor version like a glove.
+Trying to find a suitable PBM <span class="nb">set </span><span class="k">for </span>kernel <span class="s2">&quot;3.8.0-30-generic&quot;</span>.
+No matching PBM <span class="nb">set </span>was found <span class="k">for </span>kernel <span class="s2">&quot;3.8.0-30-generic&quot;</span>.
+Validating path <span class="s2">&quot;/lib/modules/3.8.0-30-generic/build/include&quot;</span> <span class="k">for </span>kernel release <span class="s2">&quot;3.8.0-30-generic&quot;</span>.
+Failed to find /lib/modules/3.8.0-30-generic/build/include/linux/version.h
+/lib/modules/3.8.0-30-generic/build/include/linux/version.h not found, looking <span class="k">for </span>generated/uapi/linux/version.h instead.
 </pre></div>
 </div>
-<p>Installation will automatically start sshd daemon.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lsof -nPi:22
-COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
-sshd    3557    root    3u  IPv4  35564      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
-sshd    3557    root    4u  IPv6  35566      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
-
-<span class="nv">$ </span>sudo service ssh status
-ssh start/running, process 3557
+</div>
+<div class="section" id="workaround">
+<h2>workaround</h2>
+<p>It seems to be known issue.
+Please refer to <a class="reference external" href="http://askubuntu.com/questions/247547/vmware-player-5-0-1-and-kernel-3-7-will-not-complile">following thread</a> in askubuntu.</p>
+<p>So workaround is to:</p>
+<ol class="arabic simple">
+<li>create symbolic link of version.h header for current kernel revision</li>
+<li>compile</li>
+</ol>
+<p>Procedure is as follows.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>uname -r
+3.8.0-30-generic
+<span class="nv">$ </span>sudo ln -s /usr/src/linux-headers-<span class="sb">`</span>uname -r<span class="sb">`</span>/include/generated/uapi/linux/version.h /usr/src/linux-headers-<span class="sb">`</span>uname -r<span class="sb">`</span>/include/linux/version.h
+<span class="nv">$ </span>sudo vmware-modconfig --console --install-all
 </pre></div>
 </div>
-<p>Please be noted, sshd daemon is registered not as sshd but as ssh.</p>
-<p>sshd configuration can be set in /etc/ssh/sshd_config.
-In case that you would like to disable remote root access, then change parameter PermitRootLogin value from yes to no.</p>
-<div class="highlight-bash"><div class="highlight"><pre>PermitRootLogin no
+<p>Now you can start vmplayer again.</p>
+</div>
+<div class="section" id="remark">
+<h2>remark</h2>
+<p>There are so many headers...</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls -ld /usr/src/linux-headers-3.8.0-*-generic
+drwxr-xr-x 7 root root 4096 May 18 14:34 /usr/src/linux-headers-3.8.0-21-generic
+drwxr-xr-x 7 root root 4096 May 25 08:59 /usr/src/linux-headers-3.8.0-22-generic
+drwxr-xr-x 7 root root 4096 May 31 09:59 /usr/src/linux-headers-3.8.0-23-generic
+drwxr-xr-x 7 root root 4096 Jun 19 10:01 /usr/src/linux-headers-3.8.0-25-generic
+drwxr-xr-x 7 root root 4096 Jul  5 09:58 /usr/src/linux-headers-3.8.0-26-generic
+drwxr-xr-x 7 root root 4096 Jul 31 09:22 /usr/src/linux-headers-3.8.0-27-generic
+drwxr-xr-x 7 root root 4096 Aug 21 10:07 /usr/src/linux-headers-3.8.0-29-generic
+drwxr-xr-x 7 root root 4096 Sep  6 09:52 /usr/src/linux-headers-3.8.0-30-generic
 </pre></div>
+</div>
 </div>
 </div>
 
@@ -124,35 +146,35 @@ In case that you would like to disable remote root access, then change parameter
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+                <a href="../../../tags/ubuntu.html">ubuntu</a>, <a href="../../../tags/vmplayer.html">vmplayer</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../23/customize_tinker_page.html">customize tinkerer page</a></li>
-            <li class="right"><a href="../21/swap_caps_lock_with_ctrl.html">swap Caps Lock key with Ctrl key</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../06/python_tools_invocation.html">python tools invocation</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../09/07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a>
+            <a href="#">vmplayer abnormal exit on ubuntu</a>
         </li><li>
-            <a href="../../09/06/python_tools_invocation.html">python tools invocation</a>
+            <a href="../06/python_tools_invocation.html">python tools invocation</a>
         </li><li>
-            <a href="../../09/04/compare_files_recursively.html">compare files recursively</a>
+            <a href="../04/compare_files_recursively.html">compare files recursively</a>
         </li><li>
-            <a href="../../09/04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
+            <a href="../04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
         </li><li>
-            <a href="../../09/02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
+            <a href="../02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
         </li><li>
-            <a href="../../09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
+            <a href="../01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
         </li><li>
-            <a href="../../09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
+            <a href="../01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
         </li><li>
-            <a href="../../09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
+            <a href="../01/try_sphinx_better_theme.html">try sphinx better theme</a>
         </li><li>
-            <a href="../31/wiki_on_bitbucket.html">memo on bitbucket</a>
+            <a href="../../08/31/wiki_on_bitbucket.html">memo on bitbucket</a>
         </li><li>
-            <a href="../30/blockdiag_in_tinkerer.html">chart in blog post</a>
+            <a href="../../08/30/blockdiag_in_tinkerer.html">chart in blog post</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
