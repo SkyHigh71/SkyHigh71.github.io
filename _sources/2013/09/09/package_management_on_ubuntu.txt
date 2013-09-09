@@ -1,0 +1,71 @@
+package management on ubuntu
+============================
+
+Why did you choose ubuntu as your platform?
+Every one must have reason(s) for that.
+
+For me, one of main reasons is easy access of software packages. 
+(Remember the days of Solaris 8 when one had to install all the necessary packages manually by pkgadd...)
+
+How are software packages repositories are maintained on ubuntu?
+Take google-chrome as example and see how it goes.
+
+apt & dpkg
+----------
+
+Ubuntu makes use of **apt** (Advanced Packaging Tool) for package maintenance.
+apt resolves depency among packages and gives user a convenient way of package utilization.
+
+And apt is dependent upon **dpkg**. 
+dpkg is a tool to manipulate deb format packages.
+
+Setup & Installation
+--------------------
+
+In case that you add some repository, you need to trust this repository by adding its public key.
+Retrieve public key and add it into key repository.
+
+.. code-block:: bash
+
+    $ wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+
+The relevant public key will be stored into /etc/apt/trusted.gpg file.
+
+.. code-block:: bash
+
+    $ sudo apt-key list
+    /etc/apt/trusted.gpg
+    --------------------
+
+    pub   1024D/7FAC5991 2007-03-08
+    uid                  Google, Inc. Linux Package Signing Key <linux-packages-keymaster@google.com>
+    sub   2048g/C07CB649 2007-03-08
+
+Then add google repository in source list.
+
+.. code-block:: bash
+
+    $ sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+
+Finally install google-chrome.
+
+.. code-block:: bash
+
+    $ sudo apt-get update 
+    $ sudo apt-get install google-chrome-stable
+
+Summary
+-------
+
+Software package related items are stored under /etc/apt directory.
+In case that you add new software package, which are not listed in default repository, you need to add.
+
+- public key (trusted.gpg)
+- package location (<package>.list)
+
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu
+.. comments::
+
