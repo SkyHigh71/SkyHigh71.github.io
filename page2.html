@@ -62,6 +62,67 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>September 06, 2013</span>
+        </div>
+        <div class="section" id="python-tools-invocation">
+<h1><a href="2013/09/06/python_tools_invocation.html">python tools invocation</a></h1>
+<p>There are many tools (e.g. yum/hg), which are written in python, on Linux platform.
+For example, on my ubuntu 13.04 box there are 45 python scripts under /usr/local/bin directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/local/bin/*|grep -ic python
+45
+</pre></div>
+</div>
+<p>So I should say that one can not live without them.</p>
+<p>How are these python tools invoked?</p>
+<p>Take tikerer as example.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>which tinker
+/usr/local/bin/tinker
+<span class="nv">$ </span>file /usr/local/bin/tinker
+/usr/local/bin/tinker: Python script, ASCII text executable
+</pre></div>
+</div>
+<p>So executing tinker command will hook python package.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="c"># EASY-INSTALL-ENTRY-SCRIPT: 'Tinkerer==1.2.1','console_scripts','tinker'</span>
+<span class="n">__requires__</span> <span class="o">=</span> <span class="s">'Tinkerer==1.2.1'</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">load_entry_point</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
+        <span class="n">load_entry_point</span><span class="p">(</span><span class="s">'Tinkerer==1.2.1'</span><span class="p">,</span> <span class="s">'console_scripts'</span><span class="p">,</span> <span class="s">'tinker'</span><span class="p">)()</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Where does this package come from?
+Let’s search for its location with primitive way.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>strace -o test.txt -e open tinker -d <span class="s2">&quot;test&quot;</span>
+<span class="nv">$ </span>grep tinker test.txt |grep -iv enoent
+...
+open<span class="o">(</span><span class="s2">&quot;/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.py&quot;</span>, O_RDONLY|O_LARGEFILE<span class="o">)</span> <span class="o">=</span> 3
+open<span class="o">(</span><span class="s2">&quot;/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.pyc&quot;</span>, O_RDONLY|O_LARGEFILE<span class="o">)</span> <span class="o">=</span> 4
+</pre></div>
+</div>
+<p>Ok, here is the location where relevant python package resides.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls /usr/local/lib/python2.7/dist-packages/tinkerer
+__init__.py   __templates  cmdline.pyc      draft.pyc  master.py   page.py   paths.py   post.py   static  utils.py   writer.py
+__init__.pyc  cmdline.py   draft.py ext        master.pyc  page.pyc  paths.pyc  post.pyc  themes  utils.pyc  writer.pyc
+</pre></div>
+</div>
+<p>So when one installs python package, say, with pip command, packages will be deployed under dist-packages directory.
+And at the same time, a wrapper script will be deployed on search path so that it invokes relevant package by making use of pkg_resources.</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/python.html">python</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>September 04, 2013</span>
         </div>
         <div class="section" id="compare-files-recursively">
@@ -142,40 +203,6 @@ You can append user names by separating them with white space.</p>
                 Tags:
                 <a href="tags/apache.html">apache</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>September 02, 2013</span>
-        </div>
-        <div class="section" id="switching-from-https-to-ssh">
-<h1><a href="2013/09/02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a></h1>
-<p>Communication protocol for github can either be SSH or HTTPS.
-You can configure protocol to SSH so that ssh key shall be used for authentication.
-And you do not have to enter password every time you communicate with github.</p>
-<p>URL, which includes protocol, is specified in .git/config file.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
-    <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
-</pre></div>
-</div>
-<p>So as to change URL, use “git remote set-url” command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git remote <span class="nb">set</span>-url origin git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git
-</pre></div>
-</div>
-<p>URL in config file shall be updated as specified in argument abvoe.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
-    <span class="na">url</span> <span class="o">=</span> <span class="s">git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
-</pre></div>
-</div>
-<p>Therefore you may be able to configure URL directly by modifying value in config file (not tested though :-)).</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/github.html">github</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -184,6 +211,8 @@ And you do not have to enter password every time you communicate with github.</p
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/10/how_to_notify_core_file_creation.html">how to notify core file creation</a>
+        </li><li>
             <a href="2013/09/09/package_management_on_ubuntu.html">package management on ubuntu</a>
         </li><li>
             <a href="2013/09/07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a>
@@ -201,8 +230,6 @@ And you do not have to enter password every time you communicate with github.</p
             <a href="2013/09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
         </li><li>
             <a href="2013/09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
-        </li><li>
-            <a href="2013/08/31/wiki_on_bitbucket.html">memo on bitbucket</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -212,7 +239,7 @@ And you do not have to enter password every time you communicate with github.</p
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gnu.html">gnu</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (3), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (7), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gnu.html">gnu</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (3), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (8), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

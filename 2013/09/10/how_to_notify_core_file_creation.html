@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>prevent broken pipe during ssh session &mdash; sakana</title>
+        <title>how to notify core file creation &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="filter packet based upon URI" href="../27/http_filter.html" /><link rel="prev" title="chart in blog post" href="blockdiag_in_tinkerer.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="package management on ubuntu" href="../09/package_management_on_ubuntu.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>August 30, 2013</span>
+            <span>September 10, 2013</span>
         </div>
     </div>
     
@@ -77,39 +77,93 @@
     
     </div>
     
-    <div class="section" id="prevent-broken-pipe-during-ssh-session">
-<h1>prevent broken pipe during ssh session</h1>
-<p>From time to time, you may encounter ssh session lost with following error.</p>
-<div class="highlight-bash"><div class="highlight"><pre>Write failed: Broken pipe
+    <div class="section" id="how-to-notify-core-file-creation">
+<h1>how to notify core file creation</h1>
+<p>Now you are able to configure system to yield core files for designated directory.</p>
+<p>But there is no way to notice creation of core file (as apport has been disabled).
+Core files shall pile up silently behind the door.
+Repetition of core dump can easily consume disk space.
+You have to be careful and pay attention for such situation.</p>
+<p>Let&#8217;s find out effective method to notify creation of core file.</p>
+<div class="section" id="inotify">
+<h2>inotify</h2>
+<p>inotify?</p>
+<p>inotify (inode notify) is a Linux kernel subsystem to notice changes on file system.
+(quoted from wiki)
+You can enjoy this functionality via inotify-tools package.</p>
+<p>Installation is quite easy (as always).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache search inotify-tools
+inotify-tools - <span class="nb">command</span>-line programs providing a simple interface to inotify
+<span class="nv">$ </span>sudo apt-get install inotify-tools
+<span class="nv">$ </span>inotifywa&lt;TAB&gt;
+inotifywait   inotifywatch
 </pre></div>
 </div>
-<p>It means that write() system call failed against File Descriptor for socket of ssh session.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>man -s2 write
-...
-EPIPE  fd is connected to a pipe or socket whose reading end is closed.  When this  happens  the  writing
-       process  will  also  receive  a SIGPIPE signal.  <span class="o">(</span>Thus, the write <span class="k">return </span>value is seen only <span class="k">if </span>the
-       program catches, blocks or ignores this signal.<span class="o">)</span>
+<p>You can make use of these tools to watch tagger directory and do some action(s).
+For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="k">while </span>inotifywait -e create,modify /tmp; <span class="k">do</span>
+<span class="k">    </span><span class="nb">echo</span> <span class="s2">&quot;Lupin, something happened under /tmp directory&quot;</span>
+<span class="k">done</span>
 </pre></div>
 </div>
-<p>You may be able to avoid this connection lost by keeping connection alive.</p>
-<div class="section" id="client">
-<h2>client</h2>
-<p>You can configure ssh client to send request a response from sshd in the background.
-You can set interval with unit in second (~/.ssh/config).</p>
-<p>With following configuration sample, requests are sent every 2 minutes.</p>
-<div class="highlight-bash"><div class="highlight"><pre>ServerAliveInterval 120
+<p>Touching file &#8220;hi&#8221; under /tmp directory will yield.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./watch.sh
+Setting up watches.
+Watches established.
+/tmp/ CREATE hi
+Lupin, something happened under /tmp directory
 </pre></div>
 </div>
-<p>For details, please refer to &#8220;man ssh_config&#8221;.</p>
+<p>In the above sample, inotifywait monitors following events:</p>
+<ul class="simple">
+<li>CREATE</li>
+<li>MODIFY</li>
+</ul>
+<p>You can monitor other events like OPEN/CLOSE/DELETE/ATTRIB.
+And if you would like to configure inotify* to monitor directory recursively, then you can use -r option for that sake.</p>
+<p>Fine.</p>
 </div>
-<div class="section" id="server">
-<h2>server</h2>
-<p>Same as client, sshd can be configured to send request on regular basis.
-sshd configuraiton file is /etc/ssh/sshd_config.</p>
-<div class="highlight-bash"><div class="highlight"><pre>ClientAliveInterval 120
+<div class="section" id="libnotify-bin">
+<h2>libnotify-bin</h2>
+<p>Now we have a method of detection.
+Next item is means to notify you.</p>
+<p>There is a tool called libnotify-bin, which sends message to notification daemon.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache search libnotify-bin
+libnotify-bin - sends desktop notifications to a notification daemon <span class="o">(</span>Utilities<span class="o">)</span>
+<span class="nv">$ </span>apt-get install libnotify-bin
 </pre></div>
 </div>
-<p>For details, please refer to &#8220;man sshd_config&#8221;.</p>
+<p>As far as I checked, libnotify-bin has already been installed by default.</p>
+<p>Sending a message will give you pop-up message on desktop.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="k">for </span>i in <span class="sb">`</span>seq 10 -1 0<span class="sb">`</span>
+&gt; <span class="k">do</span>
+&gt; <span class="nb">echo</span> <span class="nv">$i</span>|festival --tts
+&gt; <span class="k">done</span> <span class="o">&amp;&amp;</span> notify-send <span class="s1">&#39;Ten Count! Knockout!&#39;</span>
+</pre></div>
+</div>
+<p>You win!</p>
+</div>
+<div class="section" id="automatic-start-upon-login">
+<h2>automatic start upon login</h2>
+<p>It may not be appropriate to put here though, let&#8217;s make use of /etc/profile.d directory for automatic start up upon login.</p>
+<p>Prepare a script, which launches inotifywait under the name of, say, watchCore.sh.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="k">while </span>inotifywait -e create /var/cores; <span class="k">do</span>
+<span class="k">    </span>notify-send -u critical <span class="s2">&quot;a new core file is created. Please check /var/cores directory&quot;</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>Deploy another script under /etc/profile.d directory which launches former one.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+nohup &lt;PATH&gt;/watchCore.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
+</pre></div>
+</div>
+<p>Please do not forget to run script in background. :-)</p>
+<p>Voila!</p>
 </div>
 </div>
 
@@ -121,35 +175,35 @@ sshd configuraiton file is /etc/ssh/sshd_config.</p>
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/ssh.html">ssh</a></span>
+                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="blockdiag_in_tinkerer.html">chart in blog post</a></li>
-            <li class="right"><a href="../27/http_filter.html">filter packet based upon URI</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../09/package_management_on_ubuntu.html">package management on ubuntu</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../09/10/how_to_notify_core_file_creation.html">how to notify core file creation</a>
+            <a href="#">how to notify core file creation</a>
         </li><li>
-            <a href="../../09/09/package_management_on_ubuntu.html">package management on ubuntu</a>
+            <a href="../09/package_management_on_ubuntu.html">package management on ubuntu</a>
         </li><li>
-            <a href="../../09/07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a>
+            <a href="../07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a>
         </li><li>
-            <a href="../../09/06/python_tools_invocation.html">python tools invocation</a>
+            <a href="../06/python_tools_invocation.html">python tools invocation</a>
         </li><li>
-            <a href="../../09/04/compare_files_recursively.html">compare files recursively</a>
+            <a href="../04/compare_files_recursively.html">compare files recursively</a>
         </li><li>
-            <a href="../../09/04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
+            <a href="../04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
         </li><li>
-            <a href="../../09/02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
+            <a href="../02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
         </li><li>
-            <a href="../../09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
+            <a href="../01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
         </li><li>
-            <a href="../../09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
+            <a href="../01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
         </li><li>
-            <a href="../../09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
+            <a href="../01/try_sphinx_better_theme.html">try sphinx better theme</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">

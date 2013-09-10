@@ -7,7 +7,7 @@ Every one must have reason(s) for that.
 For me, one of main reasons is easy access of software packages. 
 (Remember the days of Solaris 8 when one had to install all the necessary packages manually by pkgadd...)
 
-How are software packages repositories are maintained on ubuntu?
+How are software packages repositories maintained on ubuntu?
 Take google-chrome as example and see how it goes.
 
 apt & dpkg

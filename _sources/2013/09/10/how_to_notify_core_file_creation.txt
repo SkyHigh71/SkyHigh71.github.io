@@ -1,0 +1,122 @@
+how to notify core file creation
+================================
+
+Now you are able to configure system to yield core files for designated directory.
+
+But there is no way to notice creation of core file (as apport has been disabled).
+Core files shall pile up silently behind the door.
+Repetition of core dump can easily consume disk space.
+You have to be careful and pay attention for such situation.
+
+Let's find out effective method to notify creation of core file.
+
+inotify
+-------
+
+inotify?
+
+inotify (inode notify) is a Linux kernel subsystem to notice changes on file system. 
+(quoted from wiki)
+You can enjoy this functionality via inotify-tools package.
+
+Installation is quite easy (as always).
+
+.. code-block:: bash
+
+    $ apt-cache search inotify-tools
+    inotify-tools - command-line programs providing a simple interface to inotify
+    $ sudo apt-get install inotify-tools
+    $ inotifywa<TAB>
+    inotifywait   inotifywatch  
+
+You can make use of these tools to watch tagger directory and do some action(s).
+For example,
+
+.. code-block:: bash
+
+    #!/usr/bin/env bash
+    
+    while inotifywait -e create,modify /tmp; do
+        echo "Lupin, something happened under /tmp directory"
+    done
+
+Touching file "hi" under /tmp directory will yield.    
+
+.. code-block:: bash
+
+    $ ./watch.sh 
+    Setting up watches.
+    Watches established.
+    /tmp/ CREATE hi
+    Lupin, something happened under /tmp directory
+
+In the above sample, inotifywait monitors following events:
+
+- CREATE
+- MODIFY
+
+You can monitor other events like OPEN/CLOSE/DELETE/ATTRIB.
+And if you would like to configure inotify* to monitor directory recursively, then you can use -r option for that sake.
+
+Fine.
+
+
+libnotify-bin
+-------------
+
+Now we have a method of detection.
+Next item is means to notify you.
+
+There is a tool called libnotify-bin, which sends message to notification daemon.
+
+.. code-block:: bash
+
+    $ apt-cache search libnotify-bin
+    libnotify-bin - sends desktop notifications to a notification daemon (Utilities)
+    $ apt-get install libnotify-bin
+
+As far as I checked, libnotify-bin has already been installed by default.
+
+Sending a message will give you pop-up message on desktop.
+
+.. code-block:: bash
+
+    $ for i in `seq 10 -1 0`
+    > do 
+    > echo $i|festival --tts
+    > done && notify-send 'Ten Count! Knockout!'
+
+You win!
+
+
+automatic start upon login
+--------------------------
+
+It may not be appropriate to put here though, let's make use of /etc/profile.d directory for automatic start up upon login.
+
+Prepare a script, which launches inotifywait under the name of, say, watchCore.sh.
+
+.. code-block:: bash
+
+    #!/usr/bin/env bash
+    
+    while inotifywait -e create /var/cores; do
+        notify-send -u critical "a new core file is created. Please check /var/cores directory"
+    done
+
+Deploy another script under /etc/profile.d directory which launches former one.
+
+.. code-block:: bash
+
+    #!/usr/bin/env bash
+
+    nohup <PATH>/watchCore.sh 1> /dev/null 2>&1 &
+
+Please do not forget to run script in background. :-)
+
+Voila!
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu
+.. comments::
