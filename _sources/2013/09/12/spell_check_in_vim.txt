@@ -1,0 +1,65 @@
+spell check in vim
+==================
+
+If my memory does not deceive me, I started using vi as my editor on HP-UX 10. 
+(Yes, it is quite long time ago)
+I have not noticed it until quite recently though, vim (vi improved) has evolved so much more than I had expected.
+
+I write almost all of text on vim, which includes this blog post.
+As seen, my vocabulary is quite limited and incorrect. And phrase does not go beyond routine.
+That is, I need spell checking mechanism to correct many typo I make and suggestions to meet what I want to express.
+
+spell check
+-----------
+
+vim provides spell checking mechanism and you can enable it by:
+
+.. code-block:: vim
+
+    :set spell
+
+You will see color indicators, which tells you that there is typo.
+You can list correct word candidates by setting cursor on the relevant word and
+
+.. code-block:: vim
+
+    z=
+
+You will see list of words. Select appropriate one out of them.
+
+dictionary extension
+--------------------
+
+You can add words, which are not listed in default dictionary into your own custom one.
+Type zg(ood) on the relevant word.
+
+.. code-block:: vim
+
+    zg
+
+This operation simply adds that word into spellfile, e.g.) en.utf-8.add file under ~/.vim/spell directory.
+
+.. code-block:: vim
+
+    $ cat en.utf-8.add
+    vim
+
+If you would like to revert back, then type zw(rong).
+
+.. code-block:: vim
+
+    zw
+
+It seems that vim appends "/!" for that word in spell file.
+
+.. code-block:: vim
+
+    $ cat en.utf-8.add
+    vim/!
+
+For details of spell checking, please refer to ":help spell".
+
+.. author:: default
+.. categories:: none
+.. tags:: vim
+.. comments::

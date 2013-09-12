@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/09/12/spell_check_in_vim
    2013/09/10/how_to_notify_core_file_creation
    2013/09/09/package_management_on_ubuntu
    2013/09/07/vmplayer_abnormal_exit_on_ubuntu

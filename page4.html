@@ -64,6 +64,68 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>September 01, 2013</span>
         </div>
+        <div class="section" id="back-up-files-onto-dropbox">
+<h1><a href="2013/09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a></h1>
+<p>All machine, which includes Hard Disks, are to break some day.
+Let’s back up your precious content onto dropbox with encrypted on regular basis.</p>
+<p>create backup directory in dropbox.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir ~/Dropbox/backup
+</pre></div>
+</div>
+<p>Prepare backup script kicked by cron on regular interval.
+Create directory where backup script resides:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir ~/Documents/cron
+</pre></div>
+</div>
+<p>Deploy following <a class="reference download internal" href="_downloads/backup.sh"><span class="xref download docutils literal"><span class="pre">backup</span> <span class="pre">script</span></span></a> under cron directory:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="c"># we use day of week as file name</span>
+<span class="nv">LANG</span><span class="o">=</span>C
+<span class="nv">NAME</span><span class="o">=</span><span class="sb">`</span>date <span class="s2">&quot;+%A&quot;</span><span class="sb">`</span>
+<span class="c"># please specify password for encryption in case that you encrypt backup file</span>
+<span class="nv">PASSWD</span><span class="o">=</span>xxxxxx
+<span class="c"># we create backup file under temporary directory on local host</span>
+<span class="c"># so as to avoid latency</span>
+<span class="nv">TEMP</span><span class="o">=</span>/tmp
+<span class="nv">BACKUP_DIR</span><span class="o">=</span>~/Dropbox/backup
+
+<span class="nb">cd</span> ~/Documents
+<span class="k">if </span><span class="nb">true</span>
+<span class="k">then</span>
+<span class="k">    </span>find . -exec zip -P <span class="nv">$PASSWD</span> <span class="nv">$TEMP</span>/<span class="nv">$NAME</span>.zip <span class="o">{}</span> <span class="se">\;</span> 1&gt;/dev/null 2&gt;&amp;1
+<span class="k">else</span>
+<span class="k">    </span>find . -exec zip <span class="nv">$TEMP</span>/<span class="nv">$NAME</span>.zip <span class="o">{}</span> <span class="se">\;</span> 1&gt;/dev/null 2&gt;&amp;1
+<span class="k">fi</span>
+mv <span class="nv">$TEMP</span>/<span class="nv">$NAME</span>.zip <span class="nv">$BACKUP_DIR</span>
+</pre></div>
+</div>
+<p>Please be noted that you have to add execution permission for this script.
+And test it if it works or not.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>bash -xv backup.sh
+</pre></div>
+</div>
+<p>Register cron job to start script on regular basis by “crontab -e”.
+With following example, backup script is executed every one hour at *:00.</p>
+<div class="highlight-bash"><div class="highlight"><pre>0 * * * * ~/Documents/cron/backup.sh
+</pre></div>
+</div>
+<p>On ubuntu, cron activity is recorded in /var/log/syslog.
+Monitor syslog if cron works as expected.</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>September 01, 2013</span>
+        </div>
         <div class="section" id="try-sphinx-better-theme">
 <h1><a href="2013/09/01/try_sphinx_better_theme.html">try sphinx better theme</a></h1>
 <p>Found a <a class="reference external" href="https://github.com/irskep/sphinx-better-theme">new theme</a> for sphinx.</p>
@@ -174,47 +236,6 @@ id_rsa.bitbucket  id_rsa.bitbucket.pub
                 Tags:
                 <a href="tags/hg.html">hg</a>, <a href="tags/sphinx.html">sphinx</a>, <a href="tags/bitbucket.html">bitbucket</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 30, 2013</span>
-        </div>
-        <div class="section" id="chart-in-blog-post">
-<h1><a href="2013/08/30/blockdiag_in_tinkerer.html">chart in blog post</a></h1>
-<p>Same as sphinx, you can make use of blockdiag as extension in tinkerer.
-That is, you can draw chart in your blog by blockdiag.`</p>
-<p>Here is a quick setup procedure.</p>
-<p>First install sphinxcontrib-blockdiag package.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo pip install sphinxcontrib-blockdiag
-</pre></div>
-</div>
-<p>Then add ‘sphinxcontrib.blockdiag’ in the list of extensions in conf.py.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">'tinkerer.ext.blog'</span><span class="p">,</span> <span class="s">'tinkerer.ext.disqus'</span><span class="p">,</span> <span class="s">'sphinxcontrib.blockdiag'</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>You can specify font of your choice used in blockdiag.
-Search for path of your font.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">fc</span>-list
-</pre></div>
-</div>
-<p>And specify font paht as value of blockdiag_fontpath.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">blockdiag_fontpath</span> <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
-</pre></div>
-</div>
-<p>Now it’s ready for usage.</p>
-<p>For example,</p>
-<p class="blockdiag">
-<img alt="None" height="120" src="_images/blockdiag-5e17e9707844be2c89d327c8de892f31f2754539.png" width="832"/>
-</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/tinkerer.html">tinkerer</a>, <a href="tags/blockdiag.html">blockdiag</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -223,6 +244,8 @@ Search for path of your font.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/12/spell_check_in_vim.html">spell check in vim</a>
+        </li><li>
             <a href="2013/09/10/how_to_notify_core_file_creation.html">how to notify core file creation</a>
         </li><li>
             <a href="2013/09/09/package_management_on_ubuntu.html">package management on ubuntu</a>
@@ -240,8 +263,6 @@ Search for path of your font.</p>
             <a href="2013/09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a>
         </li><li>
             <a href="2013/09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a>
-        </li><li>
-            <a href="2013/09/01/try_sphinx_better_theme.html">try sphinx better theme</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -251,7 +272,7 @@ Search for path of your font.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gnu.html">gnu</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (3), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (8), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gnu.html">gnu</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (3), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (8), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

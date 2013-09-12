@@ -5,8 +5,60 @@
         <link>http://skyhigh71.github.io/</link>
         <description>short short memo</description>
         <language>en-us</language>
-        <pubDate>Tue, 10 Sep 2013 00:00:00 +0900</pubDate>
+        <pubDate>Thu, 12 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/12/spell_check_in_vim.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/12/spell_check_in_vim.html</guid>
+            <title><![CDATA[spell check in vim]]></title>
+            <description><![CDATA[<div class="section" id="spell-check-in-vim">
+<h1>spell check in vim</h1>
+<p>If my memory does not deceive me, I started using vi as my editor on HP-UX 10.
+(Yes, it is quite long time ago)
+I have not noticed it until quite recently though, vim (vi improved) has evolved so much more than I had expected.</p>
+<p>I write almost all of text on vim, which includes this blog post.
+As seen, my vocabulary is quite limited and incorrect. And phrase does not go beyond routine.
+That is, I need spell checking mechanism to correct many typo I make and suggestions to meet what I want to express.</p>
+<div class="section" id="spell-check">
+<h2>spell check</h2>
+<p>vim provides spell checking mechanism and you can enable it by:</p>
+<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">set</span> <span class="k">spell</span>
+</pre></div>
+</div>
+<p>You will see color indicators, which tells you that there is typo.
+You can list correct word candidates by setting cursor on the relevant word and</p>
+<div class="highlight-vim"><div class="highlight"><pre>z<span class="p">=</span>
+</pre></div>
+</div>
+<p>You will see list of words. Select appropriate one out of them.</p>
+</div>
+<div class="section" id="dictionary-extension">
+<h2>dictionary extension</h2>
+<p>You can add words, which are not listed in default dictionary into your own custom one.
+Type zg(ood) on the relevant word.</p>
+<div class="highlight-vim"><div class="highlight"><pre>zg
+</pre></div>
+</div>
+<p>This operation simply adds that word into spellfile, e.g.) en.utf-8.add file under ~/.vim/spell directory.</p>
+<div class="highlight-vim"><div class="highlight"><pre>$ <span class="k">cat</span> <span class="k">en</span>.utf<span class="m">-8</span>.add
+<span class="k">vim</span>
+</pre></div>
+</div>
+<p>If you would like to revert back, then type zw(rong).</p>
+<div class="highlight-vim"><div class="highlight"><pre>zw
+</pre></div>
+</div>
+<p>It seems that vim appends “/!” for that word in spell file.</p>
+<div class="highlight-vim"><div class="highlight"><pre>$ <span class="k">cat</span> <span class="k">en</span>.utf<span class="m">-8</span>.add
+<span class="k">vim</span>/<span class="p">!</span>
+</pre></div>
+</div>
+<p>For details of spell checking, please refer to ”:help spell”.</p>
+</div>
+</div>]]></description>
+             <pubDate>Thu, 12 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/10/how_to_notify_core_file_creation.html</link>
             <guid>http://skyhigh71.github.io/2013/09/10/how_to_notify_core_file_creation.html</guid>
