@@ -1,0 +1,70 @@
+symbol table reference
+======================
+
+Now the time has come that we can debug core file.
+In this case, dropbox seems to have yielded core file.
+
+.. code-block:: bash
+
+    $ file /var/cores/core.dropbox.2172.1378900464
+    /var/cores/core.dropbox.2172.1378900464: ELF 32-bit LSB core file Intel 80386, version 1 (SYSV), SVR4-style, from '<HOME>/.dropbox-dist/dropbox'
+
+But some dependent libraries (e.g. libc.so) are stripped and they do not have symbol table.
+
+.. code-block:: bash
+
+    $ file /lib/i386-linux-gnu/libc-2.17.so 
+    /lib/i386-linux-gnu/libc-2.17.so: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), BuildID[sha1]=0x81a55e819c61f581e6a9179eaf59726dd80aea31, for GNU/Linux 2.6.24, stripped
+    $ objdump -t /lib/i386-linux-gnu/libc-2.17.so 
+
+    /lib/i386-linux-gnu/libc-2.17.so:     file format elf32-i386
+
+    SYMBOL TABLE:
+    no symbols
+
+On linux we do not replace stripped library with non-stripped one.
+Instead we install separate debug information file and configure debugger to reference it.
+
+.. code-block:: bash
+
+    $ apt-cache search libc-
+    libc6-dbg - Embedded GNU C Library: detached debugging symbols
+    $ sudo apt-get install libc6-dbg
+
+Packages for debug information has suffix of -dbg (it seems to be so).
+Installation will deploy files under /usr/lib/debug directory.
+
+.. code-block:: bash
+
+    $ file /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so 
+    /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), BuildID[sha1]=0x81a55e819c61f581e6a9179eaf59726dd80aea31, for GNU/Linux 2.6.24, not stripped
+    $ objdump -t /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so
+
+    /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so:     file format elf32-i386
+
+    SYMBOL TABLE:
+    00000174 l    d  .note.gnu.build-id	00000000 .note.gnu.build-id
+    00000198 l    d  .note.ABI-tag	00000000 .note.ABI-tag
+    
+
+gdb is wise enough to automatically detect debug information (as long as libc6 and libc6-dbg match) and applies it!
+
+.. code-block:: bash
+
+    (gdb) set verbose on
+    (gdb) run
+    ...
+    Reading symbols from /lib/i386-linux-gnu/libc.so.6...Reading symbols from /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so...done.
+    done.
+
+`This entry`_ is quite of help for debug information.
+
+.. _This entry: http://stackoverflow.com/questions/10000335/how-to-use-debug-version-of-libc
+
+Now we can see precise stack!
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu
+.. comments::
+

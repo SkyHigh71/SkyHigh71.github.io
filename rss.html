@@ -3,10 +3,67 @@
     <channel>
         <title>sakana</title>
         <link>http://skyhigh71.github.io/</link>
-        <description>short short memo</description>
+        <description>very short memo</description>
         <language>en-us</language>
         <pubDate>Thu, 12 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/12/symbol_table.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/12/symbol_table.html</guid>
+            <title><![CDATA[symbol table reference]]></title>
+            <description><![CDATA[<div class="section" id="symbol-table-reference">
+<h1>symbol table reference</h1>
+<p>Now the time has come that we can debug core file.
+In this case, dropbox seems to have yielded core file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /var/cores/core.dropbox.2172.1378900464
+/var/cores/core.dropbox.2172.1378900464: ELF 32-bit LSB core file Intel 80386, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, SVR4-style, from <span class="s1">'&lt;HOME&gt;/.dropbox-dist/dropbox'</span>
+</pre></div>
+</div>
+<p>But some dependent libraries (e.g. libc.so) are stripped and they do not have symbol table.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /lib/i386-linux-gnu/libc-2.17.so
+/lib/i386-linux-gnu/libc-2.17.so: ELF 32-bit LSB shared object, Intel 80386, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked <span class="o">(</span>uses shared libs<span class="o">)</span>, BuildID<span class="o">[</span>sha1<span class="o">]=</span>0x81a55e819c61f581e6a9179eaf59726dd80aea31, <span class="k">for </span>GNU/Linux 2.6.24, stripped
+<span class="nv">$ </span>objdump -t /lib/i386-linux-gnu/libc-2.17.so
+
+/lib/i386-linux-gnu/libc-2.17.so:     file format elf32-i386
+
+SYMBOL TABLE:
+no symbols
+</pre></div>
+</div>
+<p>On linux we do not replace stripped library with non-stripped one.
+Instead we install separate debug information file and configure debugger to reference it.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache search libc-
+libc6-dbg - Embedded GNU C Library: detached debugging symbols
+<span class="nv">$ </span>sudo apt-get install libc6-dbg
+</pre></div>
+</div>
+<p>Packages for debug information has suffix of -dbg (it seems to be so).
+Installation will deploy files under /usr/lib/debug directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so
+/usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so: ELF 32-bit LSB shared object, Intel 80386, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked <span class="o">(</span>uses shared libs<span class="o">)</span>, BuildID<span class="o">[</span>sha1<span class="o">]=</span>0x81a55e819c61f581e6a9179eaf59726dd80aea31, <span class="k">for </span>GNU/Linux 2.6.24, not stripped
+<span class="nv">$ </span>objdump -t /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so
+
+/usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so:     file format elf32-i386
+
+SYMBOL TABLE:
+00000174 l    d  .note.gnu.build-id 00000000 .note.gnu.build-id
+00000198 l    d  .note.ABI-tag      00000000 .note.ABI-tag
+</pre></div>
+</div>
+<p>gdb is wise enough to automatically detect debug information (as long as libc6 and libc6-dbg match) and applies it!</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">set </span>verbose on
+<span class="o">(</span>gdb<span class="o">)</span> run
+...
+Reading symbols from /lib/i386-linux-gnu/libc.so.6...Reading symbols from /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so...done.
+<span class="k">done</span>.
+</pre></div>
+</div>
+<p><a class="reference external" href="http://stackoverflow.com/questions/10000335/how-to-use-debug-version-of-libc">This entry</a> is quite of help for debug information.</p>
+<p>Now we can see precise stack!</p>
+</div>]]></description>
+             <pubDate>Thu, 12 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/12/spell_check_in_vim.html</link>
             <guid>http://skyhigh71.github.io/2013/09/12/spell_check_in_vim.html</guid>
