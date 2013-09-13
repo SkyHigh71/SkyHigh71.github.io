@@ -1,0 +1,82 @@
+source code reference
+=====================
+
+Now we have clear precise stack.
+Here is snippet of stack for relevant thread.
+
+.. code-block:: bash
+
+    (gdb) where
+    #0  0xb7705424 in __kernel_vsyscall ()
+    #1  0xb7504b1f in __GI_raise (sig=sig@entry=6) at ../nptl/sysdeps/unix/sysv/linux/raise.c:56
+    #2  0xb75080b3 in __GI_abort () at abort.c:90
+    #3  0xb74fd877 in __assert_fail_base (fmt=0xb385fe90 <Address 0xb385fe90 out of bounds>, assertion=assertion@entry=0xb60f8419 "ret != inval_id", 
+        file=file@entry=0xb60f838a "../../src/xcb_io.c", line=line@entry=529, function=function@entry=0xb60f849e <__PRETTY_FUNCTION__.14075> "_XAllocID")
+        at assert.c:92
+    #4  0xb74fd927 in __GI___assert_fail (assertion=assertion@entry=0xb60f8419 "ret != inval_id", file=file@entry=0xb60f838a "../../src/xcb_io.c", 
+        line=line@entry=529, function=function@entry=0xb60f849e <__PRETTY_FUNCTION__.14075> "_XAllocID") at assert.c:101
+    #5  0xb608149f in _XAllocID (dpy=0xaf43e80) at ../../src/xcb_io.c:529
+
+As seen, some assertion may have failed and program aborted by itself.
+Before applying debug information, which contains symbol table, frame 5 looked like this.
+
+.. code-block:: bash
+
+    #5  0xb608149f in _XAllocID () from /usr/lib/i386-linux-gnu/libX11.so.6
+
+So let's download source code of libX11 for reference.
+
+.. code-block:: bash
+
+    $ apt-get source libx11
+
+It's so easy...
+Source files are downloaded under current working directory.
+
+.. code-block:: bash
+
+    $ ls
+    libx11-1.5.0  libx11_1.5.0-1ubuntu1.1.diff.gz  libx11_1.5.0-1ubuntu1.1.dsc  libx11_1.5.0.orig.tar.gz
+
+You can configure gdb to reference source code, for example, by "set substitute-path".
+But for this case "../../src" does not work for me... 
+
+So quite primitive way though,
+
+.. code-block:: bash
+
+    $ cd libx11-1.5.0/
+    $ mkdir -p hoge/hoge
+    $ cd hoge/hoge/
+    $ ls ../../src/xcb_io.c
+    ../../src/xcb_io.c
+    $ gdb <HOME>/.dropbox-dist/dropbox /var/cores/core.dropbox.2147.*
+
+Now you can see relevant section of code and variables.
+
+.. code-block:: bash
+
+    (gdb) frame 5
+    #5  0xb608149f in _XAllocID (dpy=0xaf43e80) at ../../src/xcb_io.c:529
+    529		dpy->xcb->next_xid = inval_id;
+    (gdb) list
+    524	/* _XAllocID - resource ID allocation routine. */
+    525	XID _XAllocID(Display *dpy)
+    526	{
+    527		XID ret = dpy->xcb->next_xid;
+    528		assert (ret != inval_id);
+    529		dpy->xcb->next_xid = inval_id;
+    530		_XSetPrivSyncFunction(dpy);
+    531		return ret;
+    532	}
+    533	
+    (gdb) print inval_id
+    $1 = 4294967295
+    (gdb) print dpy->xcb->next_xid
+    $2 = 4294967295
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu, gdb
+.. comments::
+

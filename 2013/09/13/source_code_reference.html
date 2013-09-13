@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>Hello World &mdash; sakana</title>
+        <title>source code reference &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="prev" title="the first post of mine" href="the_first_post_of_mine.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="symbol table reference" href="../12/symbol_table.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>August 11, 2013</span>
+            <span>September 13, 2013</span>
         </div>
     </div>
     
@@ -77,9 +77,69 @@
     
     </div>
     
-    <div class="section" id="hello-world">
-<h1>Hello World</h1>
-<p>How are you doing?</p>
+    <div class="section" id="source-code-reference">
+<h1>source code reference</h1>
+<p>Now we have clear precise stack.
+Here is snippet of stack for relevant thread.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> where
+<span class="c">#0  0xb7705424 in __kernel_vsyscall ()</span>
+<span class="c">#1  0xb7504b1f in __GI_raise (sig=sig@entry=6) at ../nptl/sysdeps/unix/sysv/linux/raise.c:56</span>
+<span class="c">#2  0xb75080b3 in __GI_abort () at abort.c:90</span>
+<span class="c">#3  0xb74fd877 in __assert_fail_base (fmt=0xb385fe90 &lt;Address 0xb385fe90 out of bounds&gt;, assertion=assertion@entry=0xb60f8419 &quot;ret != inval_id&quot;,</span>
+    <span class="nv">file</span><span class="o">=</span>file@entry<span class="o">=</span>0xb60f838a <span class="s2">&quot;../../src/xcb_io.c&quot;</span>, <span class="nv">line</span><span class="o">=</span>line@entry<span class="o">=</span>529, <span class="k">function</span><span class="o">=</span><span class="k">function</span>@entry<span class="o">=</span>0xb60f849e &lt;__PRETTY_FUNCTION__.14075&gt; <span class="s2">&quot;_XAllocID&quot;</span><span class="o">)</span>
+    at assert.c:92
+<span class="c">#4  0xb74fd927 in __GI___assert_fail (assertion=assertion@entry=0xb60f8419 &quot;ret != inval_id&quot;, file=file@entry=0xb60f838a &quot;../../src/xcb_io.c&quot;,</span>
+    <span class="nv">line</span><span class="o">=</span>line@entry<span class="o">=</span>529, <span class="k">function</span><span class="o">=</span><span class="k">function</span>@entry<span class="o">=</span>0xb60f849e &lt;__PRETTY_FUNCTION__.14075&gt; <span class="s2">&quot;_XAllocID&quot;</span><span class="o">)</span> at assert.c:101
+<span class="c">#5  0xb608149f in _XAllocID (dpy=0xaf43e80) at ../../src/xcb_io.c:529</span>
+</pre></div>
+</div>
+<p>As seen, some assertion may have failed and program aborted by itself.
+Before applying debug information, which contains symbol table, frame 5 looked like this.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#5  0xb608149f in _XAllocID () from /usr/lib/i386-linux-gnu/libX11.so.6</span>
+</pre></div>
+</div>
+<p>So let&#8217;s download source code of libX11 for reference.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-get <span class="nb">source </span>libx11
+</pre></div>
+</div>
+<p>It&#8217;s so easy...
+Source files are downloaded under current working directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls
+libx11-1.5.0  libx11_1.5.0-1ubuntu1.1.diff.gz  libx11_1.5.0-1ubuntu1.1.dsc  libx11_1.5.0.orig.tar.gz
+</pre></div>
+</div>
+<p>You can configure gdb to reference source code, for example, by &#8220;set substitute-path&#8221;.
+But for this case &#8221;../../src&#8221; does not work for me...</p>
+<p>So quite primitive way though,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>libx11-1.5.0/
+<span class="nv">$ </span>mkdir -p hoge/hoge
+<span class="nv">$ </span><span class="nb">cd </span>hoge/hoge/
+<span class="nv">$ </span>ls ../../src/xcb_io.c
+../../src/xcb_io.c
+<span class="nv">$ </span>gdb &lt;HOME&gt;/.dropbox-dist/dropbox /var/cores/core.dropbox.2147.*
+</pre></div>
+</div>
+<p>Now you can see relevant section of code and variables.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> frame 5
+<span class="c">#5  0xb608149f in _XAllocID (dpy=0xaf43e80) at ../../src/xcb_io.c:529</span>
+529         dpy-&gt;xcb-&gt;next_xid <span class="o">=</span> inval_id;
+<span class="o">(</span>gdb<span class="o">)</span> list
+524 /* _XAllocID - resource ID allocation routine. */
+525 XID _XAllocID<span class="o">(</span>Display *dpy<span class="o">)</span>
+526 <span class="o">{</span>
+527         XID <span class="nv">ret</span> <span class="o">=</span> dpy-&gt;xcb-&gt;next_xid;
+528         assert <span class="o">(</span>ret !<span class="o">=</span> inval_id<span class="o">)</span>;
+529         dpy-&gt;xcb-&gt;next_xid <span class="o">=</span> inval_id;
+530         _XSetPrivSyncFunction<span class="o">(</span>dpy<span class="o">)</span>;
+531         <span class="k">return </span>ret;
+532 <span class="o">}</span>
+533
+<span class="o">(</span>gdb<span class="o">)</span> print inval_id
+<span class="nv">$1</span> <span class="o">=</span> 4294967295
+<span class="o">(</span>gdb<span class="o">)</span> print dpy-&gt;xcb-&gt;next_xid
+<span class="nv">$2</span> <span class="o">=</span> 4294967295
+</pre></div>
+</div>
 </div>
 
     <div class="postmeta">
@@ -87,34 +147,38 @@
             <span>Posted by SkyHigh71</span>
         </div>
         
-        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="../../../tags/ubuntu.html">ubuntu</a>, <a href="../../../tags/gdb.html">gdb</a></span>
+        </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="the_first_post_of_mine.html">the first post of mine</a></li>
-            <li class="right"></li>
+            <li class="left"></li>
+            <li class="right"><a href="../12/symbol_table.html">symbol table reference</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../09/13/source_code_reference.html">source code reference</a>
+            <a href="#">source code reference</a>
         </li><li>
-            <a href="../../09/12/symbol_table.html">symbol table reference</a>
+            <a href="../12/symbol_table.html">symbol table reference</a>
         </li><li>
-            <a href="../../09/12/spell_check_in_vim.html">spell check in vim</a>
+            <a href="../12/spell_check_in_vim.html">spell check in vim</a>
         </li><li>
-            <a href="../../09/10/how_to_notify_core_file_creation.html">how to notify core file creation</a>
+            <a href="../10/how_to_notify_core_file_creation.html">how to notify core file creation</a>
         </li><li>
-            <a href="../../09/09/package_management_on_ubuntu.html">package management on ubuntu</a>
+            <a href="../09/package_management_on_ubuntu.html">package management on ubuntu</a>
         </li><li>
-            <a href="../../09/07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a>
+            <a href="../07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a>
         </li><li>
-            <a href="../../09/06/python_tools_invocation.html">python tools invocation</a>
+            <a href="../06/python_tools_invocation.html">python tools invocation</a>
         </li><li>
-            <a href="../../09/04/compare_files_recursively.html">compare files recursively</a>
+            <a href="../04/compare_files_recursively.html">compare files recursively</a>
         </li><li>
-            <a href="../../09/04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
+            <a href="../04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a>
         </li><li>
-            <a href="../../09/02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
+            <a href="../02/switching_from_https_to_ssh.html">switching from HTTPS to SSH</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">

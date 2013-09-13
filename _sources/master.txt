@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/09/13/source_code_reference
    2013/09/12/symbol_table
    2013/09/12/spell_check_in_vim
    2013/09/10/how_to_notify_core_file_creation
