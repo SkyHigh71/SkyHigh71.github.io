@@ -5,8 +5,40 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Fri, 13 Sep 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sun, 15 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/15/password_lock_of_screensaver.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/15/password_lock_of_screensaver.html</guid>
+            <title><![CDATA[password lock of screensaver]]></title>
+            <description><![CDATA[<div class="section" id="password-lock-of-screensaver">
+<h1>password lock of screensaver</h1>
+<p>By default, gnome-screen runs on ubuntu and password lock is enabled.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ps -ef|grep -i screen
+lupin   2000     1  0 15:44 ?        00:00:00 /usr/bin/gnome-screensaver --no-daemon
+</pre></div>
+</div>
+<p>Sometimes you may feel password lock troublesome and would like to disable it.
+You can achieve it by gsettings command.</p>
+<p>Current configuration can be checked,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>gsettings get org.gnome.desktop.screensaver lock-enabled
+<span class="nb">true</span>
+</pre></div>
+</div>
+<p>You can disable password lock by setting lock-enabled value as false,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>gsettings <span class="nb">set </span>org.gnome.desktop.screensaver lock-enabled <span class="nb">false</span>
+</pre></div>
+</div>
+<p>Checking system calls done by this command, screensaver configuration seems to be stored in,</p>
+<ul class="simple">
+<li>/run/user/&lt;UID&gt;/dconf/user (may be for running process)</li>
+<li>/&lt;HOME&gt;/.config/dconf/user (for permanent configuration)</li>
+</ul>
+<p>You can lock screen by “CTRL” + “ALT” + “L”.</p>
+</div>]]></description>
+             <pubDate>Sun, 15 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/13/source_code_reference.html</link>
             <guid>http://skyhigh71.github.io/2013/09/13/source_code_reference.html</guid>
