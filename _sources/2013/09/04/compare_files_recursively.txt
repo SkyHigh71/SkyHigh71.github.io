@@ -16,6 +16,6 @@ sigh...
 
 .. author:: default
 .. categories:: none
-.. tags:: gnu
+.. tags:: command
 .. comments::
 

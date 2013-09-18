@@ -1,0 +1,27 @@
+copy intermediate directories
+=============================
+
+Sometimes you would like to cp files under directories, which does not exist on target directory. Current cp command does support this kind of operation.
+
+Suppose that you have a file, which contains list of files with directory. You can copy files in it, for example, as follows.
+
+.. code-block:: bash
+
+    $ mkdir <TARGER_DIR>
+    $ while read LINE
+    > do
+    > cp -p --parents $LINE <TAGET_DIR>
+    > done < <INPUT_FILE>
+
+You will see that directory strctures are automatically created under target directory.
+
+So easy...
+
+Please refer to `gnu page`_ for details.
+
+.. _gnu page: http://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html
+
+.. author:: default
+.. categories:: none
+.. tags:: command
+.. comments::

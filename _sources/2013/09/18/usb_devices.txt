@@ -1,0 +1,32 @@
+USB devices
+===========
+
+Sometimes you would like to reference USB devices, which are attached to your machine.
+You can make use of lsusb utility for this sake.
+
+For example,
+
+.. code-block:: bash
+
+    $ lsusb
+    Bus 002 Device 003: ID 5986:0299 Acer, Inc 
+    Bus 004 Device 002: ID 0a5c:21f4 Broadcom Corp. 
+    Bus 006 Device 008: ID 0bb4:0ffe HTC (High Tech Computer Corp.) Desire HD (modem mode)
+
+In case that you would like to check further details of specific USB device, for example, Desire, then you can specify use verbose option, -v.
+
+.. code-block:: bash
+
+    $ sudo lsusb -v -s 008
+
+By the way, lsusb command accesses file under /dev/bus/usb directory, which requires root permission.
+Therefore if you execute command as user other than root without sudo, then you will see open failure.
+
+.. code-block:: c
+
+    open("/dev/bus/usb/006/008", O_RDWR)    = -1 EACCES (Permission denied)
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu
+.. comments::

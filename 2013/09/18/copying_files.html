@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>package management on ubuntu &mdash; sakana</title>
+        <title>copy intermediate directories &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="vmplayer abnormal exit on ubuntu" href="../07/vmplayer_abnormal_exit_on_ubuntu.html" /><link rel="prev" title="how to notify core file creation" href="../10/how_to_notify_core_file_creation.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="password lock of screensaver" href="../15/password_lock_of_screensaver.html" /><link rel="prev" title="USB devices" href="usb_devices.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>September 09, 2013</span>
+            <span>September 18, 2013</span>
         </div>
     </div>
     
@@ -77,57 +77,20 @@
     
     </div>
     
-    <div class="section" id="package-management-on-ubuntu">
-<h1>package management on ubuntu</h1>
-<p>Why did you choose ubuntu as your platform?
-Every one must have reason(s) for that.</p>
-<p>For me, one of main reasons is easy access of software packages.
-(Remember the days of Solaris 8 when one had to install all the necessary packages manually by pkgadd...)</p>
-<p>How are software packages repositories maintained on ubuntu?
-Take google-chrome as example and see how it goes.</p>
-<div class="section" id="apt-dpkg">
-<h2>apt &amp; dpkg</h2>
-<p>Ubuntu makes use of <strong>apt</strong> (Advanced Packaging Tool) for package maintenance.
-apt resolves depency among packages and gives user a convenient way of package utilization.</p>
-<p>And apt is dependent upon <strong>dpkg</strong>.
-dpkg is a tool to manipulate deb format packages.</p>
-</div>
-<div class="section" id="setup-installation">
-<h2>Setup &amp; Installation</h2>
-<p>In case that you add some repository, you need to trust this repository by adding its public key.
-Retrieve public key and add it into key repository.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    <div class="section" id="copy-intermediate-directories">
+<h1>copy intermediate directories</h1>
+<p>Sometimes you would like to cp files under directories, which does not exist on target directory. Current cp command does support this kind of operation.</p>
+<p>Suppose that you have a file, which contains list of files with directory. You can copy files in it, for example, as follows.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir &lt;TARGER_DIR&gt;
+<span class="nv">$ </span><span class="k">while </span><span class="nb">read </span>LINE
+&gt; <span class="k">do</span>
+&gt; cp -p --parents <span class="nv">$LINE</span> &lt;TAGET_DIR&gt;
+&gt; <span class="k">done</span> &lt; &lt;INPUT_FILE&gt;
 </pre></div>
 </div>
-<p>The relevant public key will be stored into /etc/apt/trusted.gpg file.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-key list
-/etc/apt/trusted.gpg
---------------------
-
-pub   1024D/7FAC5991 2007-03-08
-uid                  Google, Inc. Linux Package Signing Key &lt;linux-packages-keymaster@google.com&gt;
-sub   2048g/C07CB649 2007-03-08
-</pre></div>
-</div>
-<p>Then add google repository in source list.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo sh -c <span class="s1">&#39;echo &quot;deb http://dl.google.com/linux/chrome/deb/ stable main&quot; &gt;&gt; /etc/apt/sources.list.d/google.list&#39;</span>
-</pre></div>
-</div>
-<p>Finally install google-chrome.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get update
-<span class="nv">$ </span>sudo apt-get install google-chrome-stable
-</pre></div>
-</div>
-</div>
-<div class="section" id="summary">
-<h2>Summary</h2>
-<p>Software package related items are stored under /etc/apt directory.
-In case that you add new software package, which are not listed in default repository, you need to add.</p>
-<ul class="simple">
-<li>public key (trusted.gpg)</li>
-<li>package location (&lt;package&gt;.list)</li>
-</ul>
-</div>
+<p>You will see that directory strctures are automatically created under target directory.</p>
+<p>So easy...</p>
+<p>Please refer to <a class="reference external" href="http://www.gnu.org/software/coreutils/manual/html_node/cp-invocation.html">gnu page</a> for details.</p>
 </div>
 
     <div class="postmeta">
@@ -138,19 +101,19 @@ In case that you add new software package, which are not listed in default repos
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+                <a href="../../../tags/command.html">command</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../10/how_to_notify_core_file_creation.html">how to notify core file creation</a></li>
-            <li class="right"><a href="../07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a> &raquo; </li>
+            <li class="left"> &laquo; <a href="usb_devices.html">USB devices</a></li>
+            <li class="right"><a href="../15/password_lock_of_screensaver.html">password lock of screensaver</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../18/usb_devices.html">USB devices</a>
+            <a href="usb_devices.html">USB devices</a>
         </li><li>
-            <a href="../18/copying_files.html">copy intermediate directories</a>
+            <a href="#">copy intermediate directories</a>
         </li><li>
             <a href="../15/password_lock_of_screensaver.html">password lock of screensaver</a>
         </li><li>
@@ -162,7 +125,7 @@ In case that you add new software package, which are not listed in default repos
         </li><li>
             <a href="../10/how_to_notify_core_file_creation.html">how to notify core file creation</a>
         </li><li>
-            <a href="#">package management on ubuntu</a>
+            <a href="../09/package_management_on_ubuntu.html">package management on ubuntu</a>
         </li><li>
             <a href="../07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a>
         </li><li>
