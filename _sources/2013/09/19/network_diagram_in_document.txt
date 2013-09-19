@@ -1,0 +1,27 @@
+network diagram in document
+===========================
+
+Sometimes you would like to draw network diagram and incorporate it into your document.
+
+It's so easy with sphinx and nwdiag.
+For example, prepare such a text as follows and save it as, say, net.diag.
+
+.. literalinclude:: net.diag
+    :language: bash
+
+And merge this file into your sphinx document with as follows.
+
+.. code-block:: bash
+
+    .. nwdiag:: net.diag
+
+Then you will see beautiful network diagram as follows.
+
+.. nwdiag:: net.diag
+
+
+.. author:: default
+.. categories:: none
+.. tags:: sphinx, blockdiag
+.. comments::
+
