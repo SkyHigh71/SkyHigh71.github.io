@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/09/21/lxc_introduction
    2013/09/21/library_details
    2013/09/19/network_diagram_in_document
    2013/09/18/usb_devices

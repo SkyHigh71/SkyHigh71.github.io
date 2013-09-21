@@ -62,6 +62,54 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>August 30, 2013</span>
+        </div>
+        <div class="section" id="prevent-broken-pipe-during-ssh-session">
+<h1><a href="2013/08/30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a></h1>
+<p>From time to time, you may encounter ssh session lost with following error.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Write failed: Broken pipe
+</pre></div>
+</div>
+<p>It means that write() system call failed against File Descriptor for socket of ssh session.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>man -s2 write
+...
+EPIPE  fd is connected to a pipe or socket whose reading end is closed.  When this  happens  the  writing
+       process  will  also  receive  a SIGPIPE signal.  <span class="o">(</span>Thus, the write <span class="k">return </span>value is seen only <span class="k">if </span>the
+       program catches, blocks or ignores this signal.<span class="o">)</span>
+</pre></div>
+</div>
+<p>You may be able to avoid this connection lost by keeping connection alive.</p>
+<div class="section" id="client">
+<h2>client</h2>
+<p>You can configure ssh client to send request a response from sshd in the background.
+You can set interval with unit in second (~/.ssh/config).</p>
+<p>With following configuration sample, requests are sent every 2 minutes.</p>
+<div class="highlight-bash"><div class="highlight"><pre>ServerAliveInterval 120
+</pre></div>
+</div>
+<p>For details, please refer to “man ssh_config”.</p>
+</div>
+<div class="section" id="server">
+<h2>server</h2>
+<p>Same as client, sshd can be configured to send request on regular basis.
+sshd configuraiton file is /etc/ssh/sshd_config.</p>
+<div class="highlight-bash"><div class="highlight"><pre>ClientAliveInterval 120
+</pre></div>
+</div>
+<p>For details, please refer to “man sshd_config”.</p>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ssh.html">ssh</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 27, 2013</span>
         </div>
         <div class="section" id="filter-packet-based-upon-uri">
@@ -170,96 +218,6 @@ ID     | Login user               | Date and <span class="nb">time</span>    | A
                 Tags:
                 <a href="tags/sl.html">sl</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 25, 2013</span>
-        </div>
-        <div class="section" id="how-to-play-minecraft-on-ubuntu">
-<h1><a href="2013/08/25/how_to_play_minecraft_on_ubuntu.html">how to play minecraft on ubuntu</a></h1>
-<p>My daughter would like to play her favorite game, minecraft on her ubuntu box.
-Here is a short memo to summarize procedure to setup environment to play minecraft on ubuntu.</p>
-<div class="section" id="jvm">
-<h2>JVM</h2>
-<p>minecraft client is a jar file and you would better to have hotspot VM.
-You can install hotpost VM as follows:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo add-apt-repository ppa:webupd8team/java
-<span class="nv">$ </span>sudo apt-get update
-<span class="nv">$ </span>sudo apt-get install oracle-java7-installer
-</pre></div>
-</div>
-</div>
-<div class="section" id="search-path">
-<h2>search path</h2>
-<p>As with default configuration shared object libjawt.so can not be found.
-You have to configure environment variable LD_LIBRARY_PATH so that libjawt.so can be searched for.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/usr/lib/jvm/java-7-oracle/jre/lib/i386/
-</pre></div>
-</div>
-</div>
-<div class="section" id="key-input">
-<h2>key input</h2>
-<p>As ibus interrupts key input on minecraft and You can not input any word on minecraft.
-You can avoid this problem by configuring following environment variable:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">XMODIFIERS</span><span class="o">=</span>@im<span class="o">=</span>none
-</pre></div>
-</div>
-</div>
-<div class="section" id="script">
-<h2>script</h2>
-<p>Here is sample script to launch minecraft.
-If you would like to speak something upon start-up, please install TTS engine, festival.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
-
-<span class="nv">LANG</span><span class="o">=</span>C
-<span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/usr/lib/jvm/java-7-oracle/jre/lib/i386/
-<span class="nv">XMODIFIERS</span><span class="o">=</span>@im<span class="o">=</span>none
-<span class="nb">export </span>LANG LD_LIBRARY_PATH XMODIFIERS
-
-<span class="nv">MINE_HOME</span><span class="o">=</span>~/minecraft
-<span class="nb">cd</span> <span class="nv">$MINE_HOME</span>
-
-<span class="nv">START_MSG</span><span class="o">=</span><span class="s2">&quot;start minecraft&quot;</span>
-<span class="nb">echo</span> <span class="nv">$START_MSG</span>|festival --tts
-
-<span class="nv">LOG</span><span class="o">=</span>play.<span class="sb">`</span>date <span class="s2">&quot;+%Y%m%d&quot;</span><span class="sb">`</span>.log
-
-<span class="nb">echo</span> <span class="s2">&quot;START: &quot;</span> <span class="sb">`</span>date<span class="sb">`</span> &gt;&gt; <span class="nv">$LOG</span>
-java -Xmx1024M -Xms512M -cp minecraft.jar net.minecraft.LauncherFrame &gt;&gt; <span class="nv">$LOG</span> 2&gt;&amp;1
-<span class="nb">echo</span> <span class="s2">&quot;FINISH: &quot;</span> <span class="sb">`</span>date<span class="sb">`</span> &gt;&gt; <span class="nv">$LOG</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="register-unity-panel">
-<h2>register unity panel</h2>
-<p>You can launch above script directly from unity panel.</p>
-<ul class="simple">
-<li>desktop file</li>
-</ul>
-<p>Create desktop configuration file (e.g. minecraft.desktop) so that unity can evaluate how to launch application.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">[Desktop</span> <span class="s">Entry]</span>
-<span class="s">Type=Application</span>
-<span class="s">Terminal=false</span>
-<span class="s">Name=minecraft</span>
-<span class="s">Icon=/PATH_TO_ICON_DIR/minecraft.ico</span>
-<span class="s">Exec=/PATH_TO_SCRIPT_DIR/minecraft.sh</span>
-</pre></div>
-</div>
-<p>Put this desktop configuration file under /usr/share/applications directory.</p>
-<ul class="simple">
-<li>unity panel</li>
-</ul>
-<p>And drag &amp; drop this desktop configuration file onto unity panel.</p>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/minecraft.html">minecraft</a>, <a href="tags/ubuntu.html">ubuntu</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -268,6 +226,8 @@ java -Xmx1024M -Xms512M -cp minecraft.jar net.minecraft.LauncherFrame &gt;&gt; <
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/21/lxc_introduction.html">lxc introduction</a>
+        </li><li>
             <a href="2013/09/21/library_details.html">library details</a>
         </li><li>
             <a href="2013/09/19/network_diagram_in_document.html">network diagram in document</a>
@@ -285,8 +245,6 @@ java -Xmx1024M -Xms512M -cp minecraft.jar net.minecraft.LauncherFrame &gt;&gt; <
             <a href="2013/09/12/spell_check_in_vim.html">spell check in vim</a>
         </li><li>
             <a href="2013/09/10/how_to_notify_core_file_creation.html">how to notify core file creation</a>
-        </li><li>
-            <a href="2013/09/09/package_management_on_ubuntu.html">package management on ubuntu</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -296,7 +254,7 @@ java -Xmx1024M -Xms512M -cp minecraft.jar net.minecraft.LauncherFrame &gt;&gt; <
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (13), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/lxc.html">lxc</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (14), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

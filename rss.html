@@ -8,6 +8,52 @@
         <pubDate>Sat, 21 Sep 2013 00:00:00 +0900</pubDate>
         
         <item>
+            <link>http://skyhigh71.github.io/2013/09/21/lxc_introduction.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/21/lxc_introduction.html</guid>
+            <title><![CDATA[lxc introduction]]></title>
+            <description><![CDATA[<div class="section" id="lxc-introduction">
+<h1>lxc introduction</h1>
+<p>You may be tempted (or may be not) to create lightweight virtual machine on you host.
+lxc (LinuX Container) must be one of your options.</p>
+<p>Installing lxc package will install all dependent packages.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install lxc
+</pre></div>
+</div>
+<p>virtual machine is manipulated by lxc- commands.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>lxc-&lt;TAB&gt;&lt;TAB&gt;
+lxc-aa-custom-profile  lxc-clone              lxc-execute            lxc-list               lxc-restart            lxc-unfreeze
+lxc-attach             lxc-console            lxc-freeze             lxc-ls                 lxc-shutdown           lxc-unshare
+lxc-cgroup             lxc-create             lxc-halt               lxc-monitor            lxc-start              lxc-version
+lxc-checkconfig        lxc-destroy            lxc-info               lxc-netstat            lxc-start-ephemeral    lxc-wait
+lxc-checkpoint         lxc-device             lxc-kill               lxc-ps                 lxc-stop
+</pre></div>
+</div>
+<p>You will see lxc related configuration files under /etc/init directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls /etc/init/lxc*
+/etc/init/lxc-instance.conf  /etc/init/lxc-net.conf  /etc/init/lxc.conf
+</pre></div>
+</div>
+<p>You will notice that new virtual interface is added and activated.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ifconfig lxcbr0
+lxcbr0    Link encap:Ethernet  HWaddr a6:1a:10:32:67:87
+          inet addr:10.0.3.1  Bcast:10.0.3.255  Mask:255.255.255.0
+          inet6 addr: fe80::a41a:10ff:fe32:6787/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:84 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 <span class="o">(</span>0.0 B<span class="o">)</span>  TX bytes:13896 <span class="o">(</span>13.8 KB<span class="o">)</span>
+</pre></div>
+</div>
+<p>And you will see that DHCP server is already running as well.</p>
+<div class="highlight-bash"><div class="highlight"><pre>dnsmasq -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file<span class="o">=</span>/var/run/lxc/dnsmasq.pid --conf-file<span class="o">=</span> --listen-address 10.0.3.1 --dhcp-range 10.0.3.2,10.0.3.254 --dhcp-lease-max<span class="o">=</span>253 --dhcp-no-override --except-interface<span class="o">=</span>lo --interface<span class="o">=</span>lxcbr0 --dhcp-leasefile<span class="o">=</span>/var/lib/misc/dnsmasq.lxcbr0.leases --dhcp-authoritative
+</pre></div>
+</div>
+</div>]]></description>
+             <pubDate>Sat, 21 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
+        <item>
             <link>http://skyhigh71.github.io/2013/09/21/library_details.html</link>
             <guid>http://skyhigh71.github.io/2013/09/21/library_details.html</guid>
             <title><![CDATA[library details]]></title>

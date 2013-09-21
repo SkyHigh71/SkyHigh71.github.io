@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>switching from HTTPS to SSH &mdash; sakana</title>
+        <title>lxc introduction &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="google anlytics in sphinx" href="../01/google_anlytics_in_sphinx.html" /><link rel="prev" title="distribute requests by URL on apache" href="../04/distribute_requests_by_url_on_apache.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="library details" href="library_details.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>September 02, 2013</span>
+            <span>September 21, 2013</span>
         </div>
     </div>
     
@@ -77,26 +77,44 @@
     
     </div>
     
-    <div class="section" id="switching-from-https-to-ssh">
-<h1>switching from HTTPS to SSH</h1>
-<p>Communication protocol for github can either be SSH or HTTPS.
-You can configure protocol to SSH so that ssh key shall be used for authentication.
-And you do not have to enter password every time you communicate with github.</p>
-<p>URL, which includes protocol, is specified in .git/config file.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
-    <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
+    <div class="section" id="lxc-introduction">
+<h1>lxc introduction</h1>
+<p>You may be tempted (or may be not) to create lightweight virtual machine on you host.
+lxc (LinuX Container) must be one of your options.</p>
+<p>Installing lxc package will install all dependent packages.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install lxc
 </pre></div>
 </div>
-<p>So as to change URL, use &#8220;git remote set-url&#8221; command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git remote <span class="nb">set</span>-url origin git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git
+<p>virtual machine is manipulated by lxc- commands.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>lxc-&lt;TAB&gt;&lt;TAB&gt;
+lxc-aa-custom-profile  lxc-clone              lxc-execute            lxc-list               lxc-restart            lxc-unfreeze
+lxc-attach             lxc-console            lxc-freeze             lxc-ls                 lxc-shutdown           lxc-unshare
+lxc-cgroup             lxc-create             lxc-halt               lxc-monitor            lxc-start              lxc-version
+lxc-checkconfig        lxc-destroy            lxc-info               lxc-netstat            lxc-start-ephemeral    lxc-wait
+lxc-checkpoint         lxc-device             lxc-kill               lxc-ps                 lxc-stop
 </pre></div>
 </div>
-<p>URL in config file shall be updated as specified in argument abvoe.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
-    <span class="na">url</span> <span class="o">=</span> <span class="s">git@github.com:&lt;USERNAME&gt;/&lt;REPO&gt;.git</span>
+<p>You will see lxc related configuration files under /etc/init directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls /etc/init/lxc*
+/etc/init/lxc-instance.conf  /etc/init/lxc-net.conf  /etc/init/lxc.conf
 </pre></div>
 </div>
-<p>Therefore you may be able to configure URL directly by modifying value in config file (not tested though :-)).</p>
+<p>You will notice that new virtual interface is added and activated.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ifconfig lxcbr0
+lxcbr0    Link encap:Ethernet  HWaddr a6:1a:10:32:67:87
+          inet addr:10.0.3.1  Bcast:10.0.3.255  Mask:255.255.255.0
+          inet6 addr: fe80::a41a:10ff:fe32:6787/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:84 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 <span class="o">(</span>0.0 B<span class="o">)</span>  TX bytes:13896 <span class="o">(</span>13.8 KB<span class="o">)</span>
+</pre></div>
+</div>
+<p>And you will see that DHCP server is already running as well.</p>
+<div class="highlight-bash"><div class="highlight"><pre>dnsmasq -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file<span class="o">=</span>/var/run/lxc/dnsmasq.pid --conf-file<span class="o">=</span> --listen-address 10.0.3.1 --dhcp-range 10.0.3.2,10.0.3.254 --dhcp-lease-max<span class="o">=</span>253 --dhcp-no-override --except-interface<span class="o">=</span>lo --interface<span class="o">=</span>lxcbr0 --dhcp-leasefile<span class="o">=</span>/var/lib/misc/dnsmasq.lxcbr0.leases --dhcp-authoritative
+</pre></div>
+</div>
 </div>
 
     <div class="postmeta">
@@ -107,19 +125,19 @@ And you do not have to enter password every time you communicate with github.</p
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/github.html">github</a></span>
+                <a href="../../../tags/lxc.html">lxc</a>, <a href="../../../tags/ubuntu.html">ubuntu</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a></li>
-            <li class="right"><a href="../01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="library_details.html">library details</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../21/lxc_introduction.html">lxc introduction</a>
+            <a href="#">lxc introduction</a>
         </li><li>
-            <a href="../21/library_details.html">library details</a>
+            <a href="library_details.html">library details</a>
         </li><li>
             <a href="../19/network_diagram_in_document.html">network diagram in document</a>
         </li><li>

@@ -1,0 +1,55 @@
+lxc introduction
+================
+
+You may be tempted (or may be not) to create lightweight virtual machine on you host.
+lxc (LinuX Container) must be one of your options.
+
+Installing lxc package will install all dependent packages.
+
+.. code-block:: bash
+
+    $ sudo apt-get install lxc
+
+virtual machine is manipulated by lxc- commands.
+
+.. code-block:: bash
+
+    $ lxc-<TAB><TAB>
+    lxc-aa-custom-profile  lxc-clone              lxc-execute            lxc-list               lxc-restart            lxc-unfreeze           
+    lxc-attach             lxc-console            lxc-freeze             lxc-ls                 lxc-shutdown           lxc-unshare            
+    lxc-cgroup             lxc-create             lxc-halt               lxc-monitor            lxc-start              lxc-version            
+    lxc-checkconfig        lxc-destroy            lxc-info               lxc-netstat            lxc-start-ephemeral    lxc-wait               
+    lxc-checkpoint         lxc-device             lxc-kill               lxc-ps                 lxc-stop 
+
+You will see lxc related configuration files under /etc/init directory.
+
+.. code-block:: bash
+
+    $ ls /etc/init/lxc*
+    /etc/init/lxc-instance.conf  /etc/init/lxc-net.conf  /etc/init/lxc.conf
+
+You will notice that new virtual interface is added and activated.
+
+.. code-block:: bash
+
+    $ ifconfig lxcbr0
+    lxcbr0    Link encap:Ethernet  HWaddr a6:1a:10:32:67:87  
+              inet addr:10.0.3.1  Bcast:10.0.3.255  Mask:255.255.255.0
+              inet6 addr: fe80::a41a:10ff:fe32:6787/64 Scope:Link
+              UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+              RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+              TX packets:84 errors:0 dropped:0 overruns:0 carrier:0
+              collisions:0 txqueuelen:0 
+              RX bytes:0 (0.0 B)  TX bytes:13896 (13.8 KB)
+
+And you will see that DHCP server is already running as well.
+
+.. code-block:: bash
+
+    dnsmasq -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file=/var/run/lxc/dnsmasq.pid --conf-file= --listen-address 10.0.3.1 --dhcp-range 10.0.3.2,10.0.3.254 --dhcp-lease-max=253 --dhcp-no-override --except-interface=lo --interface=lxcbr0 --dhcp-leasefile=/var/lib/misc/dnsmasq.lxcbr0.leases --dhcp-authoritative
+
+
+.. author:: default
+.. categories:: none
+.. tags:: lxc, ubuntu
+.. comments::
