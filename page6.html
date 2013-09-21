@@ -64,6 +64,48 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>September 01, 2013</span>
         </div>
+        <div class="section" id="google-anlytics-in-sphinx">
+<h1><a href="2013/09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a></h1>
+<p>If you would like to analyze statics of access to your site built with sphinx, then you can embed google analytics code in it.</p>
+<p>Prepare layout.html file under source/_templates directory.
+Insert javascript code obtained at google analytics site.</p>
+<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;!layout.html&quot; %}
+
+{% block footer %}
+{{ super() }}
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">o</span><span class="p">,</span><span class="nx">g</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">){</span>
+    <span class="nx">i</span><span class="p">[</span><span class="s1">'GoogleAnalyticsObject'</span><span class="p">]</span><span class="o">=</span><span class="nx">r</span><span class="p">;</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">||</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="p">(</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">||</span><span class="p">[]).</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
+    <span class="p">},</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+    <span class="nx">a</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">o</span><span class="p">),</span><span class="nx">m</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="nx">a</span><span class="p">.</span><span class="nx">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="nx">a</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">g</span><span class="p">;</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
+ <span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
+<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-xxxxxxxxx-x'</span><span class="p">,</span> <span class="s1">'&lt;site_name&gt;'</span><span class="p">);</span>
+<span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+{% endblock %}
+</pre></div>
+</div>
+<p>And rebuild html and deploy it onto site.</p>
+<p>For details, please refer to <a class="reference external" href="http://sphinx-doc.org/faq.html">sphinx FAQ</a>.</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/sphinx.html">sphinx</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>September 01, 2013</span>
+        </div>
         <div class="section" id="back-up-files-onto-dropbox">
 <h1><a href="2013/09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a></h1>
 <p>All machine, which includes Hard Disks, are to break some day.
@@ -154,88 +196,6 @@ Install sphinx-better-theme package.</p>
                 Tags:
                 <a href="tags/sphinx.html">sphinx</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 31, 2013</span>
-        </div>
-        <div class="section" id="memo-on-bitbucket">
-<h1><a href="2013/08/31/wiki_on_bitbucket.html">memo on bitbucket</a></h1>
-<p>I would like to have place where I can put some static content created by sphinx.
-I hereby demonstrate procedure to deploy html files onto bitbucket.</p>
-<p>Create a repository under the name, &lt;username&gt;.bitbucket.org.
-This repository could either be public or private. And you can select mercurial or git as your tool.
-In this scenario, I use hg as my tool.</p>
-<p>Create sphinx project to host your content.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir wiki <span class="o">&amp;&amp;</span> <span class="nb">cd </span>wiki
-<span class="nv">$ </span>sphinx-quickstart
-</pre></div>
-</div>
-<p>Write up your content and build it as usual.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>make html
-</pre></div>
-</div>
-<p>Copy content from build/html directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir publish
-<span class="nv">$ </span><span class="nb">cd </span>publish/
-<span class="nv">$ </span>rsync -av ../build/html/ .
-</pre></div>
-</div>
-<p>Now the content is ready for upload, so prepare for publication.</p>
-<p>Install mercurial if you still do not have one at your hand.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install python-dev
-<span class="nv">$ </span>sudo pip install mercurial
-<span class="nv">$ </span>which hg
-/usr/local/bin/hg
-</pre></div>
-</div>
-<p>OK, now we have hg.</p>
-<p>Create .hgrc file under home directory.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[ui]</span>
-<span class="na">username</span> <span class="o">=</span> <span class="s">Fist LAST &lt;your_mail_address&gt;</span>
-<span class="na">verbose</span> <span class="o">=</span> <span class="s">True</span>
-</pre></div>
-</div>
-<p>Create ssh key for bitbucket.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh-keygen
-
-~/.ssh<span class="nv">$ </span>ls id_rsa.bitbucket*
-id_rsa.bitbucket  id_rsa.bitbucket.pub
-</pre></div>
-</div>
-<p>Configure ~/.ssh/config file so that newly created ssh key be referenced for bitbucket access.</p>
-<div class="highlight-menuconfig"><div class="highlight"><pre>Host bitbucket.org
-    HostName        bitbucket.org
-    IdentityFile    ~/.ssh/id_rsa.bitbucket.org
-    User            hg
-</pre></div>
-</div>
-<p>And deploy your public key onto bitbucket.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>xclip -sel clip &lt; id_rsa.bitbucket.pub
-</pre></div>
-</div>
-<p>And place hgrc file under .hg directory of publish directory so that push target shall be specified.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[paths]</span>
-<span class="na">default</span><span class="o">=</span><span class="s">ssh://hg@bitbucket.org/&lt;userid&gt;/&lt;userid&gt;.bitbucket.org</span>
-</pre></div>
-</div>
-<p>And push your content onto bitbucket.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>rsync -av ../build/html .
-<span class="nv">$ </span>hg add .
-<span class="nv">$ </span>hg commit -m <span class="s2">&quot;my first post of mine&quot;</span>
-<span class="nv">$ </span>hg push
-</pre></div>
-</div>
-<p>Now you can access your content by <a class="reference external" href="http:">http:/</a>/&lt;userid&gt;.bitbucket.org.</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/hg.html">hg</a>, <a href="tags/sphinx.html">sphinx</a>, <a href="tags/bitbucket.html">bitbucket</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -244,6 +204,8 @@ id_rsa.bitbucket  id_rsa.bitbucket.pub
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/21/library_details.html">library details</a>
+        </li><li>
             <a href="2013/09/19/network_diagram_in_document.html">network diagram in document</a>
         </li><li>
             <a href="2013/09/18/usb_devices.html">USB devices</a>
@@ -261,8 +223,6 @@ id_rsa.bitbucket  id_rsa.bitbucket.pub
             <a href="2013/09/10/how_to_notify_core_file_creation.html">how to notify core file creation</a>
         </li><li>
             <a href="2013/09/09/package_management_on_ubuntu.html">package management on ubuntu</a>
-        </li><li>
-            <a href="2013/09/07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -272,7 +232,7 @@ id_rsa.bitbucket  id_rsa.bitbucket.pub
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (12), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (13), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

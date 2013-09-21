@@ -1,0 +1,31 @@
+library details
+===============
+
+Sometime you feel like (or may not) checking details of certain library on you machine.
+Suppose that the relevant library may be X related library.
+
+Let us check and search for library name at first.
+And apt-cache command is your friend.
+
+.. code-block:: bash
+
+    $ apt-cache search libx11
+    libx11-6 - X11 client-side library
+    libx11-6-dbg - X11 client-side library (debug package)
+
+Ok, lib11-6 is what we are looking for.
+Let us check its content.
+
+.. literalinclude:: show.txt
+    :language: bash
+
+You can download source as described.
+
+.. code-block:: bash
+
+    $ $ git clone git://anongit.freedesktop.org/git/xorg/lib/libX11
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu
+.. comments::

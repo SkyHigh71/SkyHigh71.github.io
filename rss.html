@@ -5,8 +5,68 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Thu, 19 Sep 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sat, 21 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/21/library_details.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/21/library_details.html</guid>
+            <title><![CDATA[library details]]></title>
+            <description><![CDATA[<div class="section" id="library-details">
+<h1>library details</h1>
+<p>Sometime you feel like (or may not) checking details of certain library on you machine.
+Suppose that the relevant library may be X related library.</p>
+<p>Let us check and search for library name at first.
+And apt-cache command is your friend.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache search libx11
+libx11-6 - X11 client-side library
+libx11-6-dbg - X11 client-side library <span class="o">(</span>debug package<span class="o">)</span>
+</pre></div>
+</div>
+<p>Ok, lib11-6 is what we are looking for.
+Let us check its content.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache show libx11-6
+Package: libx11-6
+Priority: standard
+Section: libs
+Installed-Size: 1489
+Maintainer: Ubuntu Developers &lt;ubuntu-devel-discuss@lists.ubuntu.com&gt;
+Original-Maintainer: Debian X Strike Force &lt;debian-x@lists.debian.org&gt;
+Architecture: i386
+Source: libx11
+Version: 2:1.5.0-1ubuntu1.1
+Depends: libc6 <span class="o">(</span>&gt;<span class="o">=</span> 2.15<span class="o">)</span>, libxcb1 <span class="o">(</span>&gt;<span class="o">=</span> 1.2<span class="o">)</span>, libx11-data
+Pre-Depends: multiarch-support
+Filename: pool/main/libx/libx11/libx11-6_1.5.0-1ubuntu1.1_i386.deb
+Size: 776896
+MD5sum: 3fea2137a989c9cf840c7e0db9b91606
+SHA1: 5fcc7ab89b79687fb338e169622a2c57912bcb60
+SHA256: 170ce1631c61458216078415ad9d660df98e193c18c4774d45432cb366e64c75
+Description-en: X11 client-side library
+ This package provides a client interface to the X Window System, otherwise
+ known as <span class="s1">'Xlib'</span>.  It provides a <span class="nb">complete </span>API <span class="k">for </span>the basic functions of the
+ window system.
+ .
+ More information about X.Org can be found at:
+ &lt;URL:http://www.X.org&gt;
+ .
+ This module can be found at
+ git://anongit.freedesktop.org/git/xorg/lib/libX11
+Multi-Arch: same
+Description-md5: d75c895abf6eca234f7480813aaa95ec
+Bugs: https://bugs.launchpad.net/ubuntu/+filebug
+Origin: Ubuntu
+Supported: 9m
+Task: standard, kubuntu-active, kubuntu-active, mythbuntu-frontend, mythbuntu-frontend, mythbuntu-desktop, mythbuntu-backend-slave, mythbuntu-backend-slave, mythbuntu-backend-master, mythbuntu-backend-master
+</pre></div>
+</div>
+<p>You can download source as described.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ $ </span>git clone git://anongit.freedesktop.org/git/xorg/lib/libX11
+</pre></div>
+</div>
+</div>]]></description>
+             <pubDate>Sat, 21 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/19/network_diagram_in_document.html</link>
             <guid>http://skyhigh71.github.io/2013/09/19/network_diagram_in_document.html</guid>
