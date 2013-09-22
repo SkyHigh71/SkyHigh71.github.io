@@ -5,8 +5,44 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sat, 21 Sep 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sun, 22 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/22/lxc_cont.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/22/lxc_cont.html</guid>
+            <title><![CDATA[lxc continued]]></title>
+            <description><![CDATA[<div class="section" id="lxc-continued">
+<h1>lxc continued</h1>
+<p>Let us create virtual machine of your choice.
+Suppose that you would like to create an instance of ubuntu.
+(Please do not ask me reason why I need to run ubuntu on unbutu :-)).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-create -t ubuntu -n ubuntu01
+</pre></div>
+</div>
+<p>As this command execution will download files, therefore first time execution may take time.
+So please wait for a while, say, by drinking coffee.</p>
+<p>After successful execution, you will have an ubuntu instance named “ubuntu01”.</p>
+<p>Ok, let us start lxc as daemon.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-start -n ubuntu01 -d
+</pre></div>
+</div>
+<p>According to dhcp server (dnsmasq), 10.0.3.198 may have been leased.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat /var/lib/misc/dnsmasq.lxcbr0.leases
+1379835957 00:16:3e:08:50:7f 10.0.3.198 ubuntu01 *
+</pre></div>
+</div>
+<p>Let us login via ssh.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh -l ubuntu 10.0.3.198
+</pre></div>
+</div>
+<p>Therefore network plan would be like this.</p>
+<p class="nwdiag">
+<img alt="None" height="444" src="http://skyhigh71.github.io/_images/nwdiag-7a9b63d8453e24f5c7d131a87aaf68d7ee723457.png" width="456"/>
+</p>
+</div>]]></description>
+             <pubDate>Sun, 22 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/21/lxc_introduction.html</link>
             <guid>http://skyhigh71.github.io/2013/09/21/lxc_introduction.html</guid>

@@ -62,6 +62,91 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>August 26, 2013</span>
+        </div>
+        <div class="section" id="automatic-yum-update">
+<h1><a href="2013/08/26/automatic_yum_update.html">automatic yum update</a></h1>
+<p>Sometime you would like to configure Scientific Linux to update packages automatically without manual intervention.
+You can configure system as you wish and here is a short memo to achieve such.</p>
+<div class="section" id="yum-cron">
+<h2>yum-cron</h2>
+<p>You can configure cron to start yum command on daily basis to check for update.
+First install yum-cron command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo yum install yum-cron
+</pre></div>
+</div>
+<p>Installation will place 0yum.cron file under /etc/cron.daily directory.
+And cron executes yum-cron on daily basis.</p>
+<p>You can control yum-cron’s behavior by modifying configuration file, /etc/sysconfig/yum-cron.
+I hereby quote some parameters in which you may be interested.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="c1"># Don't install, just check (valid: yes|no)</span>
+<span class="na">CHECK_ONLY</span><span class="o">=</span><span class="s">no</span>
+
+<span class="c1"># Don't install, just check and download (valid: yes|no)</span>
+<span class="na">DOWNLOAD_ONLY</span><span class="o">=</span><span class="s">no</span>
+</pre></div>
+</div>
+<p>And start service for now.
+And configure system to start yum-cron service upon restart.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>/etc/init.d/yum-cron start
+<span class="nv">$ </span>sudo chkconfig yum-cron on
+</pre></div>
+</div>
+</div>
+<div class="section" id="history">
+<h2>history</h2>
+<p>You can check if cron has started or not by referencing /var/log/cron* logs.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Aug 26 03:16:01 &lt;hostname&gt; run-parts<span class="o">(</span>/etc/cron.daily<span class="o">)[</span>24221<span class="o">]</span>: starting 0yum.cron
+Aug 26 04:07:46 &lt;hostname&gt; run-parts<span class="o">(</span>/etc/cron.daily<span class="o">)[</span>24421<span class="o">]</span>: finished 0yum.cron
+</pre></div>
+</div>
+<p>Log message are yielded in /var/log/yum.log file</p>
+<div class="highlight-bash"><div class="highlight"><pre>Aug 09 04:09:11 Updated: nss-softokn-devel-3.14.3-3.el6_4.i686
+Aug 09 04:09:12 Updated: nss-devel-3.14.3-4.el6_4.i686
+Aug 09 04:09:13 Updated: nss-tools-3.14.3-4.el6_4.i686
+Aug 14 03:36:46 Updated: httpd-tools-2.2.15-29.sl6.i686
+Aug 14 03:36:48 Updated: httpd-2.2.15-29.sl6.i686
+</pre></div>
+</div>
+<p>as specified in yum’s configuration file, /etc/yum.conf.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[main]</span>
+<span class="na">debuglevel</span><span class="o">=</span><span class="s">2</span>
+<span class="na">logfile</span><span class="o">=</span><span class="s">/var/log/yum.log</span>
+</pre></div>
+</div>
+<p>Or you can check history by yum history command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo yum <span class="nb">history</span>
+Loaded plugins: auto-update-debuginfo, downloadonly, fastestmirror, refresh-packagekit, security
+ID     | Login user               | Date and <span class="nb">time</span>    | Action<span class="o">(</span>s<span class="o">)</span>      | Altered
+-------------------------------------------------------------------------------
+   138 | root &lt;root&gt;              | 2013-08-14 03:36 | Update         |    2
+   137 | root &lt;root&gt;              | 2013-08-09 04:09 | Update         |   12
+...
+</pre></div>
+</div>
+<p>And You can check more details of update with “yum history &lt;ID&gt;”.</p>
+</div>
+<div class="section" id="sigh">
+<h2>sigh</h2>
+<p>Ah...</p>
+<p>By default, SL has similar functionality yum-autoupdate, which is enabled and executed on daily basis. So above configuration is duplicate and not necessary.</p>
+<p>You can disable yum-autoupdate by configuring /etc/sysconfig/yum-autoupdate file.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="na">ENABLED</span><span class="o">=</span><span class="s">&quot;false&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/sl.html">sl</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>August 25, 2013</span>
         </div>
         <div class="section" id="how-to-play-minecraft-on-ubuntu">
@@ -178,68 +263,6 @@ _static/skyhigh71.ico: MS Windows icon resource - 1 icon
                 Tags:
                 <a href="tags/tinkerer.html">tinkerer</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>August 24, 2013</span>
-        </div>
-        <div class="section" id="customize-tinkerer-page-continued">
-<h1><a href="2013/08/24/customize_tinkerer_page_continued.html">customize tinkerer page continued</a></h1>
-<div class="section" id="language">
-<h2>language</h2>
-<p>LANG environment variable of my shell is configured to ja_JP.UTF-8.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$LANG</span>
-ja_JP.UTF-8
-</pre></div>
-</div>
-<p>Therefore I first thought that I have to set LANG=C upon building html so as to obtain English output.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ LANG</span><span class="o">=</span>C tinker -b
-</pre></div>
-</div>
-<p><em>But it’s confirmed that language parameter in conf.py is valid for “en” as well.</em>
-<strong>value “en” does not work. You will encounter error stating that “loading translations [en]... locale not available” sorry...</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">language</span> <span class="o">=</span> <span class="s">&quot;en&quot;</span>
-</pre></div>
-</div>
-<p>And if you would like to configure, say, German as default language of your blog, then configure it as “de”.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">language</span> <span class="o">=</span> <span class="s">&quot;de&quot;</span>
-</pre></div>
-</div>
-<p>But localization is not perfect, for example, date seems to be yielded based upon LANG.
-So you would better to set LANG upon building html.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ LANG</span><span class="o">=</span>de_DE.utf8 tinker -b
-</pre></div>
-</div>
-</div>
-<div class="section" id="theme">
-<h2>theme</h2>
-<p>You can select theme among following options and set theme in theme in conf.py.</p>
-<ul class="simple">
-<li>flat (default)</li>
-<li>modern5</li>
-<li>minimal5</li>
-<li>responsive</li>
-<li>dark</li>
-</ul>
-</div>
-<div class="section" id="post-per-page">
-<h2>post per page</h2>
-<p>Sometimes you find that default post per page (10) seems to be too long.
-You can configure post per page by posts_per_page parameter.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Number of blog posts per page</span>
-<span class="n">posts_per_page</span> <span class="o">=</span> <span class="mi">3</span>
-</pre></div>
-</div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/tinkerer.html">tinkerer</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -248,6 +271,8 @@ You can configure post per page by posts_per_page parameter.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/22/lxc_cont.html">lxc continued</a>
+        </li><li>
             <a href="2013/09/21/lxc_introduction.html">lxc introduction</a>
         </li><li>
             <a href="2013/09/21/library_details.html">library details</a>
@@ -265,8 +290,6 @@ You can configure post per page by posts_per_page parameter.</p>
             <a href="2013/09/12/symbol_table.html">symbol table reference</a>
         </li><li>
             <a href="2013/09/12/spell_check_in_vim.html">spell check in vim</a>
-        </li><li>
-            <a href="2013/09/10/how_to_notify_core_file_creation.html">how to notify core file creation</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -276,7 +299,7 @@ You can configure post per page by posts_per_page parameter.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/lxc.html">lxc</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (14), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/lxc.html">lxc</a> (2), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (15), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

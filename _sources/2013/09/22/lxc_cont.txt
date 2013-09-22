@@ -1,0 +1,43 @@
+lxc continued
+=============
+
+Let us create virtual machine of your choice.
+Suppose that you would like to create an instance of ubuntu.
+(Please do not ask me reason why I need to run ubuntu on unbutu :-)).
+
+.. code-block:: bash
+
+    $ sudo lxc-create -t ubuntu -n ubuntu01
+
+As this command execution will download files, therefore first time execution may take time.
+So please wait for a while, say, by drinking coffee.
+
+After successful execution, you will have an ubuntu instance named "ubuntu01".
+
+Ok, let us start lxc as daemon.
+
+.. code-block:: bash
+
+    $ sudo lxc-start -n ubuntu01 -d
+
+According to dhcp server (dnsmasq), 10.0.3.198 may have been leased.
+
+.. code-block:: bash
+
+    $ cat /var/lib/misc/dnsmasq.lxcbr0.leases 
+    1379835957 00:16:3e:08:50:7f 10.0.3.198 ubuntu01 *
+
+Let us login via ssh.
+
+.. code-block:: bash
+
+    $ ssh -l ubuntu 10.0.3.198
+
+Therefore network plan would be like this.
+
+.. nwdiag:: net.diag
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu, lxc
+.. comments::
