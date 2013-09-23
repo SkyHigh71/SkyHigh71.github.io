@@ -64,6 +64,69 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>September 12, 2013</span>
         </div>
+        <div class="section" id="symbol-table-reference">
+<h1><a href="2013/09/12/symbol_table.html">symbol table reference</a></h1>
+<p>Now the time has come that we can debug core file.
+In this case, dropbox seems to have yielded core file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /var/cores/core.dropbox.2172.1378900464
+/var/cores/core.dropbox.2172.1378900464: ELF 32-bit LSB core file Intel 80386, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, SVR4-style, from <span class="s1">'&lt;HOME&gt;/.dropbox-dist/dropbox'</span>
+</pre></div>
+</div>
+<p>But some dependent libraries (e.g. libc.so) are stripped and they do not have symbol table.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /lib/i386-linux-gnu/libc-2.17.so
+/lib/i386-linux-gnu/libc-2.17.so: ELF 32-bit LSB shared object, Intel 80386, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked <span class="o">(</span>uses shared libs<span class="o">)</span>, BuildID<span class="o">[</span>sha1<span class="o">]=</span>0x81a55e819c61f581e6a9179eaf59726dd80aea31, <span class="k">for </span>GNU/Linux 2.6.24, stripped
+<span class="nv">$ </span>objdump -t /lib/i386-linux-gnu/libc-2.17.so
+
+/lib/i386-linux-gnu/libc-2.17.so:     file format elf32-i386
+
+SYMBOL TABLE:
+no symbols
+</pre></div>
+</div>
+<p>On linux we do not replace stripped library with non-stripped one.
+Instead we install separate debug information file and configure debugger to reference it.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache search libc-
+libc6-dbg - Embedded GNU C Library: detached debugging symbols
+<span class="nv">$ </span>sudo apt-get install libc6-dbg
+</pre></div>
+</div>
+<p>Packages for debug information has suffix of -dbg (it seems to be so).
+Installation will deploy files under /usr/lib/debug directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so
+/usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so: ELF 32-bit LSB shared object, Intel 80386, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked <span class="o">(</span>uses shared libs<span class="o">)</span>, BuildID<span class="o">[</span>sha1<span class="o">]=</span>0x81a55e819c61f581e6a9179eaf59726dd80aea31, <span class="k">for </span>GNU/Linux 2.6.24, not stripped
+<span class="nv">$ </span>objdump -t /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so
+
+/usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so:     file format elf32-i386
+
+SYMBOL TABLE:
+00000174 l    d  .note.gnu.build-id 00000000 .note.gnu.build-id
+00000198 l    d  .note.ABI-tag      00000000 .note.ABI-tag
+</pre></div>
+</div>
+<p>gdb is wise enough to automatically detect debug information (as long as libc6 and libc6-dbg match) and applies it!</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">set </span>verbose on
+<span class="o">(</span>gdb<span class="o">)</span> run
+...
+Reading symbols from /lib/i386-linux-gnu/libc.so.6...Reading symbols from /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so...done.
+<span class="k">done</span>.
+</pre></div>
+</div>
+<p><a class="reference external" href="http://stackoverflow.com/questions/10000335/how-to-use-debug-version-of-libc">This entry</a> is quite of help for debug information.</p>
+<p>Now we can see precise stack!</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>September 12, 2013</span>
+        </div>
         <div class="section" id="spell-check-in-vim">
 <h1><a href="2013/09/12/spell_check_in_vim.html">spell check in vim</a></h1>
 <p>If my memory does not deceive me, I started using vi as my editor on HP-UX 10.
@@ -221,71 +284,6 @@ nohup &lt;PATH&gt;/watchCore.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
                 Tags:
                 <a href="tags/ubuntu.html">ubuntu</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>September 09, 2013</span>
-        </div>
-        <div class="section" id="package-management-on-ubuntu">
-<h1><a href="2013/09/09/package_management_on_ubuntu.html">package management on ubuntu</a></h1>
-<p>Why did you choose ubuntu as your platform?
-Every one must have reason(s) for that.</p>
-<p>For me, one of main reasons is easy access of software packages.
-(Remember the days of Solaris 8 when one had to install all the necessary packages manually by pkgadd...)</p>
-<p>How are software packages repositories maintained on ubuntu?
-Take google-chrome as example and see how it goes.</p>
-<div class="section" id="apt-dpkg">
-<h2>apt &amp; dpkg</h2>
-<p>Ubuntu makes use of <strong>apt</strong> (Advanced Packaging Tool) for package maintenance.
-apt resolves depency among packages and gives user a convenient way of package utilization.</p>
-<p>And apt is dependent upon <strong>dpkg</strong>.
-dpkg is a tool to manipulate deb format packages.</p>
-</div>
-<div class="section" id="setup-installation">
-<h2>Setup &amp; Installation</h2>
-<p>In case that you add some repository, you need to trust this repository by adding its public key.
-Retrieve public key and add it into key repository.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-</pre></div>
-</div>
-<p>The relevant public key will be stored into /etc/apt/trusted.gpg file.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-key list
-/etc/apt/trusted.gpg
---------------------
-
-pub   1024D/7FAC5991 2007-03-08
-uid                  Google, Inc. Linux Package Signing Key &lt;linux-packages-keymaster@google.com&gt;
-sub   2048g/C07CB649 2007-03-08
-</pre></div>
-</div>
-<p>Then add google repository in source list.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo sh -c <span class="s1">'echo &quot;deb http://dl.google.com/linux/chrome/deb/ stable main&quot; &gt;&gt; /etc/apt/sources.list.d/google.list'</span>
-</pre></div>
-</div>
-<p>Finally install google-chrome.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get update
-<span class="nv">$ </span>sudo apt-get install google-chrome-stable
-</pre></div>
-</div>
-</div>
-<div class="section" id="summary">
-<h2>Summary</h2>
-<p>Software package related items are stored under /etc/apt directory.
-In case that you add new software package, which are not listed in default repository, you need to add.</p>
-<ul class="simple">
-<li>public key (trusted.gpg)</li>
-<li>package location (&lt;package&gt;.list)</li>
-</ul>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/ubuntu.html">ubuntu</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -294,6 +292,8 @@ In case that you add new software package, which are not listed in default repos
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/23/centos_on_ubuntu.html">CentOC on ubuntu</a>
+        </li><li>
             <a href="2013/09/22/lxc_cont.html">lxc continued</a>
         </li><li>
             <a href="2013/09/21/lxc_introduction.html">lxc introduction</a>
@@ -311,8 +311,6 @@ In case that you add new software package, which are not listed in default repos
             <a href="2013/09/13/source_code_reference.html">source code reference</a>
         </li><li>
             <a href="2013/09/12/symbol_table.html">symbol table reference</a>
-        </li><li>
-            <a href="2013/09/12/spell_check_in_vim.html">spell check in vim</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -322,7 +320,7 @@ In case that you add new software package, which are not listed in default repos
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/lxc.html">lxc</a> (2), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (15), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/lxc.html">lxc</a> (3), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (16), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

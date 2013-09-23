@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>USB devices &mdash; sakana</title>
+        <title>CentOC on ubuntu &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="copy intermediate directories" href="copying_files.html" /><link rel="prev" title="network diagram in document" href="../19/network_diagram_in_document.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="lxc continued" href="../22/lxc_cont.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>September 18, 2013</span>
+            <span>September 23, 2013</span>
         </div>
     </div>
     
@@ -77,24 +77,39 @@
     
     </div>
     
-    <div class="section" id="usb-devices">
-<h1>USB devices</h1>
-<p>Sometimes you would like to reference USB devices, which are attached to your machine.
-You can make use of lsusb utility for this sake.</p>
-<p>For example,</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>lsusb
-Bus 002 Device 003: ID 5986:0299 Acer, Inc
-Bus 004 Device 002: ID 0a5c:21f4 Broadcom Corp.
-Bus 006 Device 008: ID 0bb4:0ffe HTC <span class="o">(</span>High Tech Computer Corp.<span class="o">)</span> Desire HD <span class="o">(</span>modem mode<span class="o">)</span>
+    <div class="section" id="centoc-on-ubuntu">
+<h1>CentOC on ubuntu</h1>
+<p>Ok, let us create a Redhat clone instance, say, cent OS on ubuntu.
+So as to manipulate RPM packages, you need to install curl and yum package.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install curl yum
 </pre></div>
 </div>
-<p>In case that you would like to check further details of specific USB device, for example, Desire, then you can specify use verbose option, -v.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lsusb -v -s 008
+<p>By default, there is no lxc template for Cent OS.
+You need to deploy lxc template manually.
+For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo wget -O /usr/share/lxc/templates/lxc-centos https://gist.github.com/hagix9/3514296/raw/7f6bb4e291fad1dad59a49a5c02f78642bb99a45/lxc-centos
 </pre></div>
 </div>
-<p>By the way, lsusb command accesses file under /dev/bus/usb directory, which requires root permission.
-Therefore if you execute command as user other than root without sudo, then you will see open failure.</p>
-<div class="highlight-c"><div class="highlight"><pre><span class="n">open</span><span class="p">(</span><span class="s">&quot;/dev/bus/usb/006/008&quot;</span><span class="p">,</span> <span class="n">O_RDWR</span><span class="p">)</span>    <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="n">EACCES</span> <span class="p">(</span><span class="n">Permission</span> <span class="n">denied</span><span class="p">)</span>
+<p>You need some adjustment in case that architecture of you machine is i686.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>arch
+i686
+<span class="nv">$ </span>diff /usr/share/lxc/templates/lxc-centos /usr/share/lxc/templates/lxc-centos.org
+170,171c170
+&lt;         <span class="c">#RELEASE_URL=&quot;$MIRROR_URL/Packages/centos-release-$release-$releaseminor.el6.centos.10.$arch.rpm&quot;</span>
+&lt;         <span class="nv">RELEASE_URL</span><span class="o">=</span><span class="s2">&quot;$MIRROR_URL/Packages/centos-release-$release-$releaseminor.el6.centos.10.i686.rpm&quot;</span>
+---
+&gt;         <span class="nv">RELEASE_URL</span><span class="o">=</span><span class="s2">&quot;$MIRROR_URL/Packages/centos-release-$release-$releaseminor.el6.centos.10.$arch.rpm&quot;</span>
+</pre></div>
+</div>
+<p>Ok, now you are ready to start instance creation.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-create -t centos -n centos01
+</pre></div>
+</div>
+<p>Please be noted that first time execution may take time, as this will download substantial amount of PRM packages.</p>
+<p>After successful creation of instance, you can launch it and login via ssh.
+By the way, default root password is password.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-start -n centos01 -d
+<span class="nv">$ </span>ssh -l root <span class="sb">`</span>cut -d <span class="s2">&quot; &quot;</span> -f3 /var/lib/misc/dnsmasq.lxcbr0.leases<span class="sb">`</span>
 </pre></div>
 </div>
 </div>
@@ -107,17 +122,17 @@ Therefore if you execute command as user other than root without sudo, then you 
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+                <a href="../../../tags/lxc.html">lxc</a>, <a href="../../../tags/ubuntu.html">ubuntu</a>, <a href="../../../tags/centos.html">centos</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../19/network_diagram_in_document.html">network diagram in document</a></li>
-            <li class="right"><a href="copying_files.html">copy intermediate directories</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../22/lxc_cont.html">lxc continued</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../23/centos_on_ubuntu.html">CentOC on ubuntu</a>
+            <a href="#">CentOC on ubuntu</a>
         </li><li>
             <a href="../22/lxc_cont.html">lxc continued</a>
         </li><li>
@@ -127,9 +142,9 @@ Therefore if you execute command as user other than root without sudo, then you 
         </li><li>
             <a href="../19/network_diagram_in_document.html">network diagram in document</a>
         </li><li>
-            <a href="#">USB devices</a>
+            <a href="../18/usb_devices.html">USB devices</a>
         </li><li>
-            <a href="copying_files.html">copy intermediate directories</a>
+            <a href="../18/copying_files.html">copy intermediate directories</a>
         </li><li>
             <a href="../15/password_lock_of_screensaver.html">password lock of screensaver</a>
         </li><li>

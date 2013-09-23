@@ -1,0 +1,51 @@
+CentOC on ubuntu
+================
+
+Ok, let us create a Redhat clone instance, say, cent OS on ubuntu.
+So as to manipulate RPM packages, you need to install curl and yum package.
+
+.. code-block:: bash
+
+    $ sudo apt-get install curl yum
+
+By default, there is no lxc template for Cent OS.
+You need to deploy lxc template manually. 
+For example,
+
+.. code-block:: bash
+
+    $ sudo wget -O /usr/share/lxc/templates/lxc-centos https://gist.github.com/hagix9/3514296/raw/7f6bb4e291fad1dad59a49a5c02f78642bb99a45/lxc-centos
+
+You need some adjustment in case that architecture of you machine is i686.
+
+.. code-block:: bash
+
+    $ arch
+    i686
+    $ diff /usr/share/lxc/templates/lxc-centos /usr/share/lxc/templates/lxc-centos.org 
+    170,171c170
+    <         #RELEASE_URL="$MIRROR_URL/Packages/centos-release-$release-$releaseminor.el6.centos.10.$arch.rpm"
+    <         RELEASE_URL="$MIRROR_URL/Packages/centos-release-$release-$releaseminor.el6.centos.10.i686.rpm"
+    ---
+    >         RELEASE_URL="$MIRROR_URL/Packages/centos-release-$release-$releaseminor.el6.centos.10.$arch.rpm"
+
+Ok, now you are ready to start instance creation.
+
+.. code-block:: bash
+
+    $ sudo lxc-create -t centos -n centos01
+
+Please be noted that first time execution may take time, as this will download substantial amount of PRM packages.
+
+After successful creation of instance, you can launch it and login via ssh.
+By the way, default root password is password.
+
+.. code-block:: bash
+
+    $ sudo lxc-start -n centos01 -d
+    $ ssh -l root `cut -d " " -f3 /var/lib/misc/dnsmasq.lxcbr0.leases`
+
+.. author:: default
+.. categories:: none
+.. tags:: lxc, ubuntu, centos
+.. comments::

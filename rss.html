@@ -5,8 +5,51 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sun, 22 Sep 2013 00:00:00 +0900</pubDate>
+        <pubDate>Mon, 23 Sep 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/09/23/centos_on_ubuntu.html</link>
+            <guid>http://skyhigh71.github.io/2013/09/23/centos_on_ubuntu.html</guid>
+            <title><![CDATA[CentOC on ubuntu]]></title>
+            <description><![CDATA[<div class="section" id="centoc-on-ubuntu">
+<h1>CentOC on ubuntu</h1>
+<p>Ok, let us create a Redhat clone instance, say, cent OS on ubuntu.
+So as to manipulate RPM packages, you need to install curl and yum package.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install curl yum
+</pre></div>
+</div>
+<p>By default, there is no lxc template for Cent OS.
+You need to deploy lxc template manually.
+For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo wget -O /usr/share/lxc/templates/lxc-centos https://gist.github.com/hagix9/3514296/raw/7f6bb4e291fad1dad59a49a5c02f78642bb99a45/lxc-centos
+</pre></div>
+</div>
+<p>You need some adjustment in case that architecture of you machine is i686.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>arch
+i686
+<span class="nv">$ </span>diff /usr/share/lxc/templates/lxc-centos /usr/share/lxc/templates/lxc-centos.org
+170,171c170
+&lt;         <span class="c">#RELEASE_URL=&quot;$MIRROR_URL/Packages/centos-release-$release-$releaseminor.el6.centos.10.$arch.rpm&quot;</span>
+&lt;         <span class="nv">RELEASE_URL</span><span class="o">=</span><span class="s2">&quot;$MIRROR_URL/Packages/centos-release-$release-$releaseminor.el6.centos.10.i686.rpm&quot;</span>
+---
+&gt;         <span class="nv">RELEASE_URL</span><span class="o">=</span><span class="s2">&quot;$MIRROR_URL/Packages/centos-release-$release-$releaseminor.el6.centos.10.$arch.rpm&quot;</span>
+</pre></div>
+</div>
+<p>Ok, now you are ready to start instance creation.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-create -t centos -n centos01
+</pre></div>
+</div>
+<p>Please be noted that first time execution may take time, as this will download substantial amount of PRM packages.</p>
+<p>After successful creation of instance, you can launch it and login via ssh.
+By the way, default root password is password.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-start -n centos01 -d
+<span class="nv">$ </span>ssh -l root <span class="sb">`</span>cut -d <span class="s2">&quot; &quot;</span> -f3 /var/lib/misc/dnsmasq.lxcbr0.leases<span class="sb">`</span>
+</pre></div>
+</div>
+</div>]]></description>
+             <pubDate>Mon, 23 Sep 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/22/lxc_cont.html</link>
             <guid>http://skyhigh71.github.io/2013/09/22/lxc_cont.html</guid>
@@ -31,11 +74,12 @@ So please wait for a while, say, by drinking coffee.</p>
 1379835957 00:16:3e:08:50:7f 10.0.3.198 ubuntu01 *
 </pre></div>
 </div>
-<p>Let us login via ssh.</p>
+<p>Let us login via ssh.
+Default uid/password combination is ubuntu/ubuntu.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh -l ubuntu 10.0.3.198
 </pre></div>
 </div>
-<p>Therefore network plan would be like this.</p>
+<p>Ok, network plan would be like this.</p>
 <p class="nwdiag">
 <img alt="None" height="444" src="http://skyhigh71.github.io/_images/nwdiag-7a9b63d8453e24f5c7d131a87aaf68d7ee723457.png" width="456"/>
 </p>

@@ -28,12 +28,13 @@ According to dhcp server (dnsmasq), 10.0.3.198 may have been leased.
     1379835957 00:16:3e:08:50:7f 10.0.3.198 ubuntu01 *
 
 Let us login via ssh.
+Default uid/password combination is ubuntu/ubuntu.
 
 .. code-block:: bash
 
     $ ssh -l ubuntu 10.0.3.198
 
-Therefore network plan would be like this.
+Ok, network plan would be like this.
 
 .. nwdiag:: net.diag
 

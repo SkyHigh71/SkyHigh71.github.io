@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/09/23/centos_on_ubuntu
    2013/09/22/lxc_cont
    2013/09/21/lxc_introduction
    2013/09/21/library_details
