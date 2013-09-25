@@ -1,0 +1,89 @@
+Directory Server (on Centos/lxc/ubuntu)
+=======================================
+
+Sometimes you may (or may not) want to have a Directory Server at your hand for, say, storing your addresses.
+Let us try if we can have Directory Server in virtual instance.
+
+In this scenario, we use x86(i686) machine as host (not x64).
+
+Download x86 version of Directory Server installer (V19710-01.zip) from OTN.
+And deploy it onto target virtual machine.
+
+.. code-block:: bash
+
+    $ scp V19710-01.zip root@10.0.3.xxx:~/
+
+As virtual machine have very limited number of tools, therefore you need to install basic commands like tar/unzip.
+Following sample will install Directory Server under /home/dsee7 directory.
+
+.. code-block:: bash
+
+    $ sudo yum install unzip tar
+    $ unzip V19710-01.zip
+    $ tar xfv DSEE.7.0.Linux-X86-zip.tar.gz
+    $ DSEE_ZIP_Distribution/
+    $ unzip -d /home sun-dsee7.zip
+
+Ok, installation finished.
+Now let's move on to configuration.
+
+Let's create instance.
+
+.. code-block:: bash
+
+    $ ./dsadm create /home/dsee7/instance
+    Choose the Directory Manager password:
+    Confirm the Directory Manager password:
+    Use 'dsadm start '/home/dsee7/instance'' to start the instance
+
+Now you may encounter problem that instance start fails.
+
+.. code-block:: bash
+
+    $ ./dsadm start ../instance/
+    ERROR<4167> - Startup  - conn=-1 op=-1 msgId=-1 - System error  Load library /home/dsee7/lib/pwdstorage-plugin.so: error /home/dsee7/lib/../lib/private/libfreebl3.so: version 'NSSRAWHASH_3.12.3' not found (required by /lib/libcrypt.so.1)
+
+libcrypt.so is dependent upon NSS.
+
+.. code-block:: bash
+
+    $ ldd pwdstorage-plugin.so 
+    ./pwdstorage-plugin.so: /home/dsee7/lib/./../lib/private/libfreebl3.so: version 'NSSRAWHASH_3.12.3' not found (required by /lib/libcrypt.so.1)
+
+And libfreebl3.so seems not to have it.
+
+.. code-block:: bash
+
+    $ find / -name libfreebl3.so -ls
+    27270228  320 -rwxr-xr-x   1 root     root       325256 Aug  7 16:17 /lib/libfreebl3.so
+    27660408  364 -rwxr-xr-x   1 root     root       372385 Aug 27  2009 /home/dsee7/lib/private/libfreebl3.so
+    27791820    0 lrwxrwxrwx   1 root     root           23 Sep 22 20:03 /usr/lib/libfreebl3.so -> ../../lib/libfreebl3.so
+
+.. literalinclude:: test.txt
+    :language: bash
+
+As temporary workaround, configure libfreebl3.so to reference one, which OS provides.
+
+.. code-block:: bash
+
+    $ ls -l libfreebl3.so*
+    lrwxrwxrwx 1 root root     18 Sep 24 04:37 libfreebl3.so -> /lib/libfreebl3.so
+    -rwxr-xr-x 1 root root 372385 Aug 27  2009 libfreebl3.so.org
+
+Now you can start daemon.
+
+.. code-block:: bash
+
+    $ ./dsadm start ../instance/
+    Directory Server instance '/home/dsee7/instance' started: pid=523
+
+Let's create a suffix to store entires.
+
+.. code-block:: bash
+
+    $ ./dsconf create-suffix  "dc=lupin, dc=org"
+
+.. author:: default
+.. categories:: none
+.. tags:: lxc, centos, ubuntu, ldap
+.. comments::

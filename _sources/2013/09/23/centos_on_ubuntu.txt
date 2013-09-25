@@ -15,6 +15,7 @@ For example,
 .. code-block:: bash
 
     $ sudo wget -O /usr/share/lxc/templates/lxc-centos https://gist.github.com/hagix9/3514296/raw/7f6bb4e291fad1dad59a49a5c02f78642bb99a45/lxc-centos
+    $ sudo chmod 755 /usr/share/lxc/templates/lxc-centos
 
 You need some adjustment in case that architecture of you machine is i686.
 

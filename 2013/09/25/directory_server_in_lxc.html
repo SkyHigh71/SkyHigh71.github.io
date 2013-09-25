@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>automatic yum update &mdash; sakana</title>
+        <title>Directory Server (on Centos/lxc/ubuntu) &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="how to play minecraft on ubuntu" href="../25/how_to_play_minecraft_on_ubuntu.html" /><link rel="prev" title="filter packet based upon URI" href="../27/http_filter.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="CentOS on ubuntu" href="../23/centos_on_ubuntu.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>August 26, 2013</span>
+            <span>September 25, 2013</span>
         </div>
     </div>
     
@@ -77,76 +77,71 @@
     
     </div>
     
-    <div class="section" id="automatic-yum-update">
-<h1>automatic yum update</h1>
-<p>Sometime you would like to configure Scientific Linux to update packages automatically without manual intervention.
-You can configure system as you wish and here is a short memo to achieve such.</p>
-<div class="section" id="yum-cron">
-<h2>yum-cron</h2>
-<p>You can configure cron to start yum command on daily basis to check for update.
-First install yum-cron command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo yum install yum-cron
+    <div class="section" id="directory-server-on-centos-lxc-ubuntu">
+<h1>Directory Server (on Centos/lxc/ubuntu)</h1>
+<p>Sometimes you may (or may not) want to have a Directory Server at your hand for, say, storing your addresses.
+Let us try if we can have Directory Server in virtual instance.</p>
+<p>In this scenario, we use x86(i686) machine as host (not x64).</p>
+<p>Download x86 version of Directory Server installer (V19710-01.zip) from OTN.
+And deploy it onto target virtual machine.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>scp V19710-01.zip root@10.0.3.xxx:~/
 </pre></div>
 </div>
-<p>Installation will place 0yum.cron file under /etc/cron.daily directory.
-And cron executes yum-cron on daily basis.</p>
-<p>You can control yum-cron&#8217;s behavior by modifying configuration file, /etc/sysconfig/yum-cron.
-I hereby quote some parameters in which you may be interested.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="c1"># Don&#39;t install, just check (valid: yes|no)</span>
-<span class="na">CHECK_ONLY</span><span class="o">=</span><span class="s">no</span>
-
-<span class="c1"># Don&#39;t install, just check and download (valid: yes|no)</span>
-<span class="na">DOWNLOAD_ONLY</span><span class="o">=</span><span class="s">no</span>
+<p>As virtual machine have very limited number of tools, therefore you need to install basic commands like tar/unzip.
+Following sample will install Directory Server under /home/dsee7 directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo yum install unzip tar
+<span class="nv">$ </span>unzip V19710-01.zip
+<span class="nv">$ </span>tar xfv DSEE.7.0.Linux-X86-zip.tar.gz
+<span class="nv">$ </span>DSEE_ZIP_Distribution/
+<span class="nv">$ </span>unzip -d /home sun-dsee7.zip
 </pre></div>
 </div>
-<p>And start service for now.
-And configure system to start yum-cron service upon restart.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>/etc/init.d/yum-cron start
-<span class="nv">$ </span>sudo chkconfig yum-cron on
+<p>Ok, installation finished.
+Now let&#8217;s move on to configuration.</p>
+<p>Let&#8217;s create instance.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./dsadm create /home/dsee7/instance
+Choose the Directory Manager password:
+Confirm the Directory Manager password:
+Use <span class="s1">&#39;dsadm start &#39;</span>/home/dsee7/instance<span class="s1">&#39;&#39;</span> to start the instance
 </pre></div>
 </div>
-</div>
-<div class="section" id="history">
-<h2>history</h2>
-<p>You can check if cron has started or not by referencing /var/log/cron* logs.</p>
-<div class="highlight-bash"><div class="highlight"><pre>Aug 26 03:16:01 &lt;hostname&gt; run-parts<span class="o">(</span>/etc/cron.daily<span class="o">)[</span>24221<span class="o">]</span>: starting 0yum.cron
-Aug 26 04:07:46 &lt;hostname&gt; run-parts<span class="o">(</span>/etc/cron.daily<span class="o">)[</span>24421<span class="o">]</span>: finished 0yum.cron
+<p>Now you may encounter problem that instance start fails.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./dsadm start ../instance/
+ERROR&lt;4167&gt; - Startup  - <span class="nv">conn</span><span class="o">=</span>-1 <span class="nv">op</span><span class="o">=</span>-1 <span class="nv">msgId</span><span class="o">=</span>-1 - System error  Load library /home/dsee7/lib/pwdstorage-plugin.so: error /home/dsee7/lib/../lib/private/libfreebl3.so: version <span class="s1">&#39;NSSRAWHASH_3.12.3&#39;</span> not found <span class="o">(</span>required by /lib/libcrypt.so.1<span class="o">)</span>
 </pre></div>
 </div>
-<p>Log message are yielded in /var/log/yum.log file</p>
-<div class="highlight-bash"><div class="highlight"><pre>Aug 09 04:09:11 Updated: nss-softokn-devel-3.14.3-3.el6_4.i686
-Aug 09 04:09:12 Updated: nss-devel-3.14.3-4.el6_4.i686
-Aug 09 04:09:13 Updated: nss-tools-3.14.3-4.el6_4.i686
-Aug 14 03:36:46 Updated: httpd-tools-2.2.15-29.sl6.i686
-Aug 14 03:36:48 Updated: httpd-2.2.15-29.sl6.i686
+<p>libcrypt.so is dependent upon NSS.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ldd pwdstorage-plugin.so
+./pwdstorage-plugin.so: /home/dsee7/lib/./../lib/private/libfreebl3.so: version <span class="s1">&#39;NSSRAWHASH_3.12.3&#39;</span> not found <span class="o">(</span>required by /lib/libcrypt.so.1<span class="o">)</span>
 </pre></div>
 </div>
-<p>as specified in yum&#8217;s configuration file, /etc/yum.conf.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="k">[main]</span>
-<span class="na">debuglevel</span><span class="o">=</span><span class="s">2</span>
-<span class="na">logfile</span><span class="o">=</span><span class="s">/var/log/yum.log</span>
+<p>And libfreebl3.so seems not to have it.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>find / -name libfreebl3.so -ls
+27270228  320 -rwxr-xr-x   1 root     root       325256 Aug  7 16:17 /lib/libfreebl3.so
+27660408  364 -rwxr-xr-x   1 root     root       372385 Aug 27  2009 /home/dsee7/lib/private/libfreebl3.so
+27791820    0 lrwxrwxrwx   1 root     root           23 Sep 22 20:03 /usr/lib/libfreebl3.so -&gt; ../../lib/libfreebl3.so
 </pre></div>
 </div>
-<p>Or you can check history by yum history command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo yum <span class="nb">history</span>
-Loaded plugins: auto-update-debuginfo, downloadonly, fastestmirror, refresh-packagekit, security
-ID     | Login user               | Date and <span class="nb">time</span>    | Action<span class="o">(</span>s<span class="o">)</span>      | Altered
--------------------------------------------------------------------------------
-   138 | root &lt;root&gt;              | 2013-08-14 03:36 | Update         |    2
-   137 | root &lt;root&gt;              | 2013-08-09 04:09 | Update         |   12
-...
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>objdump -x /lib/libfreebl3.so |grep NSSRAWHASH_3.12.3
+3 0x00 0x04ceacd3 NSSRAWHASH_3.12.3
+<span class="nv">$ </span>objdump -x  /home/dsee7/lib/private/libfreebl3.so |grep NSSRAWHASH_3.12.3
+<span class="nv">$ </span>
 </pre></div>
 </div>
-<p>And You can check more details of update with &#8220;yum history &lt;ID&gt;&#8221;.</p>
-</div>
-<div class="section" id="sigh">
-<h2>sigh</h2>
-<p>Ah...</p>
-<p>By default, SL has similar functionality yum-autoupdate, which is enabled and executed on daily basis. So above configuration is duplicate and not necessary.</p>
-<p>You can disable yum-autoupdate by configuring /etc/sysconfig/yum-autoupdate file.</p>
-<div class="highlight-ini"><div class="highlight"><pre><span class="na">ENABLED</span><span class="o">=</span><span class="s">&quot;false&quot;</span>
+<p>As temporary workaround, configure libfreebl3.so to reference one, which OS provides.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls -l libfreebl3.so*
+lrwxrwxrwx 1 root root     18 Sep 24 04:37 libfreebl3.so -&gt; /lib/libfreebl3.so
+-rwxr-xr-x 1 root root 372385 Aug 27  2009 libfreebl3.so.org
 </pre></div>
 </div>
+<p>Now you can start daemon.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./dsadm start ../instance/
+Directory Server instance <span class="s1">&#39;/home/dsee7/instance&#39;</span> started: <span class="nv">pid</span><span class="o">=</span>523
+</pre></div>
+</div>
+<p>Let&#8217;s create a suffix to store entires.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./dsconf create-suffix  <span class="s2">&quot;dc=lupin, dc=org&quot;</span>
+</pre></div>
 </div>
 </div>
 
@@ -158,35 +153,35 @@ ID     | Login user               | Date and <span class="nb">time</span>    | A
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/sl.html">sl</a></span>
+                <a href="../../../tags/lxc.html">lxc</a>, <a href="../../../tags/centos.html">centos</a>, <a href="../../../tags/ubuntu.html">ubuntu</a>, <a href="../../../tags/ldap.html">ldap</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../27/http_filter.html">filter packet based upon URI</a></li>
-            <li class="right"><a href="../25/how_to_play_minecraft_on_ubuntu.html">how to play minecraft on ubuntu</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../23/centos_on_ubuntu.html">CentOS on ubuntu</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../09/25/directory_server_in_lxc.html">Directory Server (on Centos/lxc/ubuntu)</a>
+            <a href="#">Directory Server (on Centos/lxc/ubuntu)</a>
         </li><li>
-            <a href="../../09/23/centos_on_ubuntu.html">CentOS on ubuntu</a>
+            <a href="../23/centos_on_ubuntu.html">CentOS on ubuntu</a>
         </li><li>
-            <a href="../../09/22/lxc_cont.html">lxc continued</a>
+            <a href="../22/lxc_cont.html">lxc continued</a>
         </li><li>
-            <a href="../../09/21/lxc_introduction.html">lxc introduction</a>
+            <a href="../21/lxc_introduction.html">lxc introduction</a>
         </li><li>
-            <a href="../../09/21/library_details.html">library details</a>
+            <a href="../21/library_details.html">library details</a>
         </li><li>
-            <a href="../../09/19/network_diagram_in_document.html">network diagram in document</a>
+            <a href="../19/network_diagram_in_document.html">network diagram in document</a>
         </li><li>
-            <a href="../../09/18/usb_devices.html">USB devices</a>
+            <a href="../18/usb_devices.html">USB devices</a>
         </li><li>
-            <a href="../../09/18/copying_files.html">copy intermediate directories</a>
+            <a href="../18/copying_files.html">copy intermediate directories</a>
         </li><li>
-            <a href="../../09/15/password_lock_of_screensaver.html">password lock of screensaver</a>
+            <a href="../15/password_lock_of_screensaver.html">password lock of screensaver</a>
         </li><li>
-            <a href="../../09/13/source_code_reference.html">source code reference</a>
+            <a href="../13/source_code_reference.html">source code reference</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
