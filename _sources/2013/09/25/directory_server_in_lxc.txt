@@ -1,5 +1,5 @@
-Directory Server (on Centos/lxc/ubuntu)
-=======================================
+Directory Server
+================
 
 Sometimes you may (or may not) want to have a Directory Server at your hand for, say, storing your addresses.
 Let us try if we can have Directory Server in virtual instance.
@@ -85,5 +85,5 @@ Let's create a suffix to store entires.
 
 .. author:: default
 .. categories:: none
-.. tags:: lxc, centos, ubuntu, ldap
+.. tags:: ldap
 .. comments::

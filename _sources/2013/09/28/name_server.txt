@@ -1,0 +1,136 @@
+Name Server
+===========
+
+Now let's move on to Name Server.
+Sometimes you would like to have your own name services to manipulate protocol like SMTP.
+
+I hereby demonstrate procedure to set up BIND (version 9).
+In this example, we use fictitious domain, example.org.
+
+We disregard redundancy and focus on primary server. 
+That is, we omit secondary server :-).
+
+By the way, following articles are good reference for you.
+
+- `Redhat Doc`_
+- `Ubuntu Doc`_
+
+.. _Redhat Doc: http://www.centos.org/docs/5/html/Deployment_Guide-en-US/ch-bind.html
+.. _Ubuntu Doc: https://help.ubuntu.com/lts/serverguide/dns.html
+
+In this sample, we Ubuntu as platform.
+And goal is to setup instance as follows.
+
+.. nwdiag:: net.diag
+
+
+Installation
+------------
+
+Installation is quite simple.
+
+.. code-block:: bash
+
+    $ sudo apt-get install bind9 dnsutils
+
+That's all.
+
+Server Configurations
+---------------------
+
+Configuration files are stored under /etc/bind directory.
+You will modify some file and add zone files for forward/reverse lookup.
+
+.. code-block:: bash
+
+    ├── bind.keys
+    ├── db.0
+    ├── db.127
+    ├── db.255
+    ├── db.empty
+    ├── db.local
+    ├── db.root
+    ├── named.conf
+    ├── named.conf.default-zones
+    ├── named.conf.local
+    ├── named.conf.options
+    ├── rndc.key
+    └── zones.rfc1918
+
+Forward Zone
+------------
+
+Append following lines into named.conf.local file so as to specify your domain name and its zone file.
+
+.. code-block:: nginx
+
+    zone "example.org" {
+	    type master;
+        file "/etc/bind/db.example.org";
+    };
+
+Create zone file, db.example.org, so as to describe host in the domain.
+
+.. literalinclude:: db.example.org 
+    :language: bash
+
+
+Reverse Zone
+------------
+
+And now configure for reverse lookup.
+Same as forward lookup, append following lines into named.conf.local.file.
+
+.. code-block:: nginx
+
+    zone "3.0.10.in-addr.arpa" {
+            type master;
+            file "/etc/bind/db.10";
+    };
+
+And create a file named db.10 as follows.
+
+.. literalinclude:: db.10
+    :language: bash
+
+Logging
+-------
+
+Log message has been and will be your friend for debugging problem.
+Append following lines to named.conf.local file.
+
+.. code-block:: nginx
+
+    logging {
+        channel query.log {      
+            file "/var/log/query.log"; 
+            severity debug 3; 
+        }; 
+        category queries { query.log; }; 
+    };
+
+And create a log file and change file owner to bind user.
+
+.. code-block:: nginx
+
+    $ sudo touch /var/log/query.log
+    $ sudo chown bind /var/log/query.log
+
+You will see log messages like this.
+
+.. code-block:: bash
+
+    client 127.0.0.1#34060 (mta.example.org): query: mta.example.org IN A +E (127.0.0.1)
+
+start service
+-------------
+
+.. code-block:: bash
+
+    $ sudo service bind9 restart
+
+
+.. author:: default
+.. categories:: none
+.. tags:: DNS
+.. comments::

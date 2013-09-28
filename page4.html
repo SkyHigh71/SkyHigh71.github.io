@@ -62,6 +62,44 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>September 15, 2013</span>
+        </div>
+        <div class="section" id="password-lock-of-screensaver">
+<h1><a href="2013/09/15/password_lock_of_screensaver.html">password lock of screensaver</a></h1>
+<p>By default, gnome-screen runs on ubuntu and password lock is enabled.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ps -ef|grep -i screen
+lupin   2000     1  0 15:44 ?        00:00:00 /usr/bin/gnome-screensaver --no-daemon
+</pre></div>
+</div>
+<p>Sometimes you may feel password lock troublesome and would like to disable it.
+You can achieve it by gsettings command.</p>
+<p>Current configuration can be checked,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>gsettings get org.gnome.desktop.screensaver lock-enabled
+<span class="nb">true</span>
+</pre></div>
+</div>
+<p>You can disable password lock by setting lock-enabled value as false,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>gsettings <span class="nb">set </span>org.gnome.desktop.screensaver lock-enabled <span class="nb">false</span>
+</pre></div>
+</div>
+<p>Checking system calls done by this command, screensaver configuration seems to be stored in,</p>
+<ul class="simple">
+<li>/run/user/&lt;UID&gt;/dconf/user (may be for running process)</li>
+<li>/&lt;HOME&gt;/.config/dconf/user (for permanent configuration)</li>
+</ul>
+<p>You can lock screen by “CTRL” + “ALT” + “L”.</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>September 13, 2013</span>
         </div>
         <div class="section" id="source-code-reference">
@@ -201,64 +239,6 @@ Reading symbols from /lib/i386-linux-gnu/libc.so.6...Reading symbols from /usr/l
                 Tags:
                 <a href="tags/ubuntu.html">ubuntu</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>September 12, 2013</span>
-        </div>
-        <div class="section" id="spell-check-in-vim">
-<h1><a href="2013/09/12/spell_check_in_vim.html">spell check in vim</a></h1>
-<p>If my memory does not deceive me, I started using vi as my editor on HP-UX 10.
-(Yes, it is quite long time ago)
-I have not noticed it until quite recently though, vim (vi improved) has evolved so much more than I had expected.</p>
-<p>I write almost all of text on vim, which includes this blog post.
-As seen, my vocabulary is quite limited and incorrect. And phrase does not go beyond routine.
-That is, I need spell checking mechanism to correct many typo I make and suggestions to meet what I want to express.</p>
-<div class="section" id="spell-check">
-<h2>spell check</h2>
-<p>vim provides spell checking mechanism and you can enable it by:</p>
-<div class="highlight-vim"><div class="highlight"><pre><span class="p">:</span><span class="k">set</span> <span class="k">spell</span>
-</pre></div>
-</div>
-<p>You will see color indicators, which tells you that there is typo.
-You can list correct word candidates by setting cursor on the relevant word and</p>
-<div class="highlight-vim"><div class="highlight"><pre>z<span class="p">=</span>
-</pre></div>
-</div>
-<p>You will see list of words. Select appropriate one out of them.</p>
-</div>
-<div class="section" id="dictionary-extension">
-<h2>dictionary extension</h2>
-<p>You can add words, which are not listed in default dictionary into your own custom one.
-Type zg(ood) on the relevant word.</p>
-<div class="highlight-vim"><div class="highlight"><pre>zg
-</pre></div>
-</div>
-<p>This operation simply adds that word into spellfile, e.g.) en.utf-8.add file under ~/.vim/spell directory.</p>
-<div class="highlight-vim"><div class="highlight"><pre>$ <span class="k">cat</span> <span class="k">en</span>.utf<span class="m">-8</span>.add
-<span class="k">vim</span>
-</pre></div>
-</div>
-<p>If you would like to revert back, then type zw(rong).</p>
-<div class="highlight-vim"><div class="highlight"><pre>zw
-</pre></div>
-</div>
-<p>It seems that vim appends “/!” for that word in spell file.</p>
-<div class="highlight-vim"><div class="highlight"><pre>$ <span class="k">cat</span> <span class="k">en</span>.utf<span class="m">-8</span>.add
-<span class="k">vim</span>/<span class="p">!</span>
-</pre></div>
-</div>
-<p>For details of spell checking, please refer to ”:help spell”.</p>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/vim.html">vim</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -267,7 +247,9 @@ Type zg(ood) on the relevant word.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="2013/09/25/directory_server_in_lxc.html">Directory Server (on Centos/lxc/ubuntu)</a>
+            <a href="2013/09/28/name_server.html">Name Server</a>
+        </li><li>
+            <a href="2013/09/25/directory_server_in_lxc.html">Directory Server</a>
         </li><li>
             <a href="2013/09/23/centos_on_ubuntu.html">CentOS on ubuntu</a>
         </li><li>
@@ -284,8 +266,6 @@ Type zg(ood) on the relevant word.</p>
             <a href="2013/09/18/copying_files.html">copy intermediate directories</a>
         </li><li>
             <a href="2013/09/15/password_lock_of_screensaver.html">password lock of screensaver</a>
-        </li><li>
-            <a href="2013/09/13/source_code_reference.html">source code reference</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -295,7 +275,7 @@ Type zg(ood) on the relevant word.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/lxc.html">lxc</a> (4), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (17), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/lxc.html">lxc</a> (3), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (16), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
