@@ -62,6 +62,108 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>September 10, 2013</span>
+        </div>
+        <div class="section" id="how-to-notify-core-file-creation">
+<h1><a href="2013/09/10/how_to_notify_core_file_creation.html">how to notify core file creation</a></h1>
+<p>Now you are able to configure system to yield core files for designated directory.</p>
+<p>But there is no way to notice creation of core file (as apport has been disabled).
+Core files shall pile up silently behind the door.
+Repetition of core dump can easily consume disk space.
+You have to be careful and pay attention for such situation.</p>
+<p>Let’s find out effective method to notify creation of core file.</p>
+<div class="section" id="inotify">
+<h2>inotify</h2>
+<p>inotify?</p>
+<p>inotify (inode notify) is a Linux kernel subsystem to notice changes on file system.
+(quoted from wiki)
+You can enjoy this functionality via inotify-tools package.</p>
+<p>Installation is quite easy (as always).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache search inotify-tools
+inotify-tools - <span class="nb">command</span>-line programs providing a simple interface to inotify
+<span class="nv">$ </span>sudo apt-get install inotify-tools
+<span class="nv">$ </span>inotifywa&lt;TAB&gt;
+inotifywait   inotifywatch
+</pre></div>
+</div>
+<p>You can make use of these tools to watch tagger directory and do some action(s).
+For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="k">while </span>inotifywait -e create,modify /tmp; <span class="k">do</span>
+<span class="k">    </span><span class="nb">echo</span> <span class="s2">&quot;Lupin, something happened under /tmp directory&quot;</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>Touching file “hi” under /tmp directory will yield.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>./watch.sh
+Setting up watches.
+Watches established.
+/tmp/ CREATE hi
+Lupin, something happened under /tmp directory
+</pre></div>
+</div>
+<p>In the above sample, inotifywait monitors following events:</p>
+<ul class="simple">
+<li>CREATE</li>
+<li>MODIFY</li>
+</ul>
+<p>You can monitor other events like OPEN/CLOSE/DELETE/ATTRIB.
+And if you would like to configure inotify* to monitor directory recursively, then you can use -r option for that sake.</p>
+<p>Fine.</p>
+</div>
+<div class="section" id="libnotify-bin">
+<h2>libnotify-bin</h2>
+<p>Now we have a method of detection.
+Next item is means to notify you.</p>
+<p>There is a tool called libnotify-bin, which sends message to notification daemon.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache search libnotify-bin
+libnotify-bin - sends desktop notifications to a notification daemon <span class="o">(</span>Utilities<span class="o">)</span>
+<span class="nv">$ </span>apt-get install libnotify-bin
+</pre></div>
+</div>
+<p>As far as I checked, libnotify-bin has already been installed by default.</p>
+<p>Sending a message will give you pop-up message on desktop.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="k">for </span>i in <span class="sb">`</span>seq 10 -1 0<span class="sb">`</span>
+&gt; <span class="k">do</span>
+&gt; <span class="nb">echo</span> <span class="nv">$i</span>|festival --tts
+&gt; <span class="k">done</span> <span class="o">&amp;&amp;</span> notify-send <span class="s1">'Ten Count! Knockout!'</span>
+</pre></div>
+</div>
+<p>You win!</p>
+</div>
+<div class="section" id="automatic-start-upon-login">
+<h2>automatic start upon login</h2>
+<p>It may not be appropriate to put here though, let’s make use of /etc/profile.d directory for automatic start up upon login.</p>
+<p>Prepare a script, which launches inotifywait under the name of, say, watchCore.sh.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="k">while </span>inotifywait -e create /var/cores; <span class="k">do</span>
+<span class="k">    </span>notify-send -u critical <span class="s2">&quot;a new core file is created. Please check /var/cores directory&quot;</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>Deploy another script under /etc/profile.d directory which launches former one.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+nohup &lt;PATH&gt;/watchCore.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
+</pre></div>
+</div>
+<p>Please do not forget to run script in background. :-)</p>
+<p>Voila!</p>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>September 09, 2013</span>
         </div>
         <div class="section" id="package-management-on-ubuntu">
@@ -204,67 +306,6 @@ drwxr-xr-x 7 root root 4096 Sep  6 09:52 /usr/src/linux-headers-3.8.0-30-generic
                 Tags:
                 <a href="tags/ubuntu.html">ubuntu</a>, <a href="tags/vmplayer.html">vmplayer</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>September 06, 2013</span>
-        </div>
-        <div class="section" id="python-tools-invocation">
-<h1><a href="2013/09/06/python_tools_invocation.html">python tools invocation</a></h1>
-<p>There are many tools (e.g. yum/hg), which are written in python, on Linux platform.
-For example, on my ubuntu 13.04 box there are 45 python scripts under /usr/local/bin directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/local/bin/*|grep -ic python
-45
-</pre></div>
-</div>
-<p>So I should say that one can not live without them.</p>
-<p>How are these python tools invoked?</p>
-<p>Take tikerer as example.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>which tinker
-/usr/local/bin/tinker
-<span class="nv">$ </span>file /usr/local/bin/tinker
-/usr/local/bin/tinker: Python script, ASCII text executable
-</pre></div>
-</div>
-<p>So executing tinker command will hook python package.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
-<span class="c"># EASY-INSTALL-ENTRY-SCRIPT: 'Tinkerer==1.2.1','console_scripts','tinker'</span>
-<span class="n">__requires__</span> <span class="o">=</span> <span class="s">'Tinkerer==1.2.1'</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="n">load_entry_point</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span>
-        <span class="n">load_entry_point</span><span class="p">(</span><span class="s">'Tinkerer==1.2.1'</span><span class="p">,</span> <span class="s">'console_scripts'</span><span class="p">,</span> <span class="s">'tinker'</span><span class="p">)()</span>
-    <span class="p">)</span>
-</pre></div>
-</div>
-<p>Where does this package come from?
-Let’s search for its location with primitive way.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>strace -o test.txt -e open tinker -d <span class="s2">&quot;test&quot;</span>
-<span class="nv">$ </span>grep tinker test.txt |grep -iv enoent
-...
-open<span class="o">(</span><span class="s2">&quot;/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.py&quot;</span>, O_RDONLY|O_LARGEFILE<span class="o">)</span> <span class="o">=</span> 3
-open<span class="o">(</span><span class="s2">&quot;/usr/local/lib/python2.7/dist-packages/tinkerer/__init__.pyc&quot;</span>, O_RDONLY|O_LARGEFILE<span class="o">)</span> <span class="o">=</span> 4
-</pre></div>
-</div>
-<p>Ok, here is the location where relevant python package resides.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls /usr/local/lib/python2.7/dist-packages/tinkerer
-__init__.py   __templates  cmdline.pyc      draft.pyc  master.py   page.py   paths.py   post.py   static  utils.py   writer.py
-__init__.pyc  cmdline.py   draft.py ext        master.pyc  page.pyc  paths.pyc  post.pyc  themes  utils.pyc  writer.pyc
-</pre></div>
-</div>
-<p>So when one installs python package, say, with pip command, packages will be deployed under dist-packages directory.
-And at the same time, a wrapper script will be deployed on search path so that it invokes relevant package by making use of pkg_resources.</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/python.html">python</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -273,6 +314,8 @@ And at the same time, a wrapper script will be deployed on search path so that i
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/29/static_ip_address_assignment.html">static IP address assignment</a>
+        </li><li>
             <a href="2013/09/29/change_ip_address_range.html">change IP address range</a>
         </li><li>
             <a href="2013/09/28/name_server.html">Name Server</a>
@@ -290,8 +333,6 @@ And at the same time, a wrapper script will be deployed on search path so that i
             <a href="2013/09/19/network_diagram_in_document.html">network diagram in document</a>
         </li><li>
             <a href="2013/09/18/usb_devices.html">USB devices</a>
-        </li><li>
-            <a href="2013/09/18/copying_files.html">copy intermediate directories</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -301,7 +342,7 @@ And at the same time, a wrapper script will be deployed on search path so that i
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/lxc.html">lxc</a> (4), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (16), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/lxc.html">lxc</a> (4), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (17), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

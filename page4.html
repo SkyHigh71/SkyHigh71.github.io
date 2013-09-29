@@ -64,6 +64,40 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>September 18, 2013</span>
         </div>
+        <div class="section" id="usb-devices">
+<h1><a href="2013/09/18/usb_devices.html">USB devices</a></h1>
+<p>Sometimes you would like to reference USB devices, which are attached to your machine.
+You can make use of lsusb utility for this sake.</p>
+<p>For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>lsusb
+Bus 002 Device 003: ID 5986:0299 Acer, Inc
+Bus 004 Device 002: ID 0a5c:21f4 Broadcom Corp.
+Bus 006 Device 008: ID 0bb4:0ffe HTC <span class="o">(</span>High Tech Computer Corp.<span class="o">)</span> Desire HD <span class="o">(</span>modem mode<span class="o">)</span>
+</pre></div>
+</div>
+<p>In case that you would like to check further details of specific USB device, for example, Desire, then you can specify use verbose option, -v.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lsusb -v -s 008
+</pre></div>
+</div>
+<p>By the way, lsusb command accesses file under /dev/bus/usb directory, which requires root permission.
+Therefore if you execute command as user other than root without sudo, then you will see open failure.</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">open</span><span class="p">(</span><span class="s">&quot;/dev/bus/usb/006/008&quot;</span><span class="p">,</span> <span class="n">O_RDWR</span><span class="p">)</span>    <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="n">EACCES</span> <span class="p">(</span><span class="n">Permission</span> <span class="n">denied</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>September 18, 2013</span>
+        </div>
         <div class="section" id="copy-intermediate-directories">
 <h1><a href="2013/09/18/copying_files.html">copy intermediate directories</a></h1>
 <p>Sometimes you would like to cp files under directories, which does not exist on target directory. Current cp command does support this kind of operation.</p>
@@ -127,83 +161,6 @@ You can achieve it by gsettings command.</p>
                 Tags:
                 <a href="tags/ubuntu.html">ubuntu</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>September 13, 2013</span>
-        </div>
-        <div class="section" id="source-code-reference">
-<h1><a href="2013/09/13/source_code_reference.html">source code reference</a></h1>
-<p>Now we have clear precise stack.
-Here is snippet of stack for relevant thread.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> where
-<span class="c">#0  0xb7705424 in __kernel_vsyscall ()</span>
-<span class="c">#1  0xb7504b1f in __GI_raise (sig=sig@entry=6) at ../nptl/sysdeps/unix/sysv/linux/raise.c:56</span>
-<span class="c">#2  0xb75080b3 in __GI_abort () at abort.c:90</span>
-<span class="c">#3  0xb74fd877 in __assert_fail_base (fmt=0xb385fe90 &lt;Address 0xb385fe90 out of bounds&gt;, assertion=assertion@entry=0xb60f8419 &quot;ret != inval_id&quot;,</span>
-    <span class="nv">file</span><span class="o">=</span>file@entry<span class="o">=</span>0xb60f838a <span class="s2">&quot;../../src/xcb_io.c&quot;</span>, <span class="nv">line</span><span class="o">=</span>line@entry<span class="o">=</span>529, <span class="k">function</span><span class="o">=</span><span class="k">function</span>@entry<span class="o">=</span>0xb60f849e &lt;__PRETTY_FUNCTION__.14075&gt; <span class="s2">&quot;_XAllocID&quot;</span><span class="o">)</span>
-    at assert.c:92
-<span class="c">#4  0xb74fd927 in __GI___assert_fail (assertion=assertion@entry=0xb60f8419 &quot;ret != inval_id&quot;, file=file@entry=0xb60f838a &quot;../../src/xcb_io.c&quot;,</span>
-    <span class="nv">line</span><span class="o">=</span>line@entry<span class="o">=</span>529, <span class="k">function</span><span class="o">=</span><span class="k">function</span>@entry<span class="o">=</span>0xb60f849e &lt;__PRETTY_FUNCTION__.14075&gt; <span class="s2">&quot;_XAllocID&quot;</span><span class="o">)</span> at assert.c:101
-<span class="c">#5  0xb608149f in _XAllocID (dpy=0xaf43e80) at ../../src/xcb_io.c:529</span>
-</pre></div>
-</div>
-<p>As seen, some assertion may have failed and program aborted by itself.
-Before applying debug information, which contains symbol table, frame 5 looked like this.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c">#5  0xb608149f in _XAllocID () from /usr/lib/i386-linux-gnu/libX11.so.6</span>
-</pre></div>
-</div>
-<p>So let’s download source code of libX11 for reference.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-get <span class="nb">source </span>libx11
-</pre></div>
-</div>
-<p>It’s so easy...
-Source files are downloaded under current working directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls
-libx11-1.5.0  libx11_1.5.0-1ubuntu1.1.diff.gz  libx11_1.5.0-1ubuntu1.1.dsc  libx11_1.5.0.orig.tar.gz
-</pre></div>
-</div>
-<p>You can configure gdb to reference source code, for example, by “set substitute-path”.
-But for this case ”../../src” does not work for me...</p>
-<p>So quite primitive way though,</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>libx11-1.5.0/
-<span class="nv">$ </span>mkdir -p hoge/hoge
-<span class="nv">$ </span><span class="nb">cd </span>hoge/hoge/
-<span class="nv">$ </span>ls ../../src/xcb_io.c
-../../src/xcb_io.c
-<span class="nv">$ </span>gdb &lt;HOME&gt;/.dropbox-dist/dropbox /var/cores/core.dropbox.2147.*
-</pre></div>
-</div>
-<p>Now you can see relevant section of code and variables.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> frame 5
-<span class="c">#5  0xb608149f in _XAllocID (dpy=0xaf43e80) at ../../src/xcb_io.c:529</span>
-529         dpy-&gt;xcb-&gt;next_xid <span class="o">=</span> inval_id;
-<span class="o">(</span>gdb<span class="o">)</span> list
-524 /* _XAllocID - resource ID allocation routine. */
-525 XID _XAllocID<span class="o">(</span>Display *dpy<span class="o">)</span>
-526 <span class="o">{</span>
-527         XID <span class="nv">ret</span> <span class="o">=</span> dpy-&gt;xcb-&gt;next_xid;
-528         assert <span class="o">(</span>ret !<span class="o">=</span> inval_id<span class="o">)</span>;
-529         dpy-&gt;xcb-&gt;next_xid <span class="o">=</span> inval_id;
-530         _XSetPrivSyncFunction<span class="o">(</span>dpy<span class="o">)</span>;
-531         <span class="k">return </span>ret;
-532 <span class="o">}</span>
-533
-<span class="o">(</span>gdb<span class="o">)</span> print inval_id
-<span class="nv">$1</span> <span class="o">=</span> 4294967295
-<span class="o">(</span>gdb<span class="o">)</span> print dpy-&gt;xcb-&gt;next_xid
-<span class="nv">$2</span> <span class="o">=</span> 4294967295
-</pre></div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/ubuntu.html">ubuntu</a>, <a href="tags/gdb.html">gdb</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -212,6 +169,8 @@ But for this case ”../../src” does not work for me...</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/09/29/static_ip_address_assignment.html">static IP address assignment</a>
+        </li><li>
             <a href="2013/09/29/change_ip_address_range.html">change IP address range</a>
         </li><li>
             <a href="2013/09/28/name_server.html">Name Server</a>
@@ -229,8 +188,6 @@ But for this case ”../../src” does not work for me...</p>
             <a href="2013/09/19/network_diagram_in_document.html">network diagram in document</a>
         </li><li>
             <a href="2013/09/18/usb_devices.html">USB devices</a>
-        </li><li>
-            <a href="2013/09/18/copying_files.html">copy intermediate directories</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -240,7 +197,7 @@ But for this case ”../../src” does not work for me...</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/lxc.html">lxc</a> (4), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (16), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/lxc.html">lxc</a> (4), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (17), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
