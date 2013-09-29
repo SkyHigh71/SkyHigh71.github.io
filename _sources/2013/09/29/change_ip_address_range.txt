@@ -1,0 +1,33 @@
+change IP address range
+=======================
+
+As described in previous posts, we have some servers in lxc network now.
+
+I would like that servers shall have static IP addresses.
+Say, in the range from 10.0.3.2 until 10.0.3.99.
+
+And client shall have dynamically assigned address, which should not conflict with server's ones.
+Let's limit range of IP addresses, which DHCP Server, dnsmasq assigns for.
+
+You can configure IP address range by modifying lxc file under /etc/default directory.
+
+.. code-block:: bash
+
+    $ diff lxc lxc.org 
+    27,28c27,28
+    < LXC_DHCP_RANGE="10.0.3.100,10.0.3.199"
+    < LXC_DHCP_MAX="100"
+    ---
+    > LXC_DHCP_RANGE="10.0.3.2,10.0.3.254"
+    > LXC_DHCP_MAX="253"
+
+After restart, you will see that dnsmasq will set IP address range as follows:
+
+.. code-block:: bash
+
+    dnsmasq -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file=/var/run/lxc/dnsmasq.pid --conf-file= --listen-address 10.0.3.1 --dhcp-range 10.0.3.100,10.0.3.199 --dhcp-lease-max=100 --dhcp-no-override --except-interface=lo --interface=lxcbr0 --dhcp-leasefile=/var/lib/misc/dnsmasq.lxcbr0.leases --dhcp-authoritative
+
+.. author:: default
+.. categories:: none
+.. tags:: lxc, dnsmasq
+.. comments::
