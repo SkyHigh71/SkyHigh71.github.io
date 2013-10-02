@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>library details &mdash; sakana</title>
+        <title>x86 or x64? &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="network diagram in document" href="../19/network_diagram_in_document.html" /><link rel="prev" title="lxc introduction" href="lxc_introduction.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="static IP address assignment" href="../../09/29/static_ip_address_assignment.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>9月 21, 2013</span>
+            <span>10月 02, 2013</span>
         </div>
     </div>
     
@@ -77,56 +77,29 @@
     
     </div>
     
-    <div class="section" id="library-details">
-<h1>library details</h1>
-<p>Sometime you feel like (or may not) checking details of certain library on you machine.
-Suppose that the relevant library may be X related library.</p>
-<p>Let us check and search for library name at first.
-And apt-cache command is your friend.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache search libx11
-libx11-6 - X11 client-side library
-libx11-6-dbg - X11 client-side library <span class="o">(</span>debug package<span class="o">)</span>
+    <div class="section" id="x86-or-x64">
+<h1>x86 or x64?</h1>
+<p>I have to confess that I did not know CPU (AMD E2-1800) of my tiny PC (ThinkPad Edge E135) is x64 capable...</p>
+<p>You can check whether your CPU is x64 capable or not by referencing existence of lm flag (long mode).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>grep ^flags /proc/cpuinfo
+flags               : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc extd_apicid aperfmperf pni monitor ssse3 cx16 popcnt lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch ibs skinit wdt arat hw_pstate npt lbrv svm_lock nrip_save pausefilter
 </pre></div>
 </div>
-<p>Ok, lib11-6 is what we are looking for.
-Let us check its content.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache show libx11-6
-Package: libx11-6
-Priority: standard
-Section: libs
-Installed-Size: 1489
-Maintainer: Ubuntu Developers &lt;ubuntu-devel-discuss@lists.ubuntu.com&gt;
-Original-Maintainer: Debian X Strike Force &lt;debian-x@lists.debian.org&gt;
-Architecture: i386
-Source: libx11
-Version: 2:1.5.0-1ubuntu1.1
-Depends: libc6 <span class="o">(</span>&gt;<span class="o">=</span> 2.15<span class="o">)</span>, libxcb1 <span class="o">(</span>&gt;<span class="o">=</span> 1.2<span class="o">)</span>, libx11-data
-Pre-Depends: multiarch-support
-Filename: pool/main/libx/libx11/libx11-6_1.5.0-1ubuntu1.1_i386.deb
-Size: 776896
-MD5sum: 3fea2137a989c9cf840c7e0db9b91606
-SHA1: 5fcc7ab89b79687fb338e169622a2c57912bcb60
-SHA256: 170ce1631c61458216078415ad9d660df98e193c18c4774d45432cb366e64c75
-Description-en: X11 client-side library
- This package provides a client interface to the X Window System, otherwise
- known as <span class="s1">&#39;Xlib&#39;</span>.  It provides a <span class="nb">complete </span>API <span class="k">for </span>the basic functions of the
- window system.
- .
- More information about X.Org can be found at:
- &lt;URL:http://www.X.org&gt;
- .
- This module can be found at
- git://anongit.freedesktop.org/git/xorg/lib/libX11
-Multi-Arch: same
-Description-md5: d75c895abf6eca234f7480813aaa95ec
-Bugs: https://bugs.launchpad.net/ubuntu/+filebug
-Origin: Ubuntu
-Supported: 9m
-Task: standard, kubuntu-active, kubuntu-active, mythbuntu-frontend, mythbuntu-frontend, mythbuntu-desktop, mythbuntu-backend-slave, mythbuntu-backend-slave, mythbuntu-backend-master, mythbuntu-backend-master
+<p>If there is lm in flags line, then its CPU can be x86_64 architecture.
+After reinstalling OS, now I have x64 OS at hand!</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>arch
+x86_64
 </pre></div>
 </div>
-<p>You can download source as described.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ $ </span>git clone git://anongit.freedesktop.org/git/xorg/lib/libX11
+<p>So easy...
+Ok, let&#8217;s create an lxc instance on this re-born platform.</p>
+<p>Timezone of instance seems to be in EDT, which is not convenient for us.
+Let us change timezone to JST (Asia/tokyo).
+You can do it by configuring /etc/localtime file to reference timezone data of Japan.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/share/zoneinfo/Asia/Tokyo
+/usr/share/zoneinfo/Asia/Tokyo: timezone data, version 2, 3 gmt <span class="nb">time </span>flags, 3 std <span class="nb">time </span>flags, no leap seconds, 9 transition <span class="nb">times</span>, 3 abbreviation chars
+
+<span class="nv">$ </span>sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 </pre></div>
 </div>
 </div>
@@ -139,35 +112,35 @@ Task: standard, kubuntu-active, kubuntu-active, mythbuntu-frontend, mythbuntu-fr
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+                <a href="../../../tags/linux.html">linux</a>, <a href="../../../tags/lxc.html">lxc</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="lxc_introduction.html">lxc introduction</a></li>
-            <li class="right"><a href="../19/network_diagram_in_document.html">network diagram in document</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../../09/29/static_ip_address_assignment.html">static IP address assignment</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../10/02/x86_or_x64.html">x86 or x64?</a>
+            <a href="#">x86 or x64?</a>
         </li><li>
-            <a href="../29/static_ip_address_assignment.html">static IP address assignment</a>
+            <a href="../../09/29/static_ip_address_assignment.html">static IP address assignment</a>
         </li><li>
-            <a href="../29/change_ip_address_range.html">change IP address range</a>
+            <a href="../../09/29/change_ip_address_range.html">change IP address range</a>
         </li><li>
-            <a href="../28/name_server.html">Name Server</a>
+            <a href="../../09/28/name_server.html">Name Server</a>
         </li><li>
-            <a href="../25/directory_server_in_lxc.html">Directory Server</a>
+            <a href="../../09/25/directory_server_in_lxc.html">Directory Server</a>
         </li><li>
-            <a href="../23/centos_on_ubuntu.html">CentOS on ubuntu</a>
+            <a href="../../09/23/centos_on_ubuntu.html">CentOS on ubuntu</a>
         </li><li>
-            <a href="../22/lxc_cont.html">lxc continued</a>
+            <a href="../../09/22/lxc_cont.html">lxc continued</a>
         </li><li>
-            <a href="lxc_introduction.html">lxc introduction</a>
+            <a href="../../09/21/lxc_introduction.html">lxc introduction</a>
         </li><li>
-            <a href="#">library details</a>
+            <a href="../../09/21/library_details.html">library details</a>
         </li><li>
-            <a href="../19/network_diagram_in_document.html">network diagram in document</a>
+            <a href="../../09/19/network_diagram_in_document.html">network diagram in document</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">

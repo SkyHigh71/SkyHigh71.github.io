@@ -1,0 +1,38 @@
+x86 or x64?
+===========
+
+I have to confess that I did not know CPU (AMD E2-1800) of my tiny PC (ThinkPad Edge E135) is x64 capable...
+
+You can check whether your CPU is x64 capable or not by referencing existence of lm flag (long mode).
+
+.. code-block:: bash
+
+    $ grep ^flags /proc/cpuinfo 
+    flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc extd_apicid aperfmperf pni monitor ssse3 cx16 popcnt lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch ibs skinit wdt arat hw_pstate npt lbrv svm_lock nrip_save pausefilter
+
+If there is lm in flags line, then its CPU can be x86_64 architecture.
+After reinstalling OS, now I have x64 OS at hand!
+
+.. code-block:: bash
+
+    $ arch
+    x86_64
+
+So easy...
+Ok, let's create an lxc instance on this re-born platform.
+
+Timezone of instance seems to be in EDT, which is not convenient for us.
+Let us change timezone to JST (Asia/tokyo).
+You can do it by configuring /etc/localtime file to reference timezone data of Japan.
+
+.. code-block:: bash
+
+    $ file /usr/share/zoneinfo/Asia/Tokyo 
+    /usr/share/zoneinfo/Asia/Tokyo: timezone data, version 2, 3 gmt time flags, 3 std time flags, no leap seconds, 9 transition times, 3 abbreviation chars
+
+    $ sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime  
+
+.. author:: default
+.. categories:: none
+.. tags:: linux, lxc
+.. comments::

@@ -5,8 +5,41 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sun, 29 Sep 2013 00:00:00 +0900</pubDate>
+        <pubDate>Wed, 02 Oct 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/10/02/x86_or_x64.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/02/x86_or_x64.html</guid>
+            <title><![CDATA[x86 or x64?]]></title>
+            <description><![CDATA[<div class="section" id="x86-or-x64">
+<h1>x86 or x64?</h1>
+<p>I have to confess that I did not know CPU (AMD E2-1800) of my tiny PC (ThinkPad Edge E135) is x64 capable...</p>
+<p>You can check whether your CPU is x64 capable or not by referencing existence of lm flag (long mode).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>grep ^flags /proc/cpuinfo
+flags               : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc extd_apicid aperfmperf pni monitor ssse3 cx16 popcnt lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch ibs skinit wdt arat hw_pstate npt lbrv svm_lock nrip_save pausefilter
+</pre></div>
+</div>
+<p>If there is lm in flags line, then its CPU can be x86_64 architecture.
+After reinstalling OS, now I have x64 OS at hand!</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>arch
+x86_64
+</pre></div>
+</div>
+<p>So easy...
+Ok, let’s create an lxc instance on this re-born platform.</p>
+<p>Timezone of instance seems to be in EDT, which is not convenient for us.
+Let us change timezone to JST (Asia/tokyo).
+You can do it by configuring /etc/localtime file to reference timezone data of Japan.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/share/zoneinfo/Asia/Tokyo
+/usr/share/zoneinfo/Asia/Tokyo: timezone data, version 2, 3 gmt <span class="nb">time </span>flags, 3 std <span class="nb">time </span>flags, no leap seconds, 9 transition <span class="nb">times</span>, 3 abbreviation chars
+
+<span class="nv">$ </span>sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+</pre></div>
+</div>
+</div>]]></description>
+             <pubDate>Wed, 02 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/09/29/static_ip_address_assignment.html</link>
             <guid>http://skyhigh71.github.io/2013/09/29/static_ip_address_assignment.html</guid>

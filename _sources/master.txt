@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/10/02/x86_or_x64
    2013/09/29/static_ip_address_assignment
    2013/09/29/change_ip_address_range
    2013/09/28/name_server
