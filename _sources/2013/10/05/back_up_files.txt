@@ -1,0 +1,40 @@
+back up files
+=============
+
+Here is another approach for creating back up files onto dropbox on regular basis by cron.
+A quite simple script though, here are some remark.
+
+hostname
+--------
+
+There are multiple approaches for obtaining hostname though, here I use socket.gethostname(), which seems to be a transliteration of gethostname() system call.
+
+compression
+-----------
+
+Here I use bzip2 as compression algorithm, which seems to achieve more effective compression rate against files like plain text in comparison to other algorithm like gzip. But as a trade off to good compression rate, compression process seems to take longer time.
+
+temporary file
+--------------
+
+I create backup file first under temporary directory and then move it under directory under dropbox in case that there is/are any change(s). As creating backup file directly under dropbox directory is quite slow due to traffic.
+
+checksum
+--------
+
+Finally I compare temporary backup file and existing file by value of MD5 checksum of each file. If they do not match, it indicates that some change(s) of file(s) may have arisen. If they are identical, then there was no change in files under target directory, so do nothing.
+
+.. literalinclude:: backup.py
+    :language: python
+
+If you would like to take backup, say, every one hour, then add such a line as follows in cron table.
+
+.. code-block:: bash
+
+    $ crontab -l
+    0 * * * * python <PATH_TO_SCRIPT>/backup.py
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu, python
+.. comments::

@@ -5,8 +5,103 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Wed, 02 Oct 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sat, 05 Oct 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/10/05/back_up_files.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/05/back_up_files.html</guid>
+            <title><![CDATA[back up files]]></title>
+            <description><![CDATA[<div class="section" id="back-up-files">
+<h1>back up files</h1>
+<p>Here is another approach for creating back up files onto dropbox on regular basis by cron.
+A quite simple script though, here are some remark.</p>
+<div class="section" id="hostname">
+<h2>hostname</h2>
+<p>There are multiple approaches for obtaining hostname though, here I use socket.gethostname(), which seems to be a transliteration of gethostname() system call.</p>
+</div>
+<div class="section" id="compression">
+<h2>compression</h2>
+<p>Here I use bzip2 as compression algorithm, which seems to achieve more effective compression rate against files like plain text in comparison to other algorithm like gzip. But as a trade off to good compression rate, compression process seems to take longer time.</p>
+</div>
+<div class="section" id="temporary-file">
+<h2>temporary file</h2>
+<p>I create backup file first under temporary directory and then move it under directory under dropbox in case that there is/are any change(s). As creating backup file directly under dropbox directory is quite slow due to traffic.</p>
+</div>
+<div class="section" id="checksum">
+<h2>checksum</h2>
+<p>Finally I compare temporary backup file and existing file by value of MD5 checksum of each file. If they do not match, it indicates that some change(s) of file(s) may have arisen. If they are identical, then there was no change in files under target directory, so do nothing.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="c"># base directory, which is one level upper than target directory</span>
+    <span class="n">base</span>      <span class="o">=</span> <span class="s">&quot;&lt;BASE_DIRECTORY_OF_YOUR_CHOICE&gt;&quot;</span>
+    <span class="c"># backup target directory under base directory</span>
+    <span class="n">target</span>    <span class="o">=</span> <span class="s">&quot;&lt;BACK_UP_TARGET_DIRECTORY&gt;&quot;</span>
+    <span class="c"># directories to exclude from backup file</span>
+    <span class="n">exclude</span>   <span class="o">=</span> <span class="p">[</span><span class="s">&quot;&lt;DIRECTORY_TO_EXCLUDE&gt;&quot;</span><span class="p">]</span>
+
+    <span class="c"># backup file name / HOSTNAME_DAY.tar.bz2</span>
+    <span class="n">backup</span>    <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span>\
+                <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%A&quot;</span><span class="p">)</span> <span class="o">+</span>\
+                <span class="s">&quot;.tar.bz2&quot;</span>
+    <span class="c"># temporary directory &amp; temporary file</span>
+    <span class="n">temp_dir</span>  <span class="o">=</span> <span class="s">&quot;/tmp&quot;</span>
+    <span class="n">temp_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">backup</span><span class="p">)</span>
+    <span class="c"># destination directory</span>
+    <span class="n">dest_dir</span>  <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s">&quot;Dropbox/backup&quot;</span><span class="p">)</span>
+    <span class="n">dest_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">,</span> <span class="n">backup</span><span class="p">)</span>
+
+    <span class="c"># let's start backup</span>
+
+    <span class="c"># first create a backup file under temporary file</span>
+    <span class="n">tar</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="s">&quot;w:bz2&quot;</span><span class="p">)</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">):</span>  
+                <span class="k">if</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tar</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+    
+    <span class="n">tar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c"># backup file creation has finished</span>
+    <span class="c"># now determine if file replacement is required or not</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_file</span><span class="p">):</span>
+        <span class="c"># dictionary to store md5 checksum of each file</span>
+        <span class="n">md5</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">temp_file</span><span class="p">,</span> <span class="n">dest_file</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_to_check</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">file_to_check</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">md5</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+        <span class="c"># compare checksum value of each file</span>
+        <span class="c"># copy temporary file under destination directory</span>
+        <span class="k">if</span> <span class="n">md5</span><span class="p">[</span><span class="n">temp_file</span><span class="p">]</span> <span class="o">!=</span> <span class="n">md5</span><span class="p">[</span><span class="n">dest_file</span><span class="p">]:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># somehow backup of same name does not exist, do copy</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you would like to take backup, say, every one hour, then add such a line as follows in cron table.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>crontab -l
+0 * * * * python &lt;PATH_TO_SCRIPT&gt;/backup.py
+</pre></div>
+</div>
+</div>
+</div>]]></description>
+             <pubDate>Sat, 05 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/10/02/x86_or_x64.html</link>
             <guid>http://skyhigh71.github.io/2013/10/02/x86_or_x64.html</guid>

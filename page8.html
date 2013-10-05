@@ -64,6 +64,30 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>9月 04, 2013</span>
         </div>
+        <div class="section" id="compare-files-recursively">
+<h1><a href="2013/09/04/compare_files_recursively.html">compare files recursively</a></h1>
+<p>I have to confess that I’m so ignorant...</p>
+<p>You can compare all the files under 2 directories recursively by diff command with -r option.</p>
+<p>For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>diff -r &lt;DIR_A&gt; &lt;DIR_B&gt;
+</pre></div>
+</div>
+<p>So easy.
+sigh...</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/command.html">command</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>9月 04, 2013</span>
+        </div>
         <div class="section" id="distribute-requests-by-url-on-apache">
 <h1><a href="2013/09/04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a></h1>
 <div class="section" id="what-s-in-your-mind">
@@ -152,48 +176,6 @@ And you do not have to enter password every time you communicate with github.</p
                 Tags:
                 <a href="tags/github.html">github</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>9月 01, 2013</span>
-        </div>
-        <div class="section" id="google-anlytics-in-sphinx">
-<h1><a href="2013/09/01/google_anlytics_in_sphinx.html">google anlytics in sphinx</a></h1>
-<p>If you would like to analyze statics of access to your site built with sphinx, then you can embed google analytics code in it.</p>
-<p>Prepare layout.html file under source/_templates directory.
-Insert javascript code obtained at google analytics site.</p>
-<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;!layout.html&quot; %}
-
-{% block footer %}
-{{ super() }}
-<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;footer&quot;</span><span class="nt">&gt;</span>
-<span class="nt">&lt;script&gt;</span>
-<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">o</span><span class="p">,</span><span class="nx">g</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">){</span>
-    <span class="nx">i</span><span class="p">[</span><span class="s1">'GoogleAnalyticsObject'</span><span class="p">]</span><span class="o">=</span><span class="nx">r</span><span class="p">;</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">||</span><span class="kd">function</span><span class="p">(){</span>
-        <span class="p">(</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">||</span><span class="p">[]).</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
-    <span class="p">},</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
-    <span class="nx">a</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">o</span><span class="p">),</span><span class="nx">m</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="nx">a</span><span class="p">.</span><span class="nx">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="nx">a</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">g</span><span class="p">;</span>
-    <span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
- <span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
-<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-xxxxxxxxx-x'</span><span class="p">,</span> <span class="s1">'&lt;site_name&gt;'</span><span class="p">);</span>
-<span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
-<span class="nt">&lt;/script&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
-{% endblock %}
-</pre></div>
-</div>
-<p>And rebuild html and deploy it onto site.</p>
-<p>For details, please refer to <a class="reference external" href="http://sphinx-doc.org/faq.html">sphinx FAQ</a>.</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/sphinx.html">sphinx</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -202,6 +184,8 @@ Insert javascript code obtained at google analytics site.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/10/05/back_up_files.html">back up files</a>
+        </li><li>
             <a href="2013/10/02/x86_or_x64.html">x86 or x64?</a>
         </li><li>
             <a href="2013/09/29/static_ip_address_assignment.html">static IP address assignment</a>
@@ -219,8 +203,6 @@ Insert javascript code obtained at google analytics site.</p>
             <a href="2013/09/21/lxc_introduction.html">lxc introduction</a>
         </li><li>
             <a href="2013/09/21/library_details.html">library details</a>
-        </li><li>
-            <a href="2013/09/19/network_diagram_in_document.html">network diagram in document</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -230,7 +212,7 @@ Insert javascript code obtained at google analytics site.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (5), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/python.html">python</a> (1), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (17), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (5), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/python.html">python</a> (2), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (18), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
