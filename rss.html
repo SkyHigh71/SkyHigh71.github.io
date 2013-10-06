@@ -5,8 +5,103 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sat, 05 Oct 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sun, 06 Oct 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/10/06/plotting.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/06/plotting.html</guid>
+            <title><![CDATA[plotting]]></title>
+            <description><![CDATA[<div class="section" id="plotting">
+<h1>plotting</h1>
+<p>Sometimes you would like to create a plot out of some text file.
+You can achieve it by making use of matplotlib.</p>
+<p>I have to confess that I am not quite accustomed with matplotlib though, I hereby demonstrate a sample.</p>
+<div class="section" id="installation">
+<h2>installation</h2>
+<p>Installation is quite simple and one line command suffices.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install python-matplotlib
+</pre></div>
+</div>
+</div>
+<div class="section" id="sample">
+<h2>sample</h2>
+<p>Suppose such a CSV file as follows.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">201201</span><span class="p">,</span><span class="mi">1477</span><span class="p">,</span><span class="mi">994</span>
+<span class="mi">201202</span><span class="p">,</span><span class="mi">1462</span><span class="p">,</span><span class="mi">988</span>
+<span class="mi">201203</span><span class="p">,</span><span class="mi">1437</span><span class="p">,</span><span class="mi">985</span>
+</pre></div>
+</div>
+<p>That is, CSV file contains residential loan prepayment history.
+lines are consisted of,</p>
+<ul class="simple">
+<li>month of prepayment</li>
+<li>monthly payment</li>
+<li>bonus payment</li>
+</ul>
+</div>
+<div class="section" id="plot">
+<h2>plot</h2>
+<p>You can plot a graph, for example, as follows.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">dates</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">raw_data</span> <span class="o">=</span> <span class="s">&quot;sample.csv&quot;</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;prepay&quot;</span><span class="p">,</span> <span class="s">&quot;month&quot;</span><span class="p">,</span> <span class="s">&quot;bonus&quot;</span><span class="p">]</span>
+
+    <span class="c"># prepayment date</span>
+    <span class="n">prepay</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c"># lists to store each values</span>
+    <span class="n">monthCal</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">monthAct</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">year</span>     <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+            <span class="n">prepay</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;prepay&quot;</span><span class="p">)],</span> <span class="s">&quot;%Y%m&quot;</span><span class="p">)))</span>
+            <span class="n">monthCal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;month&quot;</span><span class="p">)])</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;bonus&quot;</span><span class="p">)])</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> 
+            <span class="n">monthAct</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;month&quot;</span><span class="p">)]))</span>
+            <span class="n">year</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;month&quot;</span><span class="p">)])</span><span class="o">*</span><span class="mi">12</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;bonus&quot;</span><span class="p">)])</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> 
+
+    <span class="c"># let's start plotting</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+    <span class="c"># monthly graph</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prepay</span><span class="p">,</span> <span class="n">monthCal</span><span class="p">,</span> <span class="s">&quot;bo&quot;</span><span class="p">,</span> <span class="n">prepay</span><span class="p">,</span> <span class="n">monthAct</span><span class="p">,</span> <span class="s">&quot;ro&quot;</span><span class="p">)</span>
+
+    <span class="n">graph</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">MonthLocator</span><span class="p">())</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s">&quot;%Y/%m&quot;</span><span class="p">))</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="s">&quot;vertical&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&quot;payment per month (USD)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="c"># yearly graph</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prepay</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="s">&quot;go&quot;</span><span class="p">)</span>
+
+    <span class="n">graph</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">MonthLocator</span><span class="p">())</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s">&quot;%Y/%m&quot;</span><span class="p">))</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&quot;payment per year (USD)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="s">&quot;vertical&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">raw_data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;csv&quot;</span><span class="p">,</span> <span class="s">&quot;png&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="../../../_images/sample.png" src="http://skyhigh71.github.io/_images/sample.png"/>
+</div>
+</div>]]></description>
+             <pubDate>Sun, 06 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/10/05/back_up_files.html</link>
             <guid>http://skyhigh71.github.io/2013/10/05/back_up_files.html</guid>
@@ -55,7 +150,7 @@ A quite simple script though, here are some remark.</p>
     <span class="n">temp_dir</span>  <span class="o">=</span> <span class="s">&quot;/tmp&quot;</span>
     <span class="n">temp_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">backup</span><span class="p">)</span>
     <span class="c"># destination directory</span>
-    <span class="n">dest_dir</span>  <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s">&quot;Dropbox/backup&quot;</span><span class="p">)</span>
+    <span class="n">dest_dir</span>  <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s">&quot;Dropbox/&lt;TARGET_DIRECTORY&gt;&quot;</span><span class="p">)</span>
     <span class="n">dest_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">,</span> <span class="n">backup</span><span class="p">)</span>
 
     <span class="c"># let's start backup</span>

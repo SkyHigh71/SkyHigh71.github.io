@@ -62,6 +62,37 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>9月 01, 2013</span>
+        </div>
+        <div class="section" id="try-sphinx-better-theme">
+<h1><a href="2013/09/01/try_sphinx_better_theme.html">try sphinx better theme</a></h1>
+<p>Found a <a class="reference external" href="https://github.com/irskep/sphinx-better-theme">new theme</a> for sphinx.</p>
+<p><a class="reference external" href="https://sphinx-better-theme.readthedocs.org/en/latest/demos.html">Demo site</a> looks nice &amp; simple.</p>
+<p>Let’s apply and see what kind of effect will have on my documentation.</p>
+<p>Application procedure is quite simple.
+Install sphinx-better-theme package.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo pip install sphinx-better-theme
+</pre></div>
+</div>
+<p>Apply theme by modifying conf.py.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">better</span> <span class="kn">import</span> <span class="n">better_theme_path</span>
+<span class="n">html_theme_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">better_theme_path</span><span class="p">]</span>
+<span class="n">html_theme</span> <span class="o">=</span> <span class="s">'better'</span>
+</pre></div>
+</div>
+<p>Ok, stay with this theme.</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/sphinx.html">sphinx</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>8月 31, 2013</span>
         </div>
         <div class="section" id="memo-on-bitbucket">
@@ -184,54 +215,6 @@ Search for path of your font.</p>
                 Tags:
                 <a href="tags/tinkerer.html">tinkerer</a>, <a href="tags/blockdiag.html">blockdiag</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>8月 30, 2013</span>
-        </div>
-        <div class="section" id="prevent-broken-pipe-during-ssh-session">
-<h1><a href="2013/08/30/prevent_broken_pipe_during_ssh_session.html">prevent broken pipe during ssh session</a></h1>
-<p>From time to time, you may encounter ssh session lost with following error.</p>
-<div class="highlight-bash"><div class="highlight"><pre>Write failed: Broken pipe
-</pre></div>
-</div>
-<p>It means that write() system call failed against File Descriptor for socket of ssh session.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>man -s2 write
-...
-EPIPE  fd is connected to a pipe or socket whose reading end is closed.  When this  happens  the  writing
-       process  will  also  receive  a SIGPIPE signal.  <span class="o">(</span>Thus, the write <span class="k">return </span>value is seen only <span class="k">if </span>the
-       program catches, blocks or ignores this signal.<span class="o">)</span>
-</pre></div>
-</div>
-<p>You may be able to avoid this connection lost by keeping connection alive.</p>
-<div class="section" id="client">
-<h2>client</h2>
-<p>You can configure ssh client to send request a response from sshd in the background.
-You can set interval with unit in second (~/.ssh/config).</p>
-<p>With following configuration sample, requests are sent every 2 minutes.</p>
-<div class="highlight-bash"><div class="highlight"><pre>ServerAliveInterval 120
-</pre></div>
-</div>
-<p>For details, please refer to “man ssh_config”.</p>
-</div>
-<div class="section" id="server">
-<h2>server</h2>
-<p>Same as client, sshd can be configured to send request on regular basis.
-sshd configuraiton file is /etc/ssh/sshd_config.</p>
-<div class="highlight-bash"><div class="highlight"><pre>ClientAliveInterval 120
-</pre></div>
-</div>
-<p>For details, please refer to “man sshd_config”.</p>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/ssh.html">ssh</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -240,6 +223,8 @@ sshd configuraiton file is /etc/ssh/sshd_config.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/10/06/plotting.html">plotting</a>
+        </li><li>
             <a href="2013/10/05/back_up_files.html">back up files</a>
         </li><li>
             <a href="2013/10/02/x86_or_x64.html">x86 or x64?</a>
@@ -257,8 +242,6 @@ sshd configuraiton file is /etc/ssh/sshd_config.</p>
             <a href="2013/09/22/lxc_cont.html">lxc continued</a>
         </li><li>
             <a href="2013/09/21/lxc_introduction.html">lxc introduction</a>
-        </li><li>
-            <a href="2013/09/21/library_details.html">library details</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -268,7 +251,7 @@ sshd configuraiton file is /etc/ssh/sshd_config.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (5), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/python.html">python</a> (2), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (18), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/hg.html">hg</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (5), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (18), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
