@@ -1,0 +1,14 @@
+
+shutdown guest OS
+
+$ du -sh /var/lib/libvirt/images/win7.img
+21G	/var/lib/libvirt/images/win7.img
+
+$ sudo qemu-img resize /var/lib/libvirt/images/win7.img +20G
+Image resized.
+
+boot with gparted
+
+resize partition and grow as much as you increased.
+
+

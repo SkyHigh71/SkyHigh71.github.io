@@ -38,6 +38,7 @@ You can plot a graph, for example, as follows.
 .. literalinclude:: plot.py
 
 .. image:: sample.png
+    :scale: 40
 
 
 .. author:: default

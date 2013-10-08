@@ -5,8 +5,53 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sun, 06 Oct 2013 00:00:00 +0900</pubDate>
+        <pubDate>Tue, 08 Oct 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/10/08/resize_disk_size_of_guest_on_kvm.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/08/resize_disk_size_of_guest_on_kvm.html</guid>
+            <title><![CDATA[resize disk size of guest on KVM]]></title>
+            <description><![CDATA[<div class="section" id="resize-disk-size-of-guest-on-kvm">
+<h1>resize disk size of guest on KVM</h1>
+<p>Sometimes you regret that you created guest OS with too small disk space.
+sigh...
+And you would like to increase disk space a little.</p>
+<p>You can do it with some steps and I hereby quote a sample procedure of such operation.
+In this sample, OS of guest instance is Windows 7.</p>
+<div class="section" id="shutdown">
+<h2>shutdown</h2>
+<p>Shutdown guest OS before start operation.</p>
+</div>
+<div class="section" id="resize-image-file">
+<h2>resize image file</h2>
+<p>Guest OS’s file system is represented in image file (*.img), which reflect its size.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>du -sh /var/lib/libvirt/images/win7.img
+21G /var/lib/libvirt/images/win7.img
+</pre></div>
+</div>
+<p>Let us manipulate image file by qemu-img command.
+In this sample, 20GB will be added to existing file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo qemu-img resize /var/lib/libvirt/images/win7.img +20G
+Image resized.
+</pre></div>
+</div>
+</div>
+<div class="section" id="resize-partition">
+<h2>resize partition</h2>
+<p>Now you need to resize existing partition to grow as much as you increased.
+For that sake, let us make use of <a class="reference external" href="http://gparted.sourceforge.net">gnome partition editor</a> (gparted).</p>
+<p>Download ISO file of gparted and connect it to guest instance.
+And boot from gparted.
+You will select graphical user interface of gparted and increase partition size easily.</p>
+</div>
+<div class="section" id="boot">
+<h2>boot</h2>
+<p>Now you can boot with guest OS and see that disk size does increase.</p>
+</div>
+</div>]]></description>
+             <pubDate>Tue, 08 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/10/06/plotting.html</link>
             <guid>http://skyhigh71.github.io/2013/10/06/plotting.html</guid>
@@ -96,7 +141,7 @@ lines are consisted of,</p>
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">raw_data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;csv&quot;</span><span class="p">,</span> <span class="s">&quot;png&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../../../_images/sample.png" src="http://skyhigh71.github.io/_images/sample.png"/>
+<a class="reference internal image-reference" href="http://skyhigh71.github.io/_images/sample.png"><img alt="../../../_images/sample.png" src="http://skyhigh71.github.io/_images/sample.png" style="width: 650.4px; height: 354.8px;"/></a>
 </div>
 </div>]]></description>
              <pubDate>Sun, 06 Oct 2013 00:00:00 +0900</pubDate>

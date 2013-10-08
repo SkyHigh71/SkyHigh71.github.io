@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>change IP address range &mdash; sakana</title>
+        <title>resize disk size of guest on KVM &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Name Server" href="../28/name_server.html" /><link rel="prev" title="static IP address assignment" href="static_ip_address_assignment.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="plotting" href="../06/plotting.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>9月 29, 2013</span>
+            <span>10月 08, 2013</span>
         </div>
     </div>
     
@@ -77,26 +77,42 @@
     
     </div>
     
-    <div class="section" id="change-ip-address-range">
-<h1>change IP address range</h1>
-<p>As described in previous posts, we have some servers in lxc network now.</p>
-<p>I would like that servers shall have static IP addresses.
-Say, in the range from 10.0.3.2 until 10.0.3.99.</p>
-<p>And client shall have dynamically assigned address, which should not conflict with server&#8217;s ones.
-Let&#8217;s limit range of IP addresses, which DHCP Server, dnsmasq assigns for.</p>
-<p>You can configure IP address range by modifying lxc file under /etc/default directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>diff lxc lxc.org
-27,28c27,28
-&lt; <span class="nv">LXC_DHCP_RANGE</span><span class="o">=</span><span class="s2">&quot;10.0.3.100,10.0.3.199&quot;</span>
-&lt; <span class="nv">LXC_DHCP_MAX</span><span class="o">=</span><span class="s2">&quot;100&quot;</span>
----
-&gt; <span class="nv">LXC_DHCP_RANGE</span><span class="o">=</span><span class="s2">&quot;10.0.3.2,10.0.3.254&quot;</span>
-&gt; <span class="nv">LXC_DHCP_MAX</span><span class="o">=</span><span class="s2">&quot;253&quot;</span>
+    <div class="section" id="resize-disk-size-of-guest-on-kvm">
+<h1>resize disk size of guest on KVM</h1>
+<p>Sometimes you regret that you created guest OS with too small disk space.
+sigh...
+And you would like to increase disk space a little.</p>
+<p>You can do it with some steps and I hereby quote a sample procedure of such operation.
+In this sample, OS of guest instance is Windows 7.</p>
+<div class="section" id="shutdown">
+<h2>shutdown</h2>
+<p>Shutdown guest OS before start operation.</p>
+</div>
+<div class="section" id="resize-image-file">
+<h2>resize image file</h2>
+<p>Guest OS&#8217;s file system is represented in image file (*.img), which reflect its size.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>du -sh /var/lib/libvirt/images/win7.img
+21G /var/lib/libvirt/images/win7.img
 </pre></div>
 </div>
-<p>After restart, you will see that dnsmasq will set IP address range as follows:</p>
-<div class="highlight-bash"><div class="highlight"><pre>dnsmasq -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file<span class="o">=</span>/var/run/lxc/dnsmasq.pid --conf-file<span class="o">=</span> --listen-address 10.0.3.1 --dhcp-range 10.0.3.100,10.0.3.199 --dhcp-lease-max<span class="o">=</span>100 --dhcp-no-override --except-interface<span class="o">=</span>lo --interface<span class="o">=</span>lxcbr0 --dhcp-leasefile<span class="o">=</span>/var/lib/misc/dnsmasq.lxcbr0.leases --dhcp-authoritative
+<p>Let us manipulate image file by qemu-img command.
+In this sample, 20GB will be added to existing file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo qemu-img resize /var/lib/libvirt/images/win7.img +20G
+Image resized.
 </pre></div>
+</div>
+</div>
+<div class="section" id="resize-partition">
+<h2>resize partition</h2>
+<p>Now you need to resize existing partition to grow as much as you increased.
+For that sake, let us make use of <a class="reference external" href="http://gparted.sourceforge.net/">gnome partition editor</a> (gparted).</p>
+<p>Download ISO file of gparted and connect it to guest instance.
+And boot from gparted.
+You will select graphical user interface of gparted and increase partition size easily.</p>
+</div>
+<div class="section" id="boot">
+<h2>boot</h2>
+<p>Now you can boot with guest OS and see that disk size does increase.</p>
 </div>
 </div>
 
@@ -108,35 +124,35 @@ Let&#8217;s limit range of IP addresses, which DHCP Server, dnsmasq assigns for.
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/lxc.html">lxc</a>, <a href="../../../tags/dnsmasq.html">dnsmasq</a></span>
+                <a href="../../../tags/kvm.html">kvm</a>, <a href="../../../tags/gparted.html">gparted</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="static_ip_address_assignment.html">static IP address assignment</a></li>
-            <li class="right"><a href="../28/name_server.html">Name Server</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../06/plotting.html">plotting</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../10/08/resize_disk_size_of_guest_on_kvm.html">resize disk size of guest on KVM</a>
+            <a href="#">resize disk size of guest on KVM</a>
         </li><li>
-            <a href="../../10/06/plotting.html">plotting</a>
+            <a href="../06/plotting.html">plotting</a>
         </li><li>
-            <a href="../../10/05/back_up_files.html">back up files</a>
+            <a href="../05/back_up_files.html">back up files</a>
         </li><li>
-            <a href="../../10/02/x86_or_x64.html">x86 or x64?</a>
+            <a href="../02/x86_or_x64.html">x86 or x64?</a>
         </li><li>
-            <a href="static_ip_address_assignment.html">static IP address assignment</a>
+            <a href="../../09/29/static_ip_address_assignment.html">static IP address assignment</a>
         </li><li>
-            <a href="#">change IP address range</a>
+            <a href="../../09/29/change_ip_address_range.html">change IP address range</a>
         </li><li>
-            <a href="../28/name_server.html">Name Server</a>
+            <a href="../../09/28/name_server.html">Name Server</a>
         </li><li>
-            <a href="../25/directory_server_in_lxc.html">Directory Server</a>
+            <a href="../../09/25/directory_server_in_lxc.html">Directory Server</a>
         </li><li>
-            <a href="../23/centos_on_ubuntu.html">CentOS on ubuntu</a>
+            <a href="../../09/23/centos_on_ubuntu.html">CentOS on ubuntu</a>
         </li><li>
-            <a href="../22/lxc_cont.html">lxc continued</a>
+            <a href="../../09/22/lxc_cont.html">lxc continued</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
