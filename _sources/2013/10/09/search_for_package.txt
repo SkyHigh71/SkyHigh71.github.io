@@ -1,0 +1,85 @@
+search for package
+==================
+
+You may encounter such a situation that some shared libraries are stripped when you debug core file.
+For example,
+
+.. code-block:: bash
+
+    (gdb) info shared
+    From        To          Syms Read   Shared Object Library
+    0xb778f430  0xb77a6054  Yes (*)     /lib/i386-linux-gnu/libncurses.so.5
+    0xb75ef350  0xb7728f4e  Yes         /lib/i386-linux-gnu/libc.so.6
+    0xb75d2ad0  0xb75d3a9c  Yes         /lib/i386-linux-gnu/libdl.so.2
+    0xb75b87d0  0xb75c2c24  Yes (*)     /lib/i386-linux-gnu/libtinfo.so.5
+    0xb77c9830  0xb77e1e7c  Yes         /lib/ld-linux.so.2
+    (*): Shared library is missing debugging information.
+
+You would like to search for package, which relevant shared object is included.
+With library, which contains symbol table and you can examine more closely core file.
+
+install
+-------
+
+You need to have apt-file command for searching packages.
+Let's install apt-file, as it is not installed by default.
+
+.. code-block:: bash
+
+    $ sudo apt-get install apt-file
+
+update cache
+------------
+
+So as to search for packages, you need to have local cache.
+Let's download cache from repository and update cache.
+
+.. code-block:: bash
+
+    $ apt-file update
+
+search & install
+----------------
+
+Now you are ready for searching packages.
+Take sample quoted above and search for "libncurses.so.5".
+
+.. code-block:: bash
+
+    $ apt-file search libncurses.so.5 
+    lib64ncurses5: /lib64/libncurses.so.5
+    lib64ncurses5: /lib64/libncurses.so.5.9
+    libncurses5: /lib/i386-linux-gnu/libncurses.so.5
+    libncurses5: /lib/i386-linux-gnu/libncurses.so.5.9
+    libncurses5-dbg: /usr/lib/debug/lib/i386-linux-gnu/libncurses.so.5.9
+    libncurses5-dbg: /usr/lib/debug/lib64/libncurses.so.5.9
+    libncurses5-dbg: /usr/lib/debug/libncurses.so.5
+    libncurses5-dbg: /usr/lib/debug/libncurses.so.5.9
+    libncurses5-dbg: /usr/lib/debug/usr/libx32/libncurses.so.5.9
+    libx32ncurses5: /usr/libx32/libncurses.so.5
+    libx32ncurses5: /usr/libx32/libncurses.so.5.9
+
+libncurses5-dbg must be our target package.
+Ok, let's install it.
+
+.. code-block:: bash
+
+    $ sudo apt-get install libncurses5-dbg
+
+Now you can see stacks with function names and arguments.
+And checking status of shared libraries, you will confirm libraries not stripped.
+
+.. code-block:: bash
+
+    (gdb) info shared
+    From        To          Syms Read   Shared Object Library
+    0xb778f430  0xb77a6054  Yes         /lib/i386-linux-gnu/libncurses.so.5
+    0xb75ef350  0xb7728f4e  Yes         /lib/i386-linux-gnu/libc.so.6
+    0xb75d2ad0  0xb75d3a9c  Yes         /lib/i386-linux-gnu/libdl.so.2
+    0xb75b87d0  0xb75c2c24  Yes         /lib/i386-linux-gnu/libtinfo.so.5
+    0xb77c9830  0xb77e1e7c  Yes         /lib/ld-linux.so.2
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu, apt
+.. comments::

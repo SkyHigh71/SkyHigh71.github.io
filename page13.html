@@ -62,6 +62,33 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>8月 25, 2013</span>
+        </div>
+        <div class="section" id="add-favicon">
+<h1><a href="2013/08/25/add_favicon.html">add favicon</a></h1>
+<p>You can configure favicon for your blog.</p>
+<p>Prepare your favorite icon and place it under _static directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file _static/skyhigh71.ico
+_static/skyhigh71.ico: MS Windows icon resource - 1 icon
+</pre></div>
+</div>
+<p>And point newly deployed icon file in conf.py.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Change your favicon (new favicon goes in _static directory)</span>
+<span class="n">html_favicon</span> <span class="o">=</span> <span class="s">'skyhigh71.ico'</span>
+</pre></div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/tinkerer.html">tinkerer</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>8月 24, 2013</span>
         </div>
         <div class="section" id="customize-tinkerer-page-continued">
@@ -203,98 +230,6 @@ Please be careful and monitor free disk space.</p>
                 Tags:
                 <a href="tags/ubuntu.html">ubuntu</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>8月 23, 2013</span>
-        </div>
-        <div class="section" id="customize-tinkerer-page">
-<h1><a href="2013/08/23/customize_tinker_page.html">customize tinkerer page</a></h1>
-<div class="section" id="sidebar-items">
-<h2>sidebar items</h2>
-<p>You can customize items in sidebar (right side of this page) by modifying values in dictionary, html_sidebars.</p>
-<p>For example, if you would like to show tags, then add “tags.html” as follows.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Add templates to be rendered in sidebar here</span>
-<span class="n">html_sidebars</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;**&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;recent.html&quot;</span><span class="p">,</span> <span class="s">&quot;searchbox.html&quot;</span><span class="p">,</span> <span class="s">&quot;tags.html&quot;</span><span class="p">]</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p><a class="reference external" href="http://tinkerer.me/doc/more_tinkering.html">tinkerer documentation</a> will help you configure customization.</p>
-</div>
-<div class="section" id="tweet-button">
-<h2>tweet button</h2>
-<p>You can add tweet button on each post.
-Here is sample code needed to be added in page.html file under _templates directory.</p>
-<div class="highlight-html"><div class="highlight"><pre><span class="c">&lt;!-- Twitter button --&gt;</span>
-<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;https://twitter.com/share&quot;</span> <span class="na">class=</span><span class="s">&quot;twitter-share-button&quot;</span><span class="nt">&gt;</span>Tweet<span class="nt">&lt;/a&gt;</span>
-<span class="nt">&lt;script&gt;</span><span class="o">!</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">id</span><span class="p">){</span><span class="kd">var</span> <span class="nx">js</span><span class="p">,</span><span class="nx">fjs</span><span class="o">=</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="nx">p</span><span class="o">=</span><span class="sr">/^http:/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">location</span><span class="p">)</span><span class="o">?</span><span class="s1">'http'</span><span class="o">:</span><span class="s1">'https'</span><span class="p">;</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">)){</span><span class="nx">js</span><span class="o">=</span><span class="nx">d</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span><span class="nx">js</span><span class="p">.</span><span class="nx">id</span><span class="o">=</span><span class="nx">id</span><span class="p">;</span><span class="nx">js</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">p</span><span class="o">+</span><span class="s1">'://platform.twitter.com/widgets.js'</span><span class="p">;</span><span class="nx">fjs</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">js</span><span class="p">,</span><span class="nx">fjs</span><span class="p">);}}(</span><span class="nb">document</span><span class="p">,</span> <span class="s1">'script'</span><span class="p">,</span> <span class="s1">'twitter-wjs'</span><span class="p">);</span><span class="nt">&lt;/script&gt;</span>
-</pre></div>
-</div>
-<p>This code can be created mannualy by referencing <a class="reference external" href="https://twitter.com/about/resources/buttons">twitter site</a>.</p>
-</div>
-<div class="section" id="google-analytics">
-<h2>google analytics</h2>
-<p>You can take statistics of your blog by google analytics.
-oN google analytics site create Tracking ID for your blog site, which yields javascript like this.</p>
-<p>Please be noted that <strong>you have to exclude &lt;script&gt; tags</strong>.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">o</span><span class="p">,</span><span class="nx">g</span><span class="p">,</span><span class="nx">r</span><span class="p">,</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">){</span>
-    <span class="nx">i</span><span class="p">[</span><span class="s1">'GoogleAnalyticsObject'</span><span class="p">]</span><span class="o">=</span><span class="nx">r</span><span class="p">;</span>
-    <span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span><span class="o">||</span><span class="kd">function</span><span class="p">(){</span>
-        <span class="p">(</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">=</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">q</span><span class="o">||</span><span class="p">[]).</span><span class="nx">push</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
-    <span class="p">},</span><span class="nx">i</span><span class="p">[</span><span class="nx">r</span><span class="p">].</span><span class="nx">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
-    <span class="nx">a</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">o</span><span class="p">),</span><span class="nx">m</span><span class="o">=</span><span class="nx">s</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="nx">a</span><span class="p">.</span><span class="nx">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
-    <span class="nx">a</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">g</span><span class="p">;</span>
-    <span class="nx">m</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">m</span><span class="p">)</span>
-<span class="p">})(</span><span class="nb">window</span><span class="p">,</span><span class="nb">document</span><span class="p">,</span><span class="s1">'script'</span><span class="p">,</span><span class="s1">'//www.google-analytics.com/analytics.js'</span><span class="p">,</span><span class="s1">'ga'</span><span class="p">);</span>
-
-<span class="nx">ga</span><span class="p">(</span><span class="s1">'create'</span><span class="p">,</span> <span class="s1">'UA-xxxxxxxx-1'</span><span class="p">,</span> <span class="s1">'&lt;your_site&gt;'</span><span class="p">);</span>
-<span class="nx">ga</span><span class="p">(</span><span class="s1">'send'</span><span class="p">,</span> <span class="s1">'pageview'</span><span class="p">);</span>
-</pre></div>
-</div>
-<p>Save this code as google_analytics.js under _static directory.</p>
-<p>And add following lines into page.html so as to incorporate this javascript.</p>
-<div class="highlight-javascript"><div class="highlight"><pre><span class="p">{</span><span class="o">%</span> <span class="kr">extends</span> <span class="s2">&quot;!page.html&quot;</span> <span class="o">%</span><span class="p">}</span>
-
-<span class="p">{</span><span class="o">%</span> <span class="nx">set</span> <span class="nx">script_files</span> <span class="o">=</span> <span class="nx">script_files</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;_static/google_analytics.js&quot;</span><span class="p">]</span> <span class="o">%</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>With above configurations applied, you will see page.html as follows.</p>
-<div class="highlight-html"><div class="highlight"><pre>{% extends &quot;!page.html&quot; %}
-
-{% set script_files = script_files + [&quot;_static/google_analytics.js&quot;] %}
-
-{%- block body %}
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;section_head&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;timestamp_layout&quot;</span><span class="nt">&gt;</span>
-      {{ timestamp(metadata.formatted_date) }}
-    <span class="nt">&lt;/div&gt;</span>
-    {% block buttons %}
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>
-      <span class="c">&lt;!-- Twitter button --&gt;</span>
-      <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;https://twitter.com/share&quot;</span> <span class="na">class=</span><span class="s">&quot;twitter-share-button&quot;</span><span class="nt">&gt;</span>Tweet<span class="nt">&lt;/a&gt;</span>
-      <span class="nt">&lt;script&gt;</span><span class="o">!</span><span class="kd">function</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span><span class="nx">s</span><span class="p">,</span><span class="nx">id</span><span class="p">){</span><span class="kd">var</span> <span class="nx">js</span><span class="p">,</span><span class="nx">fjs</span><span class="o">=</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="nx">s</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="nx">p</span><span class="o">=</span><span class="sr">/^http:/</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">location</span><span class="p">)</span><span class="o">?</span><span class="s1">'http'</span><span class="o">:</span><span class="s1">'https'</span><span class="p">;</span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">d</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">)){</span><span class="nx">js</span><span class="o">=</span><span class="nx">d</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span><span class="nx">js</span><span class="p">.</span><span class="nx">id</span><span class="o">=</span><span class="nx">id</span><span class="p">;</span><span class="nx">js</span><span class="p">.</span><span class="nx">src</span><span class="o">=</span><span class="nx">p</span><span class="o">+</span><span class="s1">'://platform.twitter.com/widgets.js'</span><span class="p">;</span><span class="nx">fjs</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">insertBefore</span><span class="p">(</span><span class="nx">js</span><span class="p">,</span><span class="nx">fjs</span><span class="p">);}}(</span><span class="nb">document</span><span class="p">,</span> <span class="s1">'script'</span><span class="p">,</span> <span class="s1">'twitter-wjs'</span><span class="p">);</span><span class="nt">&lt;/script&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
-    {% endblock %}
-    <span class="nt">&lt;/div&gt;</span>
-    {{ link }}
-    {{ body }}
-    {{ post_meta(metadata) }}
-    {{ comments }}
-{% endblock %}
-</pre></div>
-</div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/tinkerer.html">tinkerer</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -303,6 +238,8 @@ oN google analytics site create Tracking ID for your blog site, which yields jav
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/10/09/search_for_package.html">search for package</a>
+        </li><li>
             <a href="2013/10/08/resize_disk_size_of_guest_on_kvm.html">resize disk size of guest on KVM</a>
         </li><li>
             <a href="2013/10/06/plotting.html">plotting</a>
@@ -320,8 +257,6 @@ oN google analytics site create Tracking ID for your blog site, which yields jav
             <a href="2013/09/25/directory_server_in_lxc.html">Directory Server</a>
         </li><li>
             <a href="2013/09/23/centos_on_ubuntu.html">CentOS on ubuntu</a>
-        </li><li>
-            <a href="2013/09/22/lxc_cont.html">lxc continued</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -331,7 +266,7 @@ oN google analytics site create Tracking ID for your blog site, which yields jav
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (5), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (18), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (5), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (19), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

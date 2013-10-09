@@ -5,8 +5,83 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Tue, 08 Oct 2013 00:00:00 +0900</pubDate>
+        <pubDate>Wed, 09 Oct 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/10/09/search_for_package.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/09/search_for_package.html</guid>
+            <title><![CDATA[search for package]]></title>
+            <description><![CDATA[<div class="section" id="search-for-package">
+<h1>search for package</h1>
+<p>You may encounter such a situation that some shared libraries are stripped when you debug core file.
+For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> info shared
+From        To          Syms Read   Shared Object Library
+0xb778f430  0xb77a6054  Yes <span class="o">(</span>*<span class="o">)</span>     /lib/i386-linux-gnu/libncurses.so.5
+0xb75ef350  0xb7728f4e  Yes         /lib/i386-linux-gnu/libc.so.6
+0xb75d2ad0  0xb75d3a9c  Yes         /lib/i386-linux-gnu/libdl.so.2
+0xb75b87d0  0xb75c2c24  Yes <span class="o">(</span>*<span class="o">)</span>     /lib/i386-linux-gnu/libtinfo.so.5
+0xb77c9830  0xb77e1e7c  Yes         /lib/ld-linux.so.2
+<span class="o">(</span>*<span class="o">)</span>: Shared library is missing debugging information.
+</pre></div>
+</div>
+<p>You would like to search for package, which relevant shared object is included.
+With library, which contains symbol table and you can examine more closely core file.</p>
+<div class="section" id="install">
+<h2>install</h2>
+<p>You need to have apt-file command for searching packages.
+Let’s install apt-file, as it is not installed by default.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install apt-file
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-cache">
+<h2>update cache</h2>
+<p>So as to search for packages, you need to have local cache.
+Let’s download cache from repository and update cache.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-file update
+</pre></div>
+</div>
+</div>
+<div class="section" id="search-install">
+<h2>search &amp; install</h2>
+<p>Now you are ready for searching packages.
+Take sample quoted above and search for “libncurses.so.5”.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-file search libncurses.so.5
+lib64ncurses5: /lib64/libncurses.so.5
+lib64ncurses5: /lib64/libncurses.so.5.9
+libncurses5: /lib/i386-linux-gnu/libncurses.so.5
+libncurses5: /lib/i386-linux-gnu/libncurses.so.5.9
+libncurses5-dbg: /usr/lib/debug/lib/i386-linux-gnu/libncurses.so.5.9
+libncurses5-dbg: /usr/lib/debug/lib64/libncurses.so.5.9
+libncurses5-dbg: /usr/lib/debug/libncurses.so.5
+libncurses5-dbg: /usr/lib/debug/libncurses.so.5.9
+libncurses5-dbg: /usr/lib/debug/usr/libx32/libncurses.so.5.9
+libx32ncurses5: /usr/libx32/libncurses.so.5
+libx32ncurses5: /usr/libx32/libncurses.so.5.9
+</pre></div>
+</div>
+<p>libncurses5-dbg must be our target package.
+Ok, let’s install it.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install libncurses5-dbg
+</pre></div>
+</div>
+<p>Now you can see stacks with function names and arguments.
+And checking status of shared libraries, you will confirm libraries not stripped.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> info shared
+From        To          Syms Read   Shared Object Library
+0xb778f430  0xb77a6054  Yes         /lib/i386-linux-gnu/libncurses.so.5
+0xb75ef350  0xb7728f4e  Yes         /lib/i386-linux-gnu/libc.so.6
+0xb75d2ad0  0xb75d3a9c  Yes         /lib/i386-linux-gnu/libdl.so.2
+0xb75b87d0  0xb75c2c24  Yes         /lib/i386-linux-gnu/libtinfo.so.5
+0xb77c9830  0xb77e1e7c  Yes         /lib/ld-linux.so.2
+</pre></div>
+</div>
+</div>
+</div>]]></description>
+             <pubDate>Wed, 09 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/10/08/resize_disk_size_of_guest_on_kvm.html</link>
             <guid>http://skyhigh71.github.io/2013/10/08/resize_disk_size_of_guest_on_kvm.html</guid>
