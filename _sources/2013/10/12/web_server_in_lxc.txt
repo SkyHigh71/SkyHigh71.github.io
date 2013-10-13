@@ -1,0 +1,122 @@
+static web server in lxc
+========================
+
+Let us create web site in lxc environment.
+That is, with rough design as follows.
+
+design
+------
+
+- network
+
+.. nwdiag:: net.diag
+
+- traffic flow
+
+.. blockdiag:: flow.diag
+
+
+web server
+----------
+
+Create an instance of ubuntu under the name of "web".
+
+.. code-block:: bash
+
+    $ sudo lxc-create -n web -t ubuntu
+    $ sudo lxc-start -n web -d
+    $ ssh -l ubuntu `cut -d " " -f3 /var/lib/misc/dnsmasq.lxcbr0.leases`
+
+Let us configure timezone to JST and network interface to static one.
+
+.. code-block:: bash
+    
+    $ sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+    $ tail -8 /etc/network/interfaces
+    auto eth0
+    #iface eth0 inet dhcp
+    iface eth0 inet static
+    address 10.0.3.21
+    network 10.0.3.0
+    netmask 255.255.255.0
+    broadcast 10.0.3.255
+    gateway 10.0.3.1
+
+nginx
+-----
+
+Now install and configure nginx as container of static content.
+
+.. code-block:: bash
+
+    $ sudo apt-get install nginx
+
+Configuration files related to nginx are deployed under /etc/nginx directory.
+
+.. code-block:: bash
+
+    $ tree
+    .
+    ├── conf.d
+    ├── fastcgi_params
+    ├── koi-utf
+    ├── koi-win
+    ├── mime.types
+    ├── naxsi_core.rules
+    ├── naxsi.rules
+    ├── nginx.conf
+    ├── proxy_params
+    ├── scgi_params
+    ├── sites-available
+    │   └── default
+    ├── sites-enabled
+    │   └── default -> /etc/nginx/sites-available/default
+    ├── uwsgi_params
+    └── win-utf
+
+Decrease number of worker process.
+
+.. code-block:: bash
+
+    $ diff nginx.conf nginx.conf.org 
+    2c2
+    < worker_processes 1;
+    ---
+    > worker_processes 4;
+
+(It may not be necessary though,) configure nginx so as to start upon boot time.
+
+.. code-block:: bash
+
+    $ update-rc.d nginx defaults
+
+virtual host
+------------
+
+Create a virtual host configuration file under /etc/nginx/sites-available directory.
+
+.. code-block:: nginx
+
+    server {
+        listen 8080;
+
+        access_log  /home/ubuntu/wiki/logs/access.log;
+        error_log   /home/ubuntu/wiki/logs/error.log debug;
+
+        location / {
+            root   /home/ubuntu/wiki/build/html/;
+            index  index.html;
+        }
+    }
+
+And make a symbolic link under /etc/nginx/sites-enabled directory.
+
+.. code-block:: nginx
+
+    $ sudo ln -s /etc/nginx/sites-available/wiki .
+
+
+.. author:: default
+.. categories:: none
+.. tags:: lxc, nginx
+.. comments::

@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/10/12/web_server_in_lxc
    2013/10/09/search_for_package
    2013/10/08/resize_disk_size_of_guest_on_kvm
    2013/10/06/plotting
