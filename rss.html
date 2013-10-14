@@ -8,6 +8,43 @@
         <pubDate>Mon, 14 Oct 2013 00:00:00 +0900</pubDate>
         
         <item>
+            <link>http://skyhigh71.github.io/2013/10/14/reverse_proxy.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/14/reverse_proxy.html</guid>
+            <title><![CDATA[reverse proxy]]></title>
+            <description><![CDATA[<div class="section" id="reverse-proxy">
+<h1>reverse proxy</h1>
+<p>Create an instance of plain reverse proxy instance with nginx.
+It’s quite simple.</p>
+<p>Create an instance of ubuntu container as usual.
+Install nginx and add virtual host entry, say, “reverse” under /etc/nginx/sites-available.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+
+    <span class="kn">access_log</span>  <span class="s">/home/ubuntu/reverse/logs/access.log</span><span class="p">;</span>
+    <span class="kn">error_log</span>   <span class="s">/home/ubuntu/reverse/logs/error.log</span> <span class="s">debug</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span>  <span class="nv">$remote_addr</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$host</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://10.0.3.21:80/</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Create symbolic link under /etc/nginx/sites-enabled directory to point it.
+And remove default symbolic link.</p>
+<p>Make certain that you create log directory for nginx instance.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span>
+<span class="nv">$ </span>mkdir -p reverse/logs
+</pre></div>
+</div>
+<p>That’s all</p>
+</div>]]></description>
+             <pubDate>Mon, 14 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
+        <item>
             <link>http://skyhigh71.github.io/2013/10/14/quick_wiki_configuration.html</link>
             <guid>http://skyhigh71.github.io/2013/10/14/quick_wiki_configuration.html</guid>
             <title><![CDATA[quick wiki configuration]]></title>

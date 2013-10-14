@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/10/14/reverse_proxy
    2013/10/14/quick_wiki_configuration
    2013/10/12/web_server_in_lxc
    2013/10/09/search_for_package

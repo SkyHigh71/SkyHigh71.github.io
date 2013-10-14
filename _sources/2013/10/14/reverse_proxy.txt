@@ -1,0 +1,42 @@
+reverse proxy
+=============
+
+Create an instance of plain reverse proxy instance with nginx.
+It's quite simple.
+
+Create an instance of ubuntu container as usual.
+Install nginx and add virtual host entry, say, "reverse" under /etc/nginx/sites-available.
+
+.. code-block:: nginx
+
+    server {
+        listen 80;
+
+        access_log  /home/ubuntu/reverse/logs/access.log;
+        error_log   /home/ubuntu/reverse/logs/error.log debug;
+
+        location / {
+            proxy_set_header X-Real-IP  $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header Host $host;
+            proxy_pass http://10.0.3.21:80/;
+        }
+    }
+
+Create symbolic link under /etc/nginx/sites-enabled directory to point it.
+And remove default symbolic link.
+
+Make certain that you create log directory for nginx instance.
+
+.. code-block:: bash
+
+    $ cd
+    $ mkdir -p reverse/logs
+
+That's all
+
+.. author:: default
+.. categories:: none
+.. tags:: nginx
+.. comments::
+
