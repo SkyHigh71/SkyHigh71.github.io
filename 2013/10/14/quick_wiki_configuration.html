@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>try sphinx better theme &mdash; sakana</title>
+        <title>quick wiki configuration &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="memo on bitbucket" href="../../08/31/wiki_on_bitbucket.html" /><link rel="prev" title="back up files onto dropbox" href="back_up_files_onto_dropbox.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="static web server in lxc" href="../12/web_server_in_lxc.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>9月 01, 2013</span>
+            <span>10月 14, 2013</span>
         </div>
     </div>
     
@@ -77,23 +77,71 @@
     
     </div>
     
-    <div class="section" id="try-sphinx-better-theme">
-<h1>try sphinx better theme</h1>
-<p>Found a <a class="reference external" href="https://github.com/irskep/sphinx-better-theme">new theme</a> for sphinx.</p>
-<p><a class="reference external" href="https://sphinx-better-theme.readthedocs.org/en/latest/demos.html">Demo site</a> looks nice &amp; simple.</p>
-<p>Let&#8217;s apply and see what kind of effect will have on my documentation.</p>
-<p>Application procedure is quite simple.
-Install sphinx-better-theme package.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo pip install sphinx-better-theme
+    <div class="section" id="quick-wiki-configuration">
+<h1>quick wiki configuration</h1>
+<p>Now you have container to store your content.
+So let us setup sphinx so that we can deploy our contents onto it.</p>
+<div class="section" id="installation">
+<h2>installation</h2>
+<p>Fist, install make command &amp; pip.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install build-essential
+<span class="nv">$ </span>sudo apt-get install python-setuptools
+<span class="nv">$ </span>sudo easy_install pip
 </pre></div>
 </div>
-<p>Apply theme by modifying conf.py.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">better</span> <span class="kn">import</span> <span class="n">better_theme_path</span>
-<span class="n">html_theme_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">better_theme_path</span><span class="p">]</span>
-<span class="n">html_theme</span> <span class="o">=</span> <span class="s">&#39;better&#39;</span>
+<p>And then sphinx, extension &amp; fonts.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install python-sphinx
+<span class="nv">$ </span>sudo pip install sphinxcontrib-blockdiag sphinxcontrib-nwdiag sphinxcontrib-seqdiag sphinxcontrib-actdiag
+<span class="nv">$ </span>sudo apt-get install python-matplotlib
+<span class="nv">$ </span>sudo apt-get install ttf-dejavu
 </pre></div>
 </div>
-<p>Ok, stay with this theme.</p>
+</div>
+<div class="section" id="configuration">
+<h2>configuration</h2>
+<p>Configure project configuration file to reflect extension.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#extensions = []</span>
+<span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;sphinxcontrib.blockdiag&#39;</span><span class="p">,</span>
+              <span class="s">&#39;sphinxcontrib.nwdiag&#39;</span><span class="p">,</span>
+              <span class="s">&#39;sphinxcontrib.seqdiag&#39;</span><span class="p">,</span>
+              <span class="s">&#39;sphinxcontrib.actdiag&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">blockdiag_fontpath</span> <span class="o">=</span> <span class="s">&#39;/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf&#39;</span>
+<span class="n">nwdiag_fontpath</span>    <span class="o">=</span> <span class="s">&#39;/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf&#39;</span>
+<span class="n">seqdiag_fontpath</span>   <span class="o">=</span> <span class="s">&#39;/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf&#39;</span>
+<span class="n">actdiag_fontpath</span>   <span class="o">=</span> <span class="s">&#39;/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="automatic-build">
+<h2>automatic build</h2>
+<p>Ok, now let us configure system to build html automatically upon any modification under source directory.</p>
+<p>Fist install inotify-tools to monitor file system changes.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install inotify-tools
+</pre></div>
+</div>
+<p>Create a script to monitor changes and launch sphinx-build upon detection.
+Save this script as build.sh under $HOME/script directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="nv">ROOT</span><span class="o">=</span>/home/ubuntu/wiki
+<span class="nv">WATCH</span><span class="o">=</span><span class="nb">source</span>
+
+<span class="nb">cd</span> <span class="nv">$ROOT</span>
+
+<span class="k">while </span>inotifywait -r -e create,modify,delete <span class="nv">$WATCH</span>; <span class="k">do</span>
+<span class="k">    </span>sphinx-build -b html -d build/doctrees <span class="nb">source </span>build/html
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>So as to launch this script upon system boot, create such a wrapper script as following under /etc/profile.d directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+nohup /home/ubuntu/script/build.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
+</pre></div>
+</div>
+</div>
 </div>
 
     <div class="postmeta">
@@ -109,30 +157,30 @@ Install sphinx-better-theme package.</p>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="back_up_files_onto_dropbox.html">back up files onto dropbox</a></li>
-            <li class="right"><a href="../../08/31/wiki_on_bitbucket.html">memo on bitbucket</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../12/web_server_in_lxc.html">static web server in lxc</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../10/14/quick_wiki_configuration.html">quick wiki configuration</a>
+            <a href="#">quick wiki configuration</a>
         </li><li>
-            <a href="../../10/12/web_server_in_lxc.html">static web server in lxc</a>
+            <a href="../12/web_server_in_lxc.html">static web server in lxc</a>
         </li><li>
-            <a href="../../10/09/search_for_package.html">search for package</a>
+            <a href="../09/search_for_package.html">search for package</a>
         </li><li>
-            <a href="../../10/08/resize_disk_size_of_guest_on_kvm.html">resize disk size of guest on KVM</a>
+            <a href="../08/resize_disk_size_of_guest_on_kvm.html">resize disk size of guest on KVM</a>
         </li><li>
-            <a href="../../10/06/plotting.html">plotting</a>
+            <a href="../06/plotting.html">plotting</a>
         </li><li>
-            <a href="../../10/05/back_up_files.html">back up files</a>
+            <a href="../05/back_up_files.html">back up files</a>
         </li><li>
-            <a href="../../10/02/x86_or_x64.html">x86 or x64?</a>
+            <a href="../02/x86_or_x64.html">x86 or x64?</a>
         </li><li>
-            <a href="../29/static_ip_address_assignment.html">static IP address assignment</a>
+            <a href="../../09/29/static_ip_address_assignment.html">static IP address assignment</a>
         </li><li>
-            <a href="../29/change_ip_address_range.html">change IP address range</a>
+            <a href="../../09/29/change_ip_address_range.html">change IP address range</a>
         </li><li>
-            <a href="../28/name_server.html">Name Server</a>
+            <a href="../../09/28/name_server.html">Name Server</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">

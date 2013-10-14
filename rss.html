@@ -5,8 +5,81 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sat, 12 Oct 2013 00:00:00 +0900</pubDate>
+        <pubDate>Mon, 14 Oct 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/10/14/quick_wiki_configuration.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/14/quick_wiki_configuration.html</guid>
+            <title><![CDATA[quick wiki configuration]]></title>
+            <description><![CDATA[<div class="section" id="quick-wiki-configuration">
+<h1>quick wiki configuration</h1>
+<p>Now you have container to store your content.
+So let us setup sphinx so that we can deploy our contents onto it.</p>
+<div class="section" id="installation">
+<h2>installation</h2>
+<p>Fist, install make command &amp; pip.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install build-essential
+<span class="nv">$ </span>sudo apt-get install python-setuptools
+<span class="nv">$ </span>sudo easy_install pip
+</pre></div>
+</div>
+<p>And then sphinx, extension &amp; fonts.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install python-sphinx
+<span class="nv">$ </span>sudo pip install sphinxcontrib-blockdiag sphinxcontrib-nwdiag sphinxcontrib-seqdiag sphinxcontrib-actdiag
+<span class="nv">$ </span>sudo apt-get install python-matplotlib
+<span class="nv">$ </span>sudo apt-get install ttf-dejavu
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration">
+<h2>configuration</h2>
+<p>Configure project configuration file to reflect extension.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#extensions = []</span>
+<span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">'sphinxcontrib.blockdiag'</span><span class="p">,</span>
+              <span class="s">'sphinxcontrib.nwdiag'</span><span class="p">,</span>
+              <span class="s">'sphinxcontrib.seqdiag'</span><span class="p">,</span>
+              <span class="s">'sphinxcontrib.actdiag'</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">blockdiag_fontpath</span> <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
+<span class="n">nwdiag_fontpath</span>    <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
+<span class="n">seqdiag_fontpath</span>   <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
+<span class="n">actdiag_fontpath</span>   <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="automatic-build">
+<h2>automatic build</h2>
+<p>Ok, now let us configure system to build html automatically upon any modification under source directory.</p>
+<p>Fist install inotify-tools to monitor file system changes.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install inotify-tools
+</pre></div>
+</div>
+<p>Create a script to monitor changes and launch sphinx-build upon detection.
+Save this script as build.sh under $HOME/script directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+<span class="nv">ROOT</span><span class="o">=</span>/home/ubuntu/wiki
+<span class="nv">WATCH</span><span class="o">=</span><span class="nb">source</span>
+
+<span class="nb">cd</span> <span class="nv">$ROOT</span>
+
+<span class="k">while </span>inotifywait -r -e create,modify,delete <span class="nv">$WATCH</span>; <span class="k">do</span>
+<span class="k">    </span>sphinx-build -b html -d build/doctrees <span class="nb">source </span>build/html
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>So as to launch this script upon system boot, create such a wrapper script as following under /etc/profile.d directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
+
+nohup /home/ubuntu/script/build.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
+</pre></div>
+</div>
+</div>
+</div>]]></description>
+             <pubDate>Mon, 14 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/10/12/web_server_in_lxc.html</link>
             <guid>http://skyhigh71.github.io/2013/10/12/web_server_in_lxc.html</guid>
@@ -94,9 +167,9 @@ gateway 10.0.3.1
 </div>
 <div class="section" id="virtual-host">
 <h2>virtual host</h2>
-<p>Create a virtual host configuration file under /etc/nginx/sites-available directory.</p>
+<p>Create a virtual host configuration file, say, “wiki” under /etc/nginx/sites-available directory.</p>
 <div class="highlight-nginx"><div class="highlight"><pre><span class="k">server</span> <span class="p">{</span>
-    <span class="kn">listen</span> <span class="mi">8080</span><span class="p">;</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
 
     <span class="kn">access_log</span>  <span class="s">/home/ubuntu/wiki/logs/access.log</span><span class="p">;</span>
     <span class="kn">error_log</span>   <span class="s">/home/ubuntu/wiki/logs/error.log</span> <span class="s">debug</span><span class="p">;</span>
@@ -108,8 +181,10 @@ gateway 10.0.3.1
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>And make a symbolic link under /etc/nginx/sites-enabled directory.</p>
+<p>Make a symbolic link from under /etc/nginx/sites-enabled directory.
+And remove default configuration if not necessary.</p>
 <div class="highlight-nginx"><div class="highlight"><pre><span class="k">$</span> <span class="s">sudo</span> <span class="s">ln</span> <span class="s">-s</span> <span class="s">/etc/nginx/sites-available/wiki</span> <span class="s">.</span>
+$ <span class="s">rm</span> <span class="s">-i</span> <span class="s">default</span>
 </pre></div>
 </div>
 </div>

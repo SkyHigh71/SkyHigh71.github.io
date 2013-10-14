@@ -93,12 +93,12 @@ Decrease number of worker process.
 virtual host
 ------------
 
-Create a virtual host configuration file under /etc/nginx/sites-available directory.
+Create a virtual host configuration file, say, "wiki" under /etc/nginx/sites-available directory.
 
 .. code-block:: nginx
 
     server {
-        listen 8080;
+        listen 80;
 
         access_log  /home/ubuntu/wiki/logs/access.log;
         error_log   /home/ubuntu/wiki/logs/error.log debug;
@@ -109,12 +109,13 @@ Create a virtual host configuration file under /etc/nginx/sites-available direct
         }
     }
 
-And make a symbolic link under /etc/nginx/sites-enabled directory.
+Make a symbolic link from under /etc/nginx/sites-enabled directory.
+And remove default configuration if not necessary.
 
 .. code-block:: nginx
 
     $ sudo ln -s /etc/nginx/sites-available/wiki .
-
+    $ rm -i default
 
 .. author:: default
 .. categories:: none

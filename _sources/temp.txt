@@ -1,0 +1,80 @@
+
+Now you have container to store your content.
+So let us setup sphinx so that we can deploy our contents onto it.
+
+installation
+------------
+
+Fist, install make command & pip.
+
+.. code-block:: bash
+
+    $ sudo apt-get install build-essential
+    $ sudo apt-get install python-setuptools
+    $ sudo easy_install pip
+
+And then sphinx, extension & fonts.
+
+.. code-block:: bash
+
+    $ sudo apt-get install python-sphinx
+    $ sudo pip install sphinxcontrib-blockdiag sphinxcontrib-nwdiag sphinxcontrib-seqdiag sphinxcontrib-actdiag
+    $ sudo apt-get install python-matplotlib
+    $ sudo apt-get install ttf-dejavu
+
+configuration
+-------------
+
+Configure project configuration file to reflect extension.
+
+.. code-block:: python
+
+    #extensions = []
+    extensions = ['sphinxcontrib.blockdiag', 
+                  'sphinxcontrib.nwdiag', 
+                  'sphinxcontrib.seqdiag', 
+                  'sphinxcontrib.actdiag']
+
+.. code-block:: python
+
+    blockdiag_fontpath = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'
+    nwdiag_fontpath    = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'
+    seqdiag_fontpath   = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'
+    actdiag_fontpath   = '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'
+
+automatic build
+---------------
+
+Ok, now let us configure system to build html automatically upon any modification under source directory.
+
+Fist install inotify-tools to monitor file system changes.
+
+.. code-block:: bash
+
+    $ sudo apt-get install inotify-tools
+
+Create a script to monitor changes and launch sphinx-build upon detection.
+Save this script as build.sh under $HOME/script directory.
+
+.. code-block:: bash
+
+    #!/usr/bin/env bash
+
+    ROOT=/home/ubuntu/wiki
+    WATCH=source
+
+    cd $ROOT
+
+    while inotifywait -r -e create,modify,delete $WATCH; do
+        sphinx-build -b html -d build/doctrees source build/html
+    done
+
+So as to launch this script upon system boot, create such a wrapper script as following under /etc/profile.d directory.
+
+.. code-block:: bash
+
+    #!/usr/bin/env bash
+
+    nohup /home/ubuntu/script/build.sh 1> /dev/null 2>&1 &
+
+

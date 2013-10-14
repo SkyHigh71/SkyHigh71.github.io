@@ -62,6 +62,57 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>10月 08, 2013</span>
+        </div>
+        <div class="section" id="resize-disk-size-of-guest-on-kvm">
+<h1><a href="2013/10/08/resize_disk_size_of_guest_on_kvm.html">resize disk size of guest on KVM</a></h1>
+<p>Sometimes you regret that you created guest OS with too small disk space.
+sigh...
+And you would like to increase disk space a little.</p>
+<p>You can do it with some steps and I hereby quote a sample procedure of such operation.
+In this sample, OS of guest instance is Windows 7.</p>
+<div class="section" id="shutdown">
+<h2>shutdown</h2>
+<p>Shutdown guest OS before start operation.</p>
+</div>
+<div class="section" id="resize-image-file">
+<h2>resize image file</h2>
+<p>Guest OS’s file system is represented in image file (*.img), which reflect its size.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>du -sh /var/lib/libvirt/images/win7.img
+21G /var/lib/libvirt/images/win7.img
+</pre></div>
+</div>
+<p>Let us manipulate image file by qemu-img command.
+In this sample, 20GB will be added to existing file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo qemu-img resize /var/lib/libvirt/images/win7.img +20G
+Image resized.
+</pre></div>
+</div>
+</div>
+<div class="section" id="resize-partition">
+<h2>resize partition</h2>
+<p>Now you need to resize existing partition to grow as much as you increased.
+For that sake, let us make use of <a class="reference external" href="http://gparted.sourceforge.net">gnome partition editor</a> (gparted).</p>
+<p>Download ISO file of gparted and connect it to guest instance.
+And boot from gparted.
+You will select graphical user interface of gparted and increase partition size easily.</p>
+</div>
+<div class="section" id="boot">
+<h2>boot</h2>
+<p>Now you can boot with guest OS and see that disk size does increase.</p>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/kvm.html">kvm</a>, <a href="tags/gparted.html">gparted</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>10月 06, 2013</span>
         </div>
         <div class="section" id="plotting">
@@ -263,45 +314,6 @@ A quite simple script though, here are some remark.</p>
                 Tags:
                 <a href="tags/ubuntu.html">ubuntu</a>, <a href="tags/python.html">python</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>10月 02, 2013</span>
-        </div>
-        <div class="section" id="x86-or-x64">
-<h1><a href="2013/10/02/x86_or_x64.html">x86 or x64?</a></h1>
-<p>I have to confess that I did not know CPU (AMD E2-1800) of my tiny PC (ThinkPad Edge E135) is x64 capable...</p>
-<p>You can check whether your CPU is x64 capable or not by referencing existence of lm flag (long mode).</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>grep ^flags /proc/cpuinfo
-flags               : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc extd_apicid aperfmperf pni monitor ssse3 cx16 popcnt lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch ibs skinit wdt arat hw_pstate npt lbrv svm_lock nrip_save pausefilter
-</pre></div>
-</div>
-<p>If there is lm in flags line, then its CPU can be x86_64 architecture.
-After reinstalling OS, now I have x64 OS at hand!</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>arch
-x86_64
-</pre></div>
-</div>
-<p>So easy...
-Ok, let’s create an lxc instance on this re-born platform.</p>
-<p>Timezone of instance seems to be in EDT, which is not convenient for us.
-Let us change timezone to JST (Asia/tokyo).
-You can do it by configuring /etc/localtime file to reference timezone data of Japan.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/share/zoneinfo/Asia/Tokyo
-/usr/share/zoneinfo/Asia/Tokyo: timezone data, version 2, 3 gmt <span class="nb">time </span>flags, 3 std <span class="nb">time </span>flags, no leap seconds, 9 transition <span class="nb">times</span>, 3 abbreviation chars
-
-<span class="nv">$ </span>sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
-</pre></div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/linux.html">linux</a>, <a href="tags/lxc.html">lxc</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -310,6 +322,8 @@ You can do it by configuring /etc/localtime file to reference timezone data of J
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/10/14/quick_wiki_configuration.html">quick wiki configuration</a>
+        </li><li>
             <a href="2013/10/12/web_server_in_lxc.html">static web server in lxc</a>
         </li><li>
             <a href="2013/10/09/search_for_package.html">search for package</a>
@@ -327,8 +341,6 @@ You can do it by configuring /etc/localtime file to reference timezone data of J
             <a href="2013/09/29/change_ip_address_range.html">change IP address range</a>
         </li><li>
             <a href="2013/09/28/name_server.html">Name Server</a>
-        </li><li>
-            <a href="2013/09/25/directory_server_in_lxc.html">Directory Server</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -338,7 +350,7 @@ You can do it by configuring /etc/localtime file to reference timezone data of J
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (6), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (1), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (4), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (19), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (6), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (1), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (19), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
