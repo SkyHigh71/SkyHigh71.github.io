@@ -1,0 +1,92 @@
+enable encryption on nginx
+==========================
+
+Sometimes you would like to configure nginx instance to communicate with clients in secured connection. 
+You can issue self signed certificate and make use of it for encryption.
+
+Here is a quick procedure to do it.
+
+issue certificate
+-----------------
+
+Create a directory to store key and certificate.
+
+.. code-block:: bash
+
+    $ cd /etc/nginx
+    $ sudo mkdir cert
+    $ cd cert
+
+Install openssl package if not there.
+And create private key named "server.key".
+
+.. code-block:: bash
+
+    $ sudo apt-get install openssl
+    $ sudo openssl genrsa -des3 -out server.key 1024
+    Generating RSA private key, 1024 bit long modulus
+    ......................................++++++
+    ............................++++++
+    e is 65537 (0x10001)
+    Enter pass phrase for server.key:
+    Verifying - Enter pass phrase for server.key:
+    $ file server.key 
+    server.key: PEM RSA private key
+
+And then create CSR named "server.csr".
+Answer as appropriate to inquiries given by command.
+
+.. code-block:: bash
+
+    $ sudo openssl req -new -key server.key -out server.csr
+    $ file server.csr 
+    server.csr: PEM certificate request
+
+Rename private key and request certificate against forged CA.
+
+.. code-block:: bash
+
+    $ sudo cp server.key server.key.org
+    $ sudo openssl rsa -in server.key.org -out server.key
+
+Finally issue certificate named, "server.cert".
+
+.. code-block:: bash
+
+    $ sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.cert
+    $ file server.cert 
+    server.cert: PEM certificate
+
+Now you have your own server certificate for your encryption.
+
+enable SSL
+----------
+
+Incorporate server certificate into nginx's configuration by pointing its location.
+
+.. code-block:: nginx
+
+    server {
+        
+        listen 443 ssl;
+
+        ssl on;
+        ssl_certificate     cert/server.cert;
+        ssl_certificate_key cert/server.key;
+
+    }
+
+Now you see that nginx listens on HTTPS port.
+
+.. code-block:: nginx
+
+    $ sudo lsof -nPi:443
+    COMMAND PID     USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+    nginx   385     root    8u  IPv4 127726      0t0  TCP \*:443 (LISTEN)
+    nginx   387 www-data    8u  IPv4 127726      0t0  TCP \*:443 (LISTEN)
+
+.. author:: default
+.. categories:: none
+.. tags:: nginx, ssl
+.. comments::
+

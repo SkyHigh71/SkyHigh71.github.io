@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>lxc introduction &mdash; sakana</title>
+        <title>enable encryption on nginx &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="library details" href="library_details.html" /><link rel="prev" title="lxc continued" href="../22/lxc_cont.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="reverse proxy" href="../14/reverse_proxy.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>9月 21, 2013</span>
+            <span>10月 17, 2013</span>
         </div>
     </div>
     
@@ -77,43 +77,74 @@
     
     </div>
     
-    <div class="section" id="lxc-introduction">
-<h1>lxc introduction</h1>
-<p>You may be tempted (or may be not) to create lightweight virtual machine on you host.
-lxc (LinuX Container) must be one of your options.</p>
-<p>Installing lxc package will install all dependent packages.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install lxc
+    <div class="section" id="enable-encryption-on-nginx">
+<h1>enable encryption on nginx</h1>
+<p>Sometimes you would like to configure nginx instance to communicate with clients in secured connection.
+You can issue self signed certificate and make use of it for encryption.</p>
+<p>Here is a quick procedure to do it.</p>
+<div class="section" id="issue-certificate">
+<h2>issue certificate</h2>
+<p>Create a directory to store key and certificate.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /etc/nginx
+<span class="nv">$ </span>sudo mkdir cert
+<span class="nv">$ </span><span class="nb">cd </span>cert
 </pre></div>
 </div>
-<p>virtual machine is manipulated by lxc- commands.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>lxc-&lt;TAB&gt;&lt;TAB&gt;
-lxc-aa-custom-profile  lxc-clone              lxc-execute            lxc-list               lxc-restart            lxc-unfreeze
-lxc-attach             lxc-console            lxc-freeze             lxc-ls                 lxc-shutdown           lxc-unshare
-lxc-cgroup             lxc-create             lxc-halt               lxc-monitor            lxc-start              lxc-version
-lxc-checkconfig        lxc-destroy            lxc-info               lxc-netstat            lxc-start-ephemeral    lxc-wait
-lxc-checkpoint         lxc-device             lxc-kill               lxc-ps                 lxc-stop
+<p>Install openssl package if not there.
+And create private key named &#8220;server.key&#8221;.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install openssl
+<span class="nv">$ </span>sudo openssl genrsa -des3 -out server.key 1024
+Generating RSA private key, 1024 bit long modulus
+......................................++++++
+............................++++++
+e is 65537 <span class="o">(</span>0x10001<span class="o">)</span>
+Enter pass phrase <span class="k">for </span>server.key:
+Verifying - Enter pass phrase <span class="k">for </span>server.key:
+<span class="nv">$ </span>file server.key
+server.key: PEM RSA private key
 </pre></div>
 </div>
-<p>You will see lxc related configuration files under /etc/init directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ls /etc/init/lxc*
-/etc/init/lxc-instance.conf  /etc/init/lxc-net.conf  /etc/init/lxc.conf
+<p>And then create CSR named &#8220;server.csr&#8221;.
+Answer as appropriate to inquiries given by command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo openssl req -new -key server.key -out server.csr
+<span class="nv">$ </span>file server.csr
+server.csr: PEM certificate request
 </pre></div>
 </div>
-<p>You will notice that new virtual interface is added and activated.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ifconfig lxcbr0
-lxcbr0    Link encap:Ethernet  HWaddr a6:1a:10:32:67:87
-          inet addr:10.0.3.1  Bcast:10.0.3.255  Mask:255.255.255.0
-          inet6 addr: fe80::a41a:10ff:fe32:6787/64 Scope:Link
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:84 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0
-          RX bytes:0 <span class="o">(</span>0.0 B<span class="o">)</span>  TX bytes:13896 <span class="o">(</span>13.8 KB<span class="o">)</span>
+<p>Rename private key and request certificate against forged CA.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo cp server.key server.key.org
+<span class="nv">$ </span>sudo openssl rsa -in server.key.org -out server.key
 </pre></div>
 </div>
-<p>And you will see that DHCP server is already running as well.</p>
-<div class="highlight-bash"><div class="highlight"><pre>dnsmasq -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file<span class="o">=</span>/var/run/lxc/dnsmasq.pid --conf-file<span class="o">=</span> --listen-address 10.0.3.1 --dhcp-range 10.0.3.2,10.0.3.254 --dhcp-lease-max<span class="o">=</span>253 --dhcp-no-override --except-interface<span class="o">=</span>lo --interface<span class="o">=</span>lxcbr0 --dhcp-leasefile<span class="o">=</span>/var/lib/misc/dnsmasq.lxcbr0.leases --dhcp-authoritative
+<p>Finally issue certificate named, &#8220;server.cert&#8221;.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.cert
+<span class="nv">$ </span>file server.cert
+server.cert: PEM certificate
 </pre></div>
+</div>
+<p>Now you have your own server certificate for your encryption.</p>
+</div>
+<div class="section" id="enable-ssl">
+<h2>enable SSL</h2>
+<p>Incorporate server certificate into nginx&#8217;s configuration by pointing its location.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">server</span> <span class="p">{</span>
+
+    <span class="kn">listen</span> <span class="mi">443</span> <span class="s">ssl</span><span class="p">;</span>
+
+    <span class="kn">ssl</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">ssl_certificate</span>     <span class="s">cert/server.cert</span><span class="p">;</span>
+    <span class="kn">ssl_certificate_key</span> <span class="s">cert/server.key</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now you see that nginx listens on HTTPS port.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">$</span> <span class="s">sudo</span> <span class="s">lsof</span> <span class="s">-nPi:443</span>
+<span class="s">COMMAND</span> <span class="s">PID</span>     <span class="s">USER</span>   <span class="s">FD</span>   <span class="s">TYPE</span> <span class="s">DEVICE</span> <span class="s">SIZE/OFF</span> <span class="s">NODE</span> <span class="s">NAME</span>
+<span class="s">nginx</span>   <span class="mi">385</span>     <span class="s">root</span>    <span class="s">8u</span>  <span class="s">IPv4</span> <span class="mi">127726</span>      <span class="s">0t0</span>  <span class="s">TCP</span> <span class="s">\*:443</span> <span class="s">(LISTEN)</span>
+<span class="s">nginx</span>   <span class="mi">387</span> <span class="s">www-data</span>    <span class="s">8u</span>  <span class="s">IPv4</span> <span class="mi">127726</span>      <span class="s">0t0</span>  <span class="s">TCP</span> <span class="s">\*:443</span> <span class="s">(LISTEN)</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -125,35 +156,35 @@ lxcbr0    Link encap:Ethernet  HWaddr a6:1a:10:32:67:87
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/lxc.html">lxc</a>, <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+                <a href="../../../tags/nginx.html">nginx</a>, <a href="../../../tags/ssl.html">ssl</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../22/lxc_cont.html">lxc continued</a></li>
-            <li class="right"><a href="library_details.html">library details</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../14/reverse_proxy.html">reverse proxy</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../10/17/enable_ssl_on_nginx.html">enable encryption on nginx</a>
+            <a href="#">enable encryption on nginx</a>
         </li><li>
-            <a href="../../10/14/reverse_proxy.html">reverse proxy</a>
+            <a href="../14/reverse_proxy.html">reverse proxy</a>
         </li><li>
-            <a href="../../10/14/quick_wiki_configuration.html">quick wiki configuration</a>
+            <a href="../14/quick_wiki_configuration.html">quick wiki configuration</a>
         </li><li>
-            <a href="../../10/12/web_server_in_lxc.html">static web server in lxc</a>
+            <a href="../12/web_server_in_lxc.html">static web server in lxc</a>
         </li><li>
-            <a href="../../10/09/search_for_package.html">search for package</a>
+            <a href="../09/search_for_package.html">search for package</a>
         </li><li>
-            <a href="../../10/08/resize_disk_size_of_guest_on_kvm.html">resize disk size of guest on KVM</a>
+            <a href="../08/resize_disk_size_of_guest_on_kvm.html">resize disk size of guest on KVM</a>
         </li><li>
-            <a href="../../10/06/plotting.html">plotting</a>
+            <a href="../06/plotting.html">plotting</a>
         </li><li>
-            <a href="../../10/05/back_up_files.html">back up files</a>
+            <a href="../05/back_up_files.html">back up files</a>
         </li><li>
-            <a href="../../10/02/x86_or_x64.html">x86 or x64?</a>
+            <a href="../02/x86_or_x64.html">x86 or x64?</a>
         </li><li>
-            <a href="../29/static_ip_address_assignment.html">static IP address assignment</a>
+            <a href="../../09/29/static_ip_address_assignment.html">static IP address assignment</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
