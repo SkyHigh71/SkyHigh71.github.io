@@ -1,0 +1,59 @@
+port forwarding
+===============
+
+Now you have working wiki in lxc network.
+Let's configure instances to launch automatically upon system boot and can be accessed from outside network.
+
+lxc Instance be started by creating symbolic link under /etc/lxc/auto directory, which points config file for each instance.
+
+.. code-block:: bash
+
+    $ sudo ln -s /var/lib/lxc/wiki/config /etc/lxc/auto/wiki.conf
+    $ sudo ln -s /var/lib/lxc/proxy/config /etc/lxc/auto/proxy.conf
+
+You will see AUTOSTART flag as set to YES.
+
+.. code-block:: bash
+
+    $ sudo lxc-ls --fancy
+    NAME   STATE    IPV4       IPV6  AUTOSTART  
+    ------------------------------------------
+    proxy  RUNNING  10.0.3.20  -     YES        
+    wiki   RUNNING  10.0.3.21  -     YES 
+
+By default, no one can access from outside.
+
+.. code-block:: bash
+
+    $ sudo iptables -t nat -L
+    Chain PREROUTING (policy ACCEPT)
+    target     prot opt source               destination         
+
+Configure routing tables so that access to TCP port 443 shall be forwarded to reverse proxy instance.
+
+.. code-block:: bash
+
+    $ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j DNAT --to 10.0.3.20:443
+    $ sudo iptables -t nat -L
+    Chain PREROUTING (policy ACCEPT)
+    target     prot opt source               destination         
+    DNAT       tcp  --  anywhere             anywhere             tcp dpt:https to:10.0.3.20:443
+
+Now you can access wiki by IP address of host.
+
+This change of routing table is not persistent and will be lost upon reboot.
+So, for example, add such lines as follows in /etc/rc.local file.
+
+.. code-block:: bash
+
+    NETWORK_IF=eth0
+    WIKI_IP=10.0.3.20
+    WIKI_PORT=443
+
+    iptables -t nat -A PREROUTING -i $NETWORK_IF -p tcp --dport $WIKI_PORT -j DNAT --to $WIKI_IP:$WIKI_PORT
+
+
+.. author:: default
+.. categories:: none
+.. tags:: lxc, iptables
+.. comments::

@@ -8,6 +8,55 @@
         <pubDate>Sat, 19 Oct 2013 00:00:00 +0900</pubDate>
         
         <item>
+            <link>http://skyhigh71.github.io/2013/10/19/port_forwarding.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/19/port_forwarding.html</guid>
+            <title><![CDATA[port forwarding]]></title>
+            <description><![CDATA[<div class="section" id="port-forwarding">
+<h1>port forwarding</h1>
+<p>Now you have working wiki in lxc network.
+Let’s configure instances to launch automatically upon system boot and can be accessed from outside network.</p>
+<p>lxc Instance be started by creating symbolic link under /etc/lxc/auto directory, which points config file for each instance.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo ln -s /var/lib/lxc/wiki/config /etc/lxc/auto/wiki.conf
+<span class="nv">$ </span>sudo ln -s /var/lib/lxc/proxy/config /etc/lxc/auto/proxy.conf
+</pre></div>
+</div>
+<p>You will see AUTOSTART flag as set to YES.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-ls --fancy
+NAME   STATE    IPV4       IPV6  AUTOSTART
+------------------------------------------
+proxy  RUNNING  10.0.3.20  -     YES
+wiki   RUNNING  10.0.3.21  -     YES
+</pre></div>
+</div>
+<p>By default, no one can access from outside.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo iptables -t nat -L
+Chain PREROUTING <span class="o">(</span>policy ACCEPT<span class="o">)</span>
+target     prot opt <span class="nb">source               </span>destination
+</pre></div>
+</div>
+<p>Configure routing tables so that access to TCP port 443 shall be forwarded to reverse proxy instance.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j DNAT --to 10.0.3.20:443
+<span class="nv">$ </span>sudo iptables -t nat -L
+Chain PREROUTING <span class="o">(</span>policy ACCEPT<span class="o">)</span>
+target     prot opt <span class="nb">source               </span>destination
+DNAT       tcp  --  anywhere             anywhere             tcp dpt:https to:10.0.3.20:443
+</pre></div>
+</div>
+<p>Now you can access wiki by IP address of host.</p>
+<p>This change of routing table is not persistent and will be lost upon reboot.
+So, for example, add such lines as follows in /etc/rc.local file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">NETWORK_IF</span><span class="o">=</span>eth0
+<span class="nv">WIKI_IP</span><span class="o">=</span>10.0.3.20
+<span class="nv">WIKI_PORT</span><span class="o">=</span>443
+
+iptables -t nat -A PREROUTING -i <span class="nv">$NETWORK_IF</span> -p tcp --dport <span class="nv">$WIKI_PORT</span> -j DNAT --to <span class="nv">$WIKI_IP</span>:<span class="nv">$WIKI_PORT</span>
+</pre></div>
+</div>
+</div>]]></description>
+             <pubDate>Sat, 19 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
+        <item>
             <link>http://skyhigh71.github.io/2013/10/19/caching_content_on_nginx.html</link>
             <guid>http://skyhigh71.github.io/2013/10/19/caching_content_on_nginx.html</guid>
             <title><![CDATA[caching content on nginx]]></title>
