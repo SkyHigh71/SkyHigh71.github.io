@@ -1,0 +1,62 @@
+caching content on nginx
+========================
+
+You can cache content on front-end reverse proxy so as to provide content more effectively for requests and reduce traffic against back-end web server.
+
+Let us get started.
+
+nginx.conf
+----------
+
+Key point here is that you should insert cache configuration line before includes so that it should be evaluated beforehand.
+
+.. code-block:: nginx
+
+    http {
+
+        ##
+        # cache config
+        ##
+        proxy_cache_path /tmp/nginx/cache levels=1 keys_zone=wiki:4m inactive=1h max_size=10m;
+
+        include /etc/nginx/conf.d/\*.conf;
+        include /etc/nginx/sites-enabled/\*;
+    }
+
+With this configuration,
+
+- actual cache files are stored under /tmp/nginx/cache directory with hierarchy of one
+
+.. code-block:: bash
+
+    /tmp/nginx/cache
+    ├── 0
+    │   └── 64b08f8ec9459d892a1a80bea5d2d400
+    ├── 1
+    │   └── 4bbed59225358625d11842e1ec069b81
+    ├── 2
+    │   └── 47c32bbfbc8c08c9047c8a8271893f02
+
+- cache is registered as key, "wiki", which can have 10MB in size at most
+- cache will be retired after 1 hour
+
+Please make certain that cache directory does exit.
+
+virtual host
+------------
+
+A simple setup to store cache for response of status 200, which lasts 10 minutes.
+
+.. code-block:: nginx
+
+    location / {
+
+        proxy_cache       wiki;
+        proxy_cache_valid 200 10m;
+    }
+
+
+.. author:: default
+.. categories:: none
+.. tags:: nginx
+.. comments::

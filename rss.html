@@ -8,6 +8,63 @@
         <pubDate>Sat, 19 Oct 2013 00:00:00 +0900</pubDate>
         
         <item>
+            <link>http://skyhigh71.github.io/2013/10/19/caching_content_on_nginx.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/19/caching_content_on_nginx.html</guid>
+            <title><![CDATA[caching content on nginx]]></title>
+            <description><![CDATA[<div class="section" id="caching-content-on-nginx">
+<h1>caching content on nginx</h1>
+<p>You can cache content on front-end reverse proxy so as to provide content more effectively for requests and reduce traffic against back-end web server.</p>
+<p>Let us get started.</p>
+<div class="section" id="nginx-conf">
+<h2>nginx.conf</h2>
+<p>Key point here is that you should insert cache configuration line before includes so that it should be evaluated beforehand.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">http</span> <span class="p">{</span>
+
+    <span class="c1">##</span>
+    <span class="c1"># cache config</span>
+    <span class="c1">##</span>
+    <span class="kn">proxy_cache_path</span> <span class="s">/tmp/nginx/cache</span> <span class="s">levels=1</span> <span class="s">keys_zone=wiki:4m</span> <span class="s">inactive=1h</span> <span class="s">max_size=10m</span><span class="p">;</span>
+
+    <span class="kn">include</span> <span class="s">/etc/nginx/conf.d/\*.conf</span><span class="p">;</span>
+    <span class="kn">include</span> <span class="s">/etc/nginx/sites-enabled/\*</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>With this configuration,</p>
+<ul class="simple">
+<li>actual cache files are stored under /tmp/nginx/cache directory with hierarchy of one</li>
+</ul>
+<div class="highlight-bash"><div class="highlight"><pre>/tmp/nginx/cache
+├── 0
+│   └── 64b08f8ec9459d892a1a80bea5d2d400
+├── 1
+│   └── 4bbed59225358625d11842e1ec069b81
+├── 2
+│   └── 47c32bbfbc8c08c9047c8a8271893f02
+</pre></div>
+</div>
+<ul class="simple">
+<li>cache is registered as key, “wiki”, which can have 10MB in size at most</li>
+<li>cache will be retired after 1 hour</li>
+</ul>
+<p>Please make certain that cache directory does exit.</p>
+</div>
+<div class="section" id="virtual-host">
+<h2>virtual host</h2>
+<p>A simple setup to store cache for response of status 200, which lasts 10 minutes.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">location</span> <span class="s">/</span> <span class="p">{</span>
+
+    <span class="kn">proxy_cache</span>       <span class="s">wiki</span><span class="p">;</span>
+    <span class="kn">proxy_cache_valid</span> <span class="mi">200</span> <span class="mi">10m</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>]]></description>
+             <pubDate>Sat, 19 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
+        <item>
             <link>http://skyhigh71.github.io/2013/10/19/password_authentication_on_nginx.html</link>
             <guid>http://skyhigh71.github.io/2013/10/19/password_authentication_on_nginx.html</guid>
             <title><![CDATA[password authentication on nginx]]></title>

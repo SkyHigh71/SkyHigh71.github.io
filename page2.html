@@ -64,6 +64,49 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>10月 14, 2013</span>
         </div>
+        <div class="section" id="reverse-proxy">
+<h1><a href="2013/10/14/reverse_proxy.html">reverse proxy</a></h1>
+<p>Create an instance of plain reverse proxy instance with nginx.
+It’s quite simple.</p>
+<p>Create an instance of ubuntu container as usual.
+Install nginx and add virtual host entry, say, “reverse” under /etc/nginx/sites-available.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+
+    <span class="kn">access_log</span>  <span class="s">/home/ubuntu/reverse/logs/access.log</span><span class="p">;</span>
+    <span class="kn">error_log</span>   <span class="s">/home/ubuntu/reverse/logs/error.log</span> <span class="s">debug</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span>  <span class="nv">$remote_addr</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$remote_addr</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span> <span class="s">Host</span> <span class="nv">$host</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://10.0.3.21:80/</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Create symbolic link under /etc/nginx/sites-enabled directory to point it.
+And remove default symbolic link.</p>
+<p>Make certain that you create log directory for nginx instance.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span>
+<span class="nv">$ </span>mkdir -p reverse/logs
+</pre></div>
+</div>
+<p>That’s all</p>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/nginx.html">nginx</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>10月 14, 2013</span>
+        </div>
         <div class="section" id="quick-wiki-configuration">
 <h1><a href="2013/10/14/quick_wiki_configuration.html">quick wiki configuration</a></h1>
 <p>Now you have container to store your content.
@@ -258,87 +301,6 @@ $ <span class="s">rm</span> <span class="s">-i</span> <span class="s">default</s
                 Tags:
                 <a href="tags/lxc.html">lxc</a>, <a href="tags/nginx.html">nginx</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>10月 09, 2013</span>
-        </div>
-        <div class="section" id="search-for-package">
-<h1><a href="2013/10/09/search_for_package.html">search for package</a></h1>
-<p>You may encounter such a situation that some shared libraries are stripped when you debug core file.
-For example,</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> info shared
-From        To          Syms Read   Shared Object Library
-0xb778f430  0xb77a6054  Yes <span class="o">(</span>*<span class="o">)</span>     /lib/i386-linux-gnu/libncurses.so.5
-0xb75ef350  0xb7728f4e  Yes         /lib/i386-linux-gnu/libc.so.6
-0xb75d2ad0  0xb75d3a9c  Yes         /lib/i386-linux-gnu/libdl.so.2
-0xb75b87d0  0xb75c2c24  Yes <span class="o">(</span>*<span class="o">)</span>     /lib/i386-linux-gnu/libtinfo.so.5
-0xb77c9830  0xb77e1e7c  Yes         /lib/ld-linux.so.2
-<span class="o">(</span>*<span class="o">)</span>: Shared library is missing debugging information.
-</pre></div>
-</div>
-<p>You would like to search for package, which relevant shared object is included.
-With library, which contains symbol table and you can examine more closely core file.</p>
-<div class="section" id="install">
-<h2>install</h2>
-<p>You need to have apt-file command for searching packages.
-Let’s install apt-file, as it is not installed by default.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install apt-file
-</pre></div>
-</div>
-</div>
-<div class="section" id="update-cache">
-<h2>update cache</h2>
-<p>So as to search for packages, you need to have local cache.
-Let’s download cache from repository and update cache.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-file update
-</pre></div>
-</div>
-</div>
-<div class="section" id="search-install">
-<h2>search &amp; install</h2>
-<p>Now you are ready for searching packages.
-Take sample quoted above and search for “libncurses.so.5”.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-file search libncurses.so.5
-lib64ncurses5: /lib64/libncurses.so.5
-lib64ncurses5: /lib64/libncurses.so.5.9
-libncurses5: /lib/i386-linux-gnu/libncurses.so.5
-libncurses5: /lib/i386-linux-gnu/libncurses.so.5.9
-libncurses5-dbg: /usr/lib/debug/lib/i386-linux-gnu/libncurses.so.5.9
-libncurses5-dbg: /usr/lib/debug/lib64/libncurses.so.5.9
-libncurses5-dbg: /usr/lib/debug/libncurses.so.5
-libncurses5-dbg: /usr/lib/debug/libncurses.so.5.9
-libncurses5-dbg: /usr/lib/debug/usr/libx32/libncurses.so.5.9
-libx32ncurses5: /usr/libx32/libncurses.so.5
-libx32ncurses5: /usr/libx32/libncurses.so.5.9
-</pre></div>
-</div>
-<p>libncurses5-dbg must be our target package.
-Ok, let’s install it.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install libncurses5-dbg
-</pre></div>
-</div>
-<p>Now you can see stacks with function names and arguments.
-And checking status of shared libraries, you will confirm libraries not stripped.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> info shared
-From        To          Syms Read   Shared Object Library
-0xb778f430  0xb77a6054  Yes         /lib/i386-linux-gnu/libncurses.so.5
-0xb75ef350  0xb7728f4e  Yes         /lib/i386-linux-gnu/libc.so.6
-0xb75d2ad0  0xb75d3a9c  Yes         /lib/i386-linux-gnu/libdl.so.2
-0xb75b87d0  0xb75c2c24  Yes         /lib/i386-linux-gnu/libtinfo.so.5
-0xb77c9830  0xb77e1e7c  Yes         /lib/ld-linux.so.2
-</pre></div>
-</div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/ubuntu.html">ubuntu</a>, <a href="tags/apt.html">apt</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -347,6 +309,8 @@ From        To          Syms Read   Shared Object Library
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/10/19/caching_content_on_nginx.html">caching content on nginx</a>
+        </li><li>
             <a href="2013/10/19/password_authentication_on_nginx.html">password authentication on nginx</a>
         </li><li>
             <a href="2013/10/17/enable_ssl_on_nginx.html">enable encryption on nginx</a>
@@ -364,8 +328,6 @@ From        To          Syms Read   Shared Object Library
             <a href="2013/10/06/plotting.html">plotting</a>
         </li><li>
             <a href="2013/10/05/back_up_files.html">back up files</a>
-        </li><li>
-            <a href="2013/10/02/x86_or_x64.html">x86 or x64?</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -375,7 +337,7 @@ From        To          Syms Read   Shared Object Library
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (6), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (4), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (19), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (6), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (19), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

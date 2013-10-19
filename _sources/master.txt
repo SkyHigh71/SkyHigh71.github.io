@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/10/19/caching_content_on_nginx
    2013/10/19/password_authentication_on_nginx
    2013/10/17/enable_ssl_on_nginx
    2013/10/14/reverse_proxy
