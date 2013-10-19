@@ -5,8 +5,38 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Thu, 17 Oct 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sat, 19 Oct 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/10/19/password_authentication_on_nginx.html</link>
+            <guid>http://skyhigh71.github.io/2013/10/19/password_authentication_on_nginx.html</guid>
+            <title><![CDATA[password authentication on nginx]]></title>
+            <description><![CDATA[<div class="section" id="password-authentication-on-nginx">
+<h1>password authentication on nginx</h1>
+<p>I hereby demonstrate a simple procedure to set password authentication against content on nginx, which is quite similar to that of apache.</p>
+<p>First, you need to install apache2-utils for the purpose of creating password file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install apache2-utils
+</pre></div>
+</div>
+<p>Create password file with htpasswd command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo htpasswd -c /home/ubuntu/wiki/.htpasswd lupin
+</pre></div>
+</div>
+<p>Incorporate newly created password file into virtual host configuration.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">location</span> <span class="s">/</span> <span class="p">{</span>
+    <span class="kn">auth_basic</span> <span class="s">&quot;Open</span> <span class="s">Sesame!&quot;</span><span class="p">;</span>
+    <span class="kn">auth_basic_user_file</span> <span class="s">/home/ubuntu/wiki/.htpasswd</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Reflect modified configuration into running nginx process.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo /etc/init.d/nginx reload
+</pre></div>
+</div>
+</div>]]></description>
+             <pubDate>Sat, 19 Oct 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/10/17/enable_ssl_on_nginx.html</link>
             <guid>http://skyhigh71.github.io/2013/10/17/enable_ssl_on_nginx.html</guid>
