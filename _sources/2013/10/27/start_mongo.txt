@@ -1,0 +1,61 @@
+start mongo
+===========
+
+It occurred to me that I want some place to store data like CSV file.
+Ok, let us use NoSQL like mongodb.
+
+Like other tools, set up process is quite easy for anyone.
+
+Installation requires only one line of command execution.
+It depends upon existing packages though, it may take time to download all the necessary package.
+
+.. code-block:: bash
+
+    $ sudo apt-get install mongodb
+
+Installation will automatically starts up daemon, mongod.
+
+.. code-block:: bash
+
+    $ ps -ef|grep mongod
+    mongodb    759     1  0 03:47 ?        00:00:27 /usr/bin/mongod --config /etc/mongodb.conf
+
+Configuration file shall be /etc/mongodb.conf.
+According to configuration file, database repository seems to reside under /var/lib/mongodb directory.
+
+.. code-block:: bash
+
+    # Where to store the data.
+    dbpath=/var/lib/mongodb
+
+mongod listesn on default port, TCP 27107.
+
+.. code-block:: bash
+
+    $ sudo lsof -nPi:27017
+    COMMAND PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+    mongod  759 mongodb    6u  IPv4 113195      0t0  TCP 127.0.0.1:27017 (LISTEN)
+
+OK, let us import CSV file into mongodb.
+You can import CSV file into collection, an quivalent of page in spreadsheet(?), under database.
+
+.. code-block:: bash
+
+    $ mongoimport -d <DB_NAME> -c <COLLECTION_NAME> --type csv --file <CSV_FILE> --headerline
+
+After installation, you will check its content from interactive shell.
+
+.. code-block:: bash
+
+    $ mongo
+    MongoDB shell version: 2.2.4
+    connecting to: test
+    > use <DB_NAME>
+    switched to db salary
+    > db.<COLLECTION_NAME>.find().pretty()
+
+
+.. author:: default
+.. categories:: none
+.. tags:: mongodb, ubuntu
+.. comments::
