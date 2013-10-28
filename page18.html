@@ -64,6 +64,193 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>8月 11, 2013</span>
         </div>
+        <div class="section" id="the-first-post-of-mine">
+<h1><a href="2013/08/11/the_first_post_of_mine.html">the first post of mine</a></h1>
+<p>A short memo to describe procedure how to host blog on github.</p>
+<div class="section" id="github-configuration">
+<h2>github configuration</h2>
+<p>Let’s create public key and private key.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh-keygen
+Generating public/private rsa key pair.
+...
+</pre></div>
+</div>
+<p>They are yielded under ~/.ssh directory or under current working directory in case that you do not specify its path.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file *
+id_rsa.github:     PEM RSA private key
+id_rsa.github.pub: OpenSSH RSA public key
+</pre></div>
+</div>
+<p>Configure ssh so that newly created private key will be applied for access against github.</p>
+<div class="highlight-bash"><div class="highlight"><pre>~/.ssh<span class="nv">$ </span>more config
+Host github.com
+    HostName      github.com
+    IdentityFile  ~/.ssh/id_rsa.github
+    User          git
+</pre></div>
+</div>
+<p>Deploy public key on github.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>xclip -sel clip &lt; ~/.ssh/id_rsa.github.pub
+</pre></div>
+</div>
+<p>Now let’s make a test connection to github.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh -v -T git@github.com
+</pre></div>
+</div>
+<p>Let’s install git command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install git
+</pre></div>
+</div>
+<p>Configure user name and e-mail address for github,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git config --global user.name &lt;USERNAME&gt;
+<span class="nv">$ </span>git config --global user.email &lt;YOUR_EMAIL_ADDRESS&gt;
+</pre></div>
+</div>
+<p>which will be reflected into .gitconfig file under home directory.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[user]</span>
+        <span class="na">name</span> <span class="o">=</span> <span class="s">&lt;USERNAME&gt;</span>
+<span class="s">        email = &lt;YOUR_EMAIL_ADDRESS&gt;</span>
+</pre></div>
+</div>
+<p>Enable password cache so as to avoid repetition of password input.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git config --global credential.helper cache
+<span class="nv">$ </span>git config --global credential.helper <span class="s1">'cache --timeout=3600'</span>
+</pre></div>
+</div>
+<p>These configurations will be reflected int .gitconfig file as well.
+Or you can write it by hand. (maybe)</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[credential]</span>
+        <span class="na">helper</span> <span class="o">=</span> <span class="s">cache --timeout=3600</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tinkerer-configuration">
+<h2>tinkerer configuration</h2>
+<p>You can install tinkerer with pip command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo pip install tinkerer
+</pre></div>
+</div>
+<p>This command execution will install dependent modules like sphinx if not there.
+The installed version (on ubuntu 13.04) is as follows:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tinker -v
+Tinkerer version 1.2.1
+</pre></div>
+</div>
+<p>Create local directory to host blog.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir blog
+</pre></div>
+</div>
+<p>Execute tinker command (not tinkerer) with setup option.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tinker --setup
+Your new blog is almost ready!
+You just need to edit a couple of lines in conf.py
+<span class="nv">$ </span>tree .
+    .
+    ├── _static
+    ├── _templates
+    │   ├── page.rst
+    │   └── post.rst
+    ├── conf.py
+    ├── drafts
+    ├── index.html
+    └── master.rst
+</pre></div>
+</div>
+<p>Configure configuration file, conf.py (same as sphinx’s one) according to your appetite.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>diff conf.py.org conf.py
+11c11
+&lt; <span class="nv">project</span> <span class="o">=</span> <span class="s1">'My blog'</span>
+---
+&gt; <span class="nv">project</span> <span class="o">=</span> <span class="s2">&quot;sakana&quot;</span>
+14c14
+&lt; <span class="nv">tagline</span> <span class="o">=</span> <span class="s1">'Add intelligent tagline here'</span>
+---
+&gt; <span class="nv">tagline</span> <span class="o">=</span> <span class="s1">'short memo by SkyHigh71'</span>
+20c20
+&lt; <span class="nv">author</span> <span class="o">=</span> <span class="s1">'Winston Smith'</span>
+---
+&gt; <span class="nv">author</span> <span class="o">=</span> <span class="s1">'SkyHigh71'</span>
+23c23
+&lt; <span class="nv">copyright</span> <span class="o">=</span> <span class="s1">'1984, '</span> + author
+---
+&gt; <span class="nv">copyright</span> <span class="o">=</span> <span class="s1">'2013-, '</span> + author
+26c26
+&lt; <span class="nv">website</span> <span class="o">=</span> <span class="s1">'http://127.0.0.1/blog/html/'</span>
+---
+&gt; <span class="nv">website</span> <span class="o">=</span> <span class="s1">'http://skyhigh71.github.com'</span>
+</pre></div>
+</div>
+<p>That’s all you have to configure upon initial configuration on local side.
+And you can modify parameter(s) later on.</p>
+<p>Create a new repository named &lt;account.github.io&gt;, e.g.) SkyHigh71.github.io on github.</p>
+<p>On the other hand, create local directory to host HTML files for publication.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir publish
+<span class="nv">$ </span><span class="nb">cd </span>publish
+<span class="nv">$ </span>git init
+<span class="nv">$ </span>git remote add origin https://github.com/SkyHigh71/SkyHigh71.github.io.git
+</pre></div>
+</div>
+<p>github URL will be reflected in config file under .git directory.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span class="k">[remote &quot;origin&quot;]</span>
+        <span class="na">url</span> <span class="o">=</span> <span class="s">https://github.com/SkyHigh71/SkyHigh71.github.io.git</span>
+</pre></div>
+</div>
+<p>Disable jekyll.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>touch .nojekyll
+</pre></div>
+</div>
+</div>
+<div class="section" id="write-up-a-post-and-publish-it">
+<h2>write up a post and publish it</h2>
+<p>tinker command will create a RST file under YYYY/MM/DD directory:</p>
+<p>Start preparation for post frst as draft.
+This will create rst file under draft directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tinker -d <span class="s2">&quot;the First Post of mine&quot;</span>
+<span class="nv">$ </span>ls drafts
+the_first_post_of_mine.rst
+</pre></div>
+</div>
+<p>After having finished editing your post and you are ready to post it, then it’s time to post.
+Following command will move RST file from draft directory to YYYY/MM/DD directory and be reflected in master.rst file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tinker -p drafts/the_first_post_of_mine.rst
+</pre></div>
+</div>
+<p>And build it to yield html file. Or you can revert back to draft if you find something needs to be modified.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ LANG</span><span class="o">=</span>C tinker -b
+</pre></div>
+</div>
+<p>This will create HTML files under blog/html directory.</p>
+<p>Copy files to publish directory and commit it.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd </span>publish
+<span class="nv">$ </span>rsync -av ../blog/html/ .
+
+<span class="nv">$ </span>git add .
+<span class="nv">$ </span>git commit -m <span class="s2">&quot;first post&quot;</span>
+</pre></div>
+</div>
+<p>Finally publish post to github.
+By the way, please be noted that you need to select not gh-pages branch but master branch for user’s blog.
+(It seems that there is a confusion about which branch to choose)</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>git push origin master
+</pre></div>
+</div>
+<p>Please be patient, as it takes several minutes until posted page will come up.
+After a while, you can access your blog with URL of <a class="reference external" href="http:">http:/</a>/&lt;account&gt;.github.io/.</p>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/tinkerer.html">tinkerer</a>, <a href="tags/github.html">github</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>8月 11, 2013</span>
+        </div>
         <div class="section" id="hello-world">
 <h1><a href="2013/08/11/hello_world.html">Hello World</a></h1>
 <p>How are you doing?</p>
@@ -82,6 +269,8 @@
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
+        </li><li>
             <a href="2013/10/27/start_mongo.html">start mongo</a>
         </li><li>
             <a href="2013/10/19/port_forwarding.html">port forwarding</a>
@@ -99,8 +288,6 @@
             <a href="2013/10/12/web_server_in_lxc.html">static web server in lxc</a>
         </li><li>
             <a href="2013/10/09/search_for_package.html">search for package</a>
-        </li><li>
-            <a href="2013/10/08/resize_disk_size_of_guest_on_kvm.html">resize disk size of guest on KVM</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -110,7 +297,7 @@
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

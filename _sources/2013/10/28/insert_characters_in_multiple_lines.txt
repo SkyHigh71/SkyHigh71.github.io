@@ -1,0 +1,23 @@
+insert characters in multiple lines
+===================================
+
+Sometime you would like to insert same characters into multiple lines.
+I have to confess that I've been using sed command to achieve this, say,
+
+.. code-block:: bash
+
+    $ sed -e "s/^/> /g" in.txt > out.txt
+
+You can do the same within vim.
+
+- press ctrl + v
+- press shift + i (I)
+- input character(s) of your choice
+- press esc
+
+So easy...
+
+.. author:: default
+.. categories:: none
+.. tags:: vim
+.. comments::

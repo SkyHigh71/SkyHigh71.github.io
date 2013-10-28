@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/10/28/insert_characters_in_multiple_lines
    2013/10/27/start_mongo
    2013/10/19/port_forwarding
    2013/10/19/caching_content_on_nginx

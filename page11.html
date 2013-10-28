@@ -62,6 +62,71 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>9月 09, 2013</span>
+        </div>
+        <div class="section" id="package-management-on-ubuntu">
+<h1><a href="2013/09/09/package_management_on_ubuntu.html">package management on ubuntu</a></h1>
+<p>Why did you choose ubuntu as your platform?
+Every one must have reason(s) for that.</p>
+<p>For me, one of main reasons is easy access of software packages.
+(Remember the days of Solaris 8 when one had to install all the necessary packages manually by pkgadd...)</p>
+<p>How are software packages repositories maintained on ubuntu?
+Take google-chrome as example and see how it goes.</p>
+<div class="section" id="apt-dpkg">
+<h2>apt &amp; dpkg</h2>
+<p>Ubuntu makes use of <strong>apt</strong> (Advanced Packaging Tool) for package maintenance.
+apt resolves depency among packages and gives user a convenient way of package utilization.</p>
+<p>And apt is dependent upon <strong>dpkg</strong>.
+dpkg is a tool to manipulate deb format packages.</p>
+</div>
+<div class="section" id="setup-installation">
+<h2>Setup &amp; Installation</h2>
+<p>In case that you add some repository, you need to trust this repository by adding its public key.
+Retrieve public key and add it into key repository.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+</pre></div>
+</div>
+<p>The relevant public key will be stored into /etc/apt/trusted.gpg file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-key list
+/etc/apt/trusted.gpg
+--------------------
+
+pub   1024D/7FAC5991 2007-03-08
+uid                  Google, Inc. Linux Package Signing Key &lt;linux-packages-keymaster@google.com&gt;
+sub   2048g/C07CB649 2007-03-08
+</pre></div>
+</div>
+<p>Then add google repository in source list.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo sh -c <span class="s1">'echo &quot;deb http://dl.google.com/linux/chrome/deb/ stable main&quot; &gt;&gt; /etc/apt/sources.list.d/google.list'</span>
+</pre></div>
+</div>
+<p>Finally install google-chrome.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get update
+<span class="nv">$ </span>sudo apt-get install google-chrome-stable
+</pre></div>
+</div>
+</div>
+<div class="section" id="summary">
+<h2>Summary</h2>
+<p>Software package related items are stored under /etc/apt directory.
+In case that you add new software package, which are not listed in default repository, you need to add.</p>
+<ul class="simple">
+<li>public key (trusted.gpg)</li>
+<li>package location (&lt;package&gt;.list)</li>
+</ul>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>9月 07, 2013</span>
         </div>
         <div class="section" id="vmplayer-abnormal-exit-on-ubuntu">
@@ -200,30 +265,6 @@ And at the same time, a wrapper script will be deployed on search path so that i
                 Tags:
                 <a href="tags/python.html">python</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>9月 04, 2013</span>
-        </div>
-        <div class="section" id="compare-files-recursively">
-<h1><a href="2013/09/04/compare_files_recursively.html">compare files recursively</a></h1>
-<p>I have to confess that I’m so ignorant...</p>
-<p>You can compare all the files under 2 directories recursively by diff command with -r option.</p>
-<p>For example,</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>diff -r &lt;DIR_A&gt; &lt;DIR_B&gt;
-</pre></div>
-</div>
-<p>So easy.
-sigh...</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/command.html">command</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -232,6 +273,8 @@ sigh...</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
+        </li><li>
             <a href="2013/10/27/start_mongo.html">start mongo</a>
         </li><li>
             <a href="2013/10/19/port_forwarding.html">port forwarding</a>
@@ -249,8 +292,6 @@ sigh...</p>
             <a href="2013/10/12/web_server_in_lxc.html">static web server in lxc</a>
         </li><li>
             <a href="2013/10/09/search_for_package.html">search for package</a>
-        </li><li>
-            <a href="2013/10/08/resize_disk_size_of_guest_on_kvm.html">resize disk size of guest on KVM</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -260,7 +301,7 @@ sigh...</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (1), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

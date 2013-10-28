@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>password authentication on nginx &mdash; sakana</title>
+        <title>insert characters in multiple lines &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="enable encryption on nginx" href="../17/enable_ssl_on_nginx.html" /><link rel="prev" title="caching content on nginx" href="caching_content_on_nginx.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="start mongo" href="../27/start_mongo.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>10月 19, 2013</span>
+            <span>10月 28, 2013</span>
         </div>
     </div>
     
@@ -77,28 +77,21 @@
     
     </div>
     
-    <div class="section" id="password-authentication-on-nginx">
-<h1>password authentication on nginx</h1>
-<p>I hereby demonstrate a simple procedure to set password authentication against content on nginx, which is quite similar to that of apache.</p>
-<p>First, you need to install apache2-utils for the purpose of creating password file.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install apache2-utils
+    <div class="section" id="insert-characters-in-multiple-lines">
+<h1>insert characters in multiple lines</h1>
+<p>Sometime you would like to insert same characters into multiple lines.
+I have to confess that I&#8217;ve been using sed command to achieve this, say,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sed -e <span class="s2">&quot;s/^/&gt; /g&quot;</span> in.txt &gt; out.txt
 </pre></div>
 </div>
-<p>Create password file with htpasswd command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo htpasswd -c /home/ubuntu/wiki/.htpasswd lupin
-</pre></div>
-</div>
-<p>Incorporate newly created password file into virtual host configuration.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">location</span> <span class="s">/</span> <span class="p">{</span>
-    <span class="kn">auth_basic</span> <span class="s">&quot;Open</span> <span class="s">Sesame!&quot;</span><span class="p">;</span>
-    <span class="kn">auth_basic_user_file</span> <span class="s">/home/ubuntu/wiki/.htpasswd</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>Reflect modified configuration into running nginx process.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo /etc/init.d/nginx reload
-</pre></div>
-</div>
+<p>You can do the same within vim.</p>
+<ul class="simple">
+<li>press ctrl + v</li>
+<li>press shift + i (I)</li>
+<li>input character(s) of your choice</li>
+<li>press esc</li>
+</ul>
+<p>So easy...</p>
 </div>
 
     <div class="postmeta">
@@ -109,25 +102,25 @@
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/nginx.html">nginx</a></span>
+                <a href="../../../tags/vim.html">vim</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="caching_content_on_nginx.html">caching content on nginx</a></li>
-            <li class="right"><a href="../17/enable_ssl_on_nginx.html">enable encryption on nginx</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../27/start_mongo.html">start mongo</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
+            <a href="#">insert characters in multiple lines</a>
         </li><li>
             <a href="../27/start_mongo.html">start mongo</a>
         </li><li>
-            <a href="port_forwarding.html">port forwarding</a>
+            <a href="../19/port_forwarding.html">port forwarding</a>
         </li><li>
-            <a href="caching_content_on_nginx.html">caching content on nginx</a>
+            <a href="../19/caching_content_on_nginx.html">caching content on nginx</a>
         </li><li>
-            <a href="#">password authentication on nginx</a>
+            <a href="../19/password_authentication_on_nginx.html">password authentication on nginx</a>
         </li><li>
             <a href="../17/enable_ssl_on_nginx.html">enable encryption on nginx</a>
         </li><li>
