@@ -5,8 +5,40 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Mon, 28 Oct 2013 00:00:00 +0900</pubDate>
+        <pubDate>Mon, 11 Nov 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/11/11/x_window_trouble.html</link>
+            <guid>http://skyhigh71.github.io/2013/11/11/x_window_trouble.html</guid>
+            <title><![CDATA[a X window trouble]]></title>
+            <description><![CDATA[<div class="section" id="a-x-window-trouble">
+<h1>a X window trouble</h1>
+<p>When I connected from localhost to an instance of ubuntu in lxc, I encountered following message upon login via ssh.</p>
+<div class="highlight-bash"><div class="highlight"><pre>X11 forwarding request failed on channel 0
+</pre></div>
+</div>
+<p>That is, I connected to this host with -X option for the purpose of X forwarding. (so as to use gvim)</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh -X -l ubuntu &lt;lxc_instance_IP&gt;
+</pre></div>
+</div>
+<p>Let us dig into further by adding verbose option, -v as argument of ssh.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh -X -v -l ubuntu &lt;lxc_instance_IP&gt;
+</pre></div>
+</div>
+<p>Then I found following debug message, which states that relevant xauth application does not exist.</p>
+<div class="highlight-bash"><div class="highlight"><pre>debug1: Remote: No xauth program; cannot forward with spoofing.
+</pre></div>
+</div>
+<p>Ok, let us install xauth on target host side.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install xauth
+</pre></div>
+</div>
+<p>After installation of xauth, this message never comes up.
+And I am able to forward X sessions to host without any problem.</p>
+</div>]]></description>
+             <pubDate>Mon, 11 Nov 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/10/28/insert_characters_in_multiple_lines.html</link>
             <guid>http://skyhigh71.github.io/2013/10/28/insert_characters_in_multiple_lines.html</guid>

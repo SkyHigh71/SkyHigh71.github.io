@@ -62,6 +62,124 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>10月 12, 2013</span>
+        </div>
+        <div class="section" id="static-web-server-in-lxc">
+<h1><a href="2013/10/12/web_server_in_lxc.html">static web server in lxc</a></h1>
+<p>Let us create web site in lxc environment.
+That is, with rough design as follows.</p>
+<div class="section" id="design">
+<h2>design</h2>
+<ul class="simple">
+<li>network</li>
+</ul>
+<p class="nwdiag">
+<img alt="None" height="444" src="_images/nwdiag-dd22924438686a0348c6627f44853ce71631c8ab.png" width="608"/>
+</p>
+<ul class="simple">
+<li>traffic flow</li>
+</ul>
+<p class="blockdiag">
+<img alt="None" height="120" src="_images/blockdiag-b2d3d3816cd2846f1744a61dc8ddb9fd907dfa13.png" width="640"/>
+</p>
+</div>
+<div class="section" id="web-server">
+<h2>web server</h2>
+<p>Create an instance of ubuntu under the name of “web”.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-create -n web -t ubuntu
+<span class="nv">$ </span>sudo lxc-start -n web -d
+<span class="nv">$ </span>ssh -l ubuntu <span class="sb">`</span>cut -d <span class="s2">&quot; &quot;</span> -f3 /var/lib/misc/dnsmasq.lxcbr0.leases<span class="sb">`</span>
+</pre></div>
+</div>
+<p>Let us configure timezone to JST and network interface to static one.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+<span class="nv">$ </span>tail -8 /etc/network/interfaces
+auto eth0
+<span class="c">#iface eth0 inet dhcp</span>
+iface eth0 inet static
+address 10.0.3.21
+network 10.0.3.0
+netmask 255.255.255.0
+broadcast 10.0.3.255
+gateway 10.0.3.1
+</pre></div>
+</div>
+</div>
+<div class="section" id="nginx">
+<h2>nginx</h2>
+<p>Now install and configure nginx as container of static content.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install nginx
+</pre></div>
+</div>
+<p>Configuration files related to nginx are deployed under /etc/nginx directory.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tree
+.
+├── conf.d
+├── fastcgi_params
+├── koi-utf
+├── koi-win
+├── mime.types
+├── naxsi_core.rules
+├── naxsi.rules
+├── nginx.conf
+├── proxy_params
+├── scgi_params
+├── sites-available
+│   └── default
+├── sites-enabled
+│   └── default -&gt; /etc/nginx/sites-available/default
+├── uwsgi_params
+└── win-utf
+</pre></div>
+</div>
+<p>Decrease number of worker process.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>diff nginx.conf nginx.conf.org
+2c2
+&lt; worker_processes 1;
+---
+&gt; worker_processes 4;
+</pre></div>
+</div>
+<p>(It may not be necessary though,) configure nginx so as to start upon boot time.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>update-rc.d nginx defaults
+</pre></div>
+</div>
+</div>
+<div class="section" id="virtual-host">
+<h2>virtual host</h2>
+<p>Create a virtual host configuration file, say, “wiki” under /etc/nginx/sites-available directory.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+
+    <span class="kn">access_log</span>  <span class="s">/home/ubuntu/wiki/logs/access.log</span><span class="p">;</span>
+    <span class="kn">error_log</span>   <span class="s">/home/ubuntu/wiki/logs/error.log</span> <span class="s">debug</span><span class="p">;</span>
+
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">root</span>   <span class="s">/home/ubuntu/wiki/build/html/</span><span class="p">;</span>
+        <span class="kn">index</span>  <span class="s">index.html</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Make a symbolic link from under /etc/nginx/sites-enabled directory.
+And remove default configuration if not necessary.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">$</span> <span class="s">sudo</span> <span class="s">ln</span> <span class="s">-s</span> <span class="s">/etc/nginx/sites-available/wiki</span> <span class="s">.</span>
+$ <span class="s">rm</span> <span class="s">-i</span> <span class="s">default</span>
+</pre></div>
+</div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/lxc.html">lxc</a>, <a href="tags/nginx.html">nginx</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>10月 09, 2013</span>
         </div>
         <div class="section" id="search-for-package">
@@ -193,107 +311,6 @@ You will select graphical user interface of gparted and increase partition size 
                 Tags:
                 <a href="tags/kvm.html">kvm</a>, <a href="tags/gparted.html">gparted</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>10月 06, 2013</span>
-        </div>
-        <div class="section" id="plotting">
-<h1><a href="2013/10/06/plotting.html">plotting</a></h1>
-<p>Sometimes you would like to create a plot out of some text file.
-You can achieve it by making use of matplotlib.</p>
-<p>I have to confess that I am not quite accustomed with matplotlib though, I hereby demonstrate a sample.</p>
-<div class="section" id="installation">
-<h2>installation</h2>
-<p>Installation is quite simple and one line command suffices.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install python-matplotlib
-</pre></div>
-</div>
-</div>
-<div class="section" id="sample">
-<h2>sample</h2>
-<p>Suppose such a CSV file as follows.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">201201</span><span class="p">,</span><span class="mi">1477</span><span class="p">,</span><span class="mi">994</span>
-<span class="mi">201202</span><span class="p">,</span><span class="mi">1462</span><span class="p">,</span><span class="mi">988</span>
-<span class="mi">201203</span><span class="p">,</span><span class="mi">1437</span><span class="p">,</span><span class="mi">985</span>
-</pre></div>
-</div>
-<p>That is, CSV file contains residential loan prepayment history.
-lines are consisted of,</p>
-<ul class="simple">
-<li>month of prepayment</li>
-<li>monthly payment</li>
-<li>bonus payment</li>
-</ul>
-</div>
-<div class="section" id="plot">
-<h2>plot</h2>
-<p>You can plot a graph, for example, as follows.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">dates</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-
-    <span class="n">raw_data</span> <span class="o">=</span> <span class="s">&quot;sample.csv&quot;</span>
-    <span class="n">fmt</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;prepay&quot;</span><span class="p">,</span> <span class="s">&quot;month&quot;</span><span class="p">,</span> <span class="s">&quot;bonus&quot;</span><span class="p">]</span>
-
-    <span class="c"># prepayment date</span>
-    <span class="n">prepay</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="c"># lists to store each values</span>
-    <span class="n">monthCal</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">monthAct</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">year</span>     <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="s">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
-            <span class="n">prepay</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;prepay&quot;</span><span class="p">)],</span> <span class="s">&quot;%Y%m&quot;</span><span class="p">)))</span>
-            <span class="n">monthCal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;month&quot;</span><span class="p">)])</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;bonus&quot;</span><span class="p">)])</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span> 
-            <span class="n">monthAct</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;month&quot;</span><span class="p">)]))</span>
-            <span class="n">year</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;month&quot;</span><span class="p">)])</span><span class="o">*</span><span class="mi">12</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">fmt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s">&quot;bonus&quot;</span><span class="p">)])</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> 
-
-    <span class="c"># let's start plotting</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-
-    <span class="c"># monthly graph</span>
-    <span class="n">graph</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">graph</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prepay</span><span class="p">,</span> <span class="n">monthCal</span><span class="p">,</span> <span class="s">&quot;bo&quot;</span><span class="p">,</span> <span class="n">prepay</span><span class="p">,</span> <span class="n">monthAct</span><span class="p">,</span> <span class="s">&quot;ro&quot;</span><span class="p">)</span>
-
-    <span class="n">graph</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">MonthLocator</span><span class="p">())</span>
-    <span class="n">graph</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s">&quot;%Y/%m&quot;</span><span class="p">))</span>
-    
-    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="s">&quot;vertical&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&quot;payment per month (USD)&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-
-    <span class="c"># yearly graph</span>
-    <span class="n">graph</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">graph</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prepay</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="s">&quot;go&quot;</span><span class="p">)</span>
-
-    <span class="n">graph</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">MonthLocator</span><span class="p">())</span>
-    <span class="n">graph</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s">&quot;%Y/%m&quot;</span><span class="p">))</span>
-    
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&quot;payment per year (USD)&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="s">&quot;vertical&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">raw_data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&quot;csv&quot;</span><span class="p">,</span> <span class="s">&quot;png&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="_images/sample.png"><img alt="../../../_images/sample.png" src="_images/sample.png" style="width: 650.4px; height: 354.8px;"/></a>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/python.html">python</a>, <a href="tags/matplotlib.html">matplotlib</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -302,6 +319,8 @@ lines are consisted of,</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/11/11/x_window_trouble.html">a X window trouble</a>
+        </li><li>
             <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
         </li><li>
             <a href="2013/10/27/start_mongo.html">start mongo</a>
@@ -319,8 +338,6 @@ lines are consisted of,</p>
             <a href="2013/10/14/quick_wiki_configuration.html">quick wiki configuration</a>
         </li><li>
             <a href="2013/10/12/web_server_in_lxc.html">static web server in lxc</a>
-        </li><li>
-            <a href="2013/10/09/search_for_package.html">search for package</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -330,7 +347,7 @@ lines are consisted of,</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

@@ -1,0 +1,40 @@
+a X window trouble
+==================
+
+When I connected from localhost to an instance of ubuntu in lxc, I encountered following message upon login via ssh.
+
+.. code-block:: bash
+
+    X11 forwarding request failed on channel 0
+
+That is, I connected to this host with -X option for the purpose of X forwarding. (so as to use gvim)
+
+.. code-block:: bash
+
+    $ ssh -X -l ubuntu <lxc_instance_IP>
+
+Let us dig into further by adding verbose option, -v as argument of ssh.
+
+.. code-block:: bash
+
+    $ ssh -X -v -l ubuntu <lxc_instance_IP>
+
+Then I found following debug message, which states that relevant xauth application does not exist.
+
+.. code-block:: bash
+
+    debug1: Remote: No xauth program; cannot forward with spoofing.
+
+Ok, let us install xauth on target host side.
+
+.. code-block:: bash
+
+    $ sudo apt-get install xauth
+
+After installation of xauth, this message never comes up.
+And I am able to forward X sessions to host without any problem. 
+
+.. author:: default
+.. categories:: none
+.. tags:: X
+.. comments::
