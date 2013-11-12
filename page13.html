@@ -62,6 +62,63 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>9月 04, 2013</span>
+        </div>
+        <div class="section" id="distribute-requests-by-url-on-apache">
+<h1><a href="2013/09/04/distribute_requests_by_url_on_apache.html">distribute requests by URL on apache</a></h1>
+<div class="section" id="what-s-in-your-mind">
+<h2>what’s in your mind?</h2>
+<p>Suppose that you have contents built on sphinx.
+And you have already deployed it on apache instance.</p>
+<p>Suppose that you would like to deploy another content.
+That is, you started blogging and would like to publish it on identical instance of apache.</p>
+<p>You can configure apache instance so that it distributes content by given URL.</p>
+</div>
+<div class="section" id="let-s-get-started">
+<h2>Let’s get started</h2>
+<p>You can create symbolic link to target directory under documentation root directory though, it seems to be quite raw.
+You can make use of “LocationMatch” directive.</p>
+<p>Create configuration file, e.g. tinker.conf under /etc/httpd/conf.d directory so that httpd can evaluate request.</p>
+<div class="highlight-apache"><div class="highlight"><pre><span class="nb">Alias</span> <span class="sx">/blog</span> &lt;TINKER_ROOT&gt;/blog/html/
+<span class="nt">&lt;LocationMatch</span> <span class="s">&quot;/blog/.*&quot;</span><span class="nt">&gt;</span>
+    <span class="nb">AuthType</span> Basic
+    <span class="nb">AuthName</span> <span class="s2">&quot;Open Sesame!&quot;</span>
+    <span class="nb">AuthUserFile</span> &lt;PATH_TO_PASS&gt;/htpasswd
+    <span class="nb">Require</span> <span class="k">user</span> lupin
+<span class="nt">&lt;/LocationMatch&gt;</span>
+</pre></div>
+</div>
+<p>All request for &lt;SERVER&gt;/blog/* will be routed to contents under &lt;TINKER_ROOT&gt;/blog/html directory.
+Replace &lt;TINKER_ROOT&gt; and &lt;PATH_TO_PASS&gt; as appropriate to meet your environment.</p>
+<p>In this sample, we apply basic authentication for access to this content.
+And user “lupin” can view content if authentication succeeds.</p>
+<p>Create password file for lupin by htpasswd command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>htpasswd -c htpasswd lupin
+</pre></div>
+</div>
+<p>If you would like to allow access for other users, then add accounts to user list.
+You can append user names by separating them with white space.</p>
+<div class="highlight-apache"><div class="highlight"><pre><span class="nb">Require</span> <span class="k">user</span> lupin fujiko jigen
+</pre></div>
+</div>
+<p>And restart httpd so as to reflect changes above.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo service httpd restart
+</pre></div>
+</div>
+<p><strong>Enjoy!</strong></p>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/apache.html">apache</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>9月 02, 2013</span>
         </div>
         <div class="section" id="switching-from-https-to-ssh">
@@ -137,68 +194,6 @@ Insert javascript code obtained at google analytics site.</p>
                 Tags:
                 <a href="tags/sphinx.html">sphinx</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>9月 01, 2013</span>
-        </div>
-        <div class="section" id="back-up-files-onto-dropbox">
-<h1><a href="2013/09/01/back_up_files_onto_dropbox.html">back up files onto dropbox</a></h1>
-<p>All machine, which includes Hard Disks, are to break some day.
-Let’s back up your precious content onto dropbox with encrypted on regular basis.</p>
-<p>create backup directory in dropbox.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir ~/Dropbox/backup
-</pre></div>
-</div>
-<p>Prepare backup script kicked by cron on regular interval.
-Create directory where backup script resides:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mkdir ~/Documents/cron
-</pre></div>
-</div>
-<p>Deploy following <a class="reference download internal" href="_downloads/backup.sh"><span class="xref download docutils literal"><span class="pre">backup</span> <span class="pre">script</span></span></a> under cron directory:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
-
-<span class="c"># we use day of week as file name</span>
-<span class="nv">LANG</span><span class="o">=</span>C
-<span class="nv">NAME</span><span class="o">=</span><span class="sb">`</span>date <span class="s2">&quot;+%A&quot;</span><span class="sb">`</span>
-<span class="c"># please specify password for encryption in case that you encrypt backup file</span>
-<span class="nv">PASSWD</span><span class="o">=</span>xxxxxx
-<span class="c"># we create backup file under temporary directory on local host</span>
-<span class="c"># so as to avoid latency</span>
-<span class="nv">TEMP</span><span class="o">=</span>/tmp
-<span class="nv">BACKUP_DIR</span><span class="o">=</span>~/Dropbox/backup
-
-<span class="nb">cd</span> ~/Documents
-<span class="k">if </span><span class="nb">true</span>
-<span class="k">then</span>
-<span class="k">    </span>find . -exec zip -P <span class="nv">$PASSWD</span> <span class="nv">$TEMP</span>/<span class="nv">$NAME</span>.zip <span class="o">{}</span> <span class="se">\;</span> 1&gt;/dev/null 2&gt;&amp;1
-<span class="k">else</span>
-<span class="k">    </span>find . -exec zip <span class="nv">$TEMP</span>/<span class="nv">$NAME</span>.zip <span class="o">{}</span> <span class="se">\;</span> 1&gt;/dev/null 2&gt;&amp;1
-<span class="k">fi</span>
-mv <span class="nv">$TEMP</span>/<span class="nv">$NAME</span>.zip <span class="nv">$BACKUP_DIR</span>
-</pre></div>
-</div>
-<p>Please be noted that you have to add execution permission for this script.
-And test it if it works or not.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>bash -xv backup.sh
-</pre></div>
-</div>
-<p>Register cron job to start script on regular basis by “crontab -e”.
-With following example, backup script is executed every one hour at *:00.</p>
-<div class="highlight-bash"><div class="highlight"><pre>0 * * * * ~/Documents/cron/backup.sh
-</pre></div>
-</div>
-<p>On ubuntu, cron activity is recorded in /var/log/syslog.
-Monitor syslog if cron works as expected.</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/ubuntu.html">ubuntu</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -207,6 +202,8 @@ Monitor syslog if cron works as expected.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/11/12/view_next_line_of_matched_one.html">view next line of matched word</a>
+        </li><li>
             <a href="2013/11/11/x_window_trouble.html">a X window trouble</a>
         </li><li>
             <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
@@ -224,8 +221,6 @@ Monitor syslog if cron works as expected.</p>
             <a href="2013/10/14/reverse_proxy.html">reverse proxy</a>
         </li><li>
             <a href="2013/10/14/quick_wiki_configuration.html">quick wiki configuration</a>
-        </li><li>
-            <a href="2013/10/12/web_server_in_lxc.html">static web server in lxc</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -235,7 +230,7 @@ Monitor syslog if cron works as expected.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

@@ -64,6 +64,68 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>8月 24, 2013</span>
         </div>
+        <div class="section" id="customize-tinkerer-page-continued">
+<h1><a href="2013/08/24/customize_tinkerer_page_continued.html">customize tinkerer page continued</a></h1>
+<div class="section" id="language">
+<h2>language</h2>
+<p>LANG environment variable of my shell is configured to ja_JP.UTF-8.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="nv">$LANG</span>
+ja_JP.UTF-8
+</pre></div>
+</div>
+<p>Therefore I first thought that I have to set LANG=C upon building html so as to obtain English output.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ LANG</span><span class="o">=</span>C tinker -b
+</pre></div>
+</div>
+<p><em>But it’s confirmed that language parameter in conf.py is valid for “en” as well.</em>
+<strong>value “en” does not work. You will encounter error stating that “loading translations [en]... locale not available” sorry...</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">language</span> <span class="o">=</span> <span class="s">&quot;en&quot;</span>
+</pre></div>
+</div>
+<p>And if you would like to configure, say, German as default language of your blog, then configure it as “de”.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">language</span> <span class="o">=</span> <span class="s">&quot;de&quot;</span>
+</pre></div>
+</div>
+<p>But localization is not perfect, for example, date seems to be yielded based upon LANG.
+So you would better to set LANG upon building html.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ LANG</span><span class="o">=</span>de_DE.utf8 tinker -b
+</pre></div>
+</div>
+</div>
+<div class="section" id="theme">
+<h2>theme</h2>
+<p>You can select theme among following options and set theme in theme in conf.py.</p>
+<ul class="simple">
+<li>flat (default)</li>
+<li>modern5</li>
+<li>minimal5</li>
+<li>responsive</li>
+<li>dark</li>
+</ul>
+</div>
+<div class="section" id="post-per-page">
+<h2>post per page</h2>
+<p>Sometimes you find that default post per page (10) seems to be too long.
+You can configure post per page by posts_per_page parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Number of blog posts per page</span>
+<span class="n">posts_per_page</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/tinkerer.html">tinkerer</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>8月 24, 2013</span>
+        </div>
         <div class="section" id="how-to-yield-core-file">
 <h1><a href="2013/08/24/how_to_yield_core_file.html">how to yield core file</a></h1>
 <p>By default, gdb is given on ubuntu desktop, so you can enjoy debugging applications (if you like :-)).</p>
@@ -233,57 +295,6 @@ oN google analytics site create Tracking ID for your blog site, which yields jav
                 Tags:
                 <a href="tags/tinkerer.html">tinkerer</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>8月 22, 2013</span>
-        </div>
-        <div class="section" id="enable-sshd">
-<h1><a href="2013/08/22/enable_sshd.html">enable sshd</a></h1>
-<p>By default, sshd is disabled on ubuntu desktop.
-Therefore you need to install &amp; enable sshd if you would like to access host remotely via ssh.</p>
-<p>Here is short memo for this sake.</p>
-<p>First, search for sshd package via apt-cache command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-cache search sshd
-openssh-server - secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
-
-<span class="nv">$ </span>sudo apt-cache show openssh-server
-Package: openssh-server
-...
-Description-en: secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
-...
-This package provides the sshd server.
-</pre></div>
-</div>
-<p>OK, openssh-server seems to be what we are looking for.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install openssh-server
-</pre></div>
-</div>
-<p>Installation will automatically start sshd daemon.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lsof -nPi:22
-COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
-sshd    3557    root    3u  IPv4  35564      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
-sshd    3557    root    4u  IPv6  35566      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
-
-<span class="nv">$ </span>sudo service ssh status
-ssh start/running, process 3557
-</pre></div>
-</div>
-<p>Please be noted, sshd daemon is registered not as sshd but as ssh.</p>
-<p>sshd configuration can be set in /etc/ssh/sshd_config.
-In case that you would like to disable remote root access, then change parameter PermitRootLogin value from yes to no.</p>
-<div class="highlight-bash"><div class="highlight"><pre>PermitRootLogin no
-</pre></div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/ubuntu.html">ubuntu</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -292,6 +303,8 @@ In case that you would like to disable remote root access, then change parameter
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/11/12/view_next_line_of_matched_one.html">view next line of matched word</a>
+        </li><li>
             <a href="2013/11/11/x_window_trouble.html">a X window trouble</a>
         </li><li>
             <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
@@ -309,8 +322,6 @@ In case that you would like to disable remote root access, then change parameter
             <a href="2013/10/14/reverse_proxy.html">reverse proxy</a>
         </li><li>
             <a href="2013/10/14/quick_wiki_configuration.html">quick wiki configuration</a>
-        </li><li>
-            <a href="2013/10/12/web_server_in_lxc.html">static web server in lxc</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -320,7 +331,7 @@ In case that you would like to disable remote root access, then change parameter
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

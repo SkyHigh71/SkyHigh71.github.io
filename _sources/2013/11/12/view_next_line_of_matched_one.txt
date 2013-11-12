@@ -1,0 +1,23 @@
+view next line of matched word
+==============================
+
+You sometimes would like to show the very next line(s), which contain specific word(s).
+
+I have to confess that I did not know there is a useful option in grep to achieve this sake...
+I have been using, say, some script to extract lines, which I would like to check.
+
+You can achieve this with -A option.
+For example, if you would like to show the next line, which contains specific word, then following command give you the answer:
+
+.. code-block:: bash
+
+    $ grep <WORD> -A 1 <FILE>
+
+If you would like to see more line(s), increase argument after -A option.
+
+So easy...
+
+.. author:: default
+.. categories:: none
+.. tags:: grep
+.. comments::

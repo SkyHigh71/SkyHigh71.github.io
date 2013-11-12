@@ -62,6 +62,42 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>10月 19, 2013</span>
+        </div>
+        <div class="section" id="password-authentication-on-nginx">
+<h1><a href="2013/10/19/password_authentication_on_nginx.html">password authentication on nginx</a></h1>
+<p>I hereby demonstrate a simple procedure to set password authentication against content on nginx, which is quite similar to that of apache.</p>
+<p>First, you need to install apache2-utils for the purpose of creating password file.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install apache2-utils
+</pre></div>
+</div>
+<p>Create password file with htpasswd command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo htpasswd -c /home/ubuntu/wiki/.htpasswd lupin
+</pre></div>
+</div>
+<p>Incorporate newly created password file into virtual host configuration.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">location</span> <span class="s">/</span> <span class="p">{</span>
+    <span class="kn">auth_basic</span> <span class="s">&quot;Open</span> <span class="s">Sesame!&quot;</span><span class="p">;</span>
+    <span class="kn">auth_basic_user_file</span> <span class="s">/home/ubuntu/wiki/.htpasswd</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Reflect modified configuration into running nginx process.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo /etc/init.d/nginx reload
+</pre></div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/nginx.html">nginx</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>10月 17, 2013</span>
         </div>
         <div class="section" id="enable-encryption-on-nginx">
@@ -187,85 +223,6 @@ And remove default symbolic link.</p>
                 Tags:
                 <a href="tags/nginx.html">nginx</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>10月 14, 2013</span>
-        </div>
-        <div class="section" id="quick-wiki-configuration">
-<h1><a href="2013/10/14/quick_wiki_configuration.html">quick wiki configuration</a></h1>
-<p>Now you have container to store your content.
-So let us setup sphinx so that we can deploy our contents onto it.</p>
-<div class="section" id="installation">
-<h2>installation</h2>
-<p>Fist, install make command &amp; pip.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install build-essential
-<span class="nv">$ </span>sudo apt-get install python-setuptools
-<span class="nv">$ </span>sudo easy_install pip
-</pre></div>
-</div>
-<p>And then sphinx, extension &amp; fonts.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install python-sphinx
-<span class="nv">$ </span>sudo pip install sphinxcontrib-blockdiag sphinxcontrib-nwdiag sphinxcontrib-seqdiag sphinxcontrib-actdiag
-<span class="nv">$ </span>sudo apt-get install python-matplotlib
-<span class="nv">$ </span>sudo apt-get install ttf-dejavu
-</pre></div>
-</div>
-</div>
-<div class="section" id="configuration">
-<h2>configuration</h2>
-<p>Configure project configuration file to reflect extension.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#extensions = []</span>
-<span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="s">'sphinxcontrib.blockdiag'</span><span class="p">,</span>
-              <span class="s">'sphinxcontrib.nwdiag'</span><span class="p">,</span>
-              <span class="s">'sphinxcontrib.seqdiag'</span><span class="p">,</span>
-              <span class="s">'sphinxcontrib.actdiag'</span><span class="p">]</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">blockdiag_fontpath</span> <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
-<span class="n">nwdiag_fontpath</span>    <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
-<span class="n">seqdiag_fontpath</span>   <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
-<span class="n">actdiag_fontpath</span>   <span class="o">=</span> <span class="s">'/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf'</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="automatic-build">
-<h2>automatic build</h2>
-<p>Ok, now let us configure system to build html automatically upon any modification under source directory.</p>
-<p>Fist install inotify-tools to monitor file system changes.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install inotify-tools
-</pre></div>
-</div>
-<p>Create a script to monitor changes and launch sphinx-build upon detection.
-Save this script as build.sh under $HOME/script directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
-
-<span class="nv">ROOT</span><span class="o">=</span>/home/ubuntu/wiki
-<span class="nv">WATCH</span><span class="o">=</span><span class="nb">source</span>
-
-<span class="nb">cd</span> <span class="nv">$ROOT</span>
-
-<span class="k">while </span>inotifywait -r -e create,modify,delete <span class="nv">$WATCH</span>; <span class="k">do</span>
-<span class="k">    </span>sphinx-build -b html -d build/doctrees <span class="nb">source </span>build/html
-<span class="k">done</span>
-</pre></div>
-</div>
-<p>So as to launch this script upon system boot, create such a wrapper script as following under /etc/profile.d directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="c">#!/usr/bin/env bash</span>
-
-nohup /home/ubuntu/script/build.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
-</pre></div>
-</div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/sphinx.html">sphinx</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -274,6 +231,8 @@ nohup /home/ubuntu/script/build.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/11/12/view_next_line_of_matched_one.html">view next line of matched word</a>
+        </li><li>
             <a href="2013/11/11/x_window_trouble.html">a X window trouble</a>
         </li><li>
             <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
@@ -291,8 +250,6 @@ nohup /home/ubuntu/script/build.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
             <a href="2013/10/14/reverse_proxy.html">reverse proxy</a>
         </li><li>
             <a href="2013/10/14/quick_wiki_configuration.html">quick wiki configuration</a>
-        </li><li>
-            <a href="2013/10/12/web_server_in_lxc.html">static web server in lxc</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -302,7 +259,7 @@ nohup /home/ubuntu/script/build.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
