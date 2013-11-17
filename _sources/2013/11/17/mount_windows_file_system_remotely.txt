@@ -1,0 +1,58 @@
+mount windows file system remotely
+==================================
+
+Sometime you would like to mount Windows File System from ubuntu so that you are able to Windows files by making use of command line tools of linux.
+
+You can access via CIFS and here is a quick procedure to do so.
+
+Create share
+------------
+
+Create File Share on on Windows side, which is the target of reference.
+You can check share properties by.
+
+.. code-block:: bash
+
+    $ net share <shareName>
+
+CIFS utility
+------------
+
+Then install tools necessary for mounting with CIFS on ubuntu side.
+
+.. code-block:: bash
+
+    $ sudo apt-get install cifs-utils
+
+mount
+-----
+
+Create mount point.
+
+.. code-block:: bash
+
+    $ sudo mkdir -p /windows/server1
+
+Prepare password file for authentication, say, named "passwd" under ~/cifs directory with content as follows:
+
+.. code-block:: bash
+
+    username=<MS_UID>
+    password=<MS_PASSWD>
+
+Add following line in /etc/fstab so that one can mount shared folder from ubuntu
+
+.. code-block:: bash
+
+    //<MS_HOST>/<ShareName>  /windows/server1  cifs credentials=<HOME>/cifs/passwd,iocharset=utf8,sec=ntlm  0  0
+
+Now it's ready for mounting.
+
+.. code-block:: bash
+
+    $ sudo mount -v -a
+
+.. author:: default
+.. categories:: none
+.. tags:: cifs 
+.. comments::

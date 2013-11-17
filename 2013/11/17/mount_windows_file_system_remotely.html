@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>package management on ubuntu &mdash; sakana</title>
+        <title>mount windows file system remotely &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="vmplayer abnormal exit on ubuntu" href="../07/vmplayer_abnormal_exit_on_ubuntu.html" /><link rel="prev" title="how to notify core file creation" href="../10/how_to_notify_core_file_creation.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="view next line of matched word" href="../12/view_next_line_of_matched_one.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>9月 09, 2013</span>
+            <span>11月 17, 2013</span>
         </div>
     </div>
     
@@ -77,56 +77,44 @@
     
     </div>
     
-    <div class="section" id="package-management-on-ubuntu">
-<h1>package management on ubuntu</h1>
-<p>Why did you choose ubuntu as your platform?
-Every one must have reason(s) for that.</p>
-<p>For me, one of main reasons is easy access of software packages.
-(Remember the days of Solaris 8 when one had to install all the necessary packages manually by pkgadd...)</p>
-<p>How are software packages repositories maintained on ubuntu?
-Take google-chrome as example and see how it goes.</p>
-<div class="section" id="apt-dpkg">
-<h2>apt &amp; dpkg</h2>
-<p>Ubuntu makes use of <strong>apt</strong> (Advanced Packaging Tool) for package maintenance.
-apt resolves depency among packages and gives user a convenient way of package utilization.</p>
-<p>And apt is dependent upon <strong>dpkg</strong>.
-dpkg is a tool to manipulate deb format packages.</p>
-</div>
-<div class="section" id="setup-installation">
-<h2>Setup &amp; Installation</h2>
-<p>In case that you add some repository, you need to trust this repository by adding its public key.
-Retrieve public key and add it into key repository.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-</pre></div>
-</div>
-<p>The relevant public key will be stored into /etc/apt/trusted.gpg file.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-key list
-/etc/apt/trusted.gpg
---------------------
-
-pub   1024D/7FAC5991 2007-03-08
-uid                  Google, Inc. Linux Package Signing Key &lt;linux-packages-keymaster@google.com&gt;
-sub   2048g/C07CB649 2007-03-08
-</pre></div>
-</div>
-<p>Then add google repository in source list.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo sh -c <span class="s1">&#39;echo &quot;deb http://dl.google.com/linux/chrome/deb/ stable main&quot; &gt;&gt; /etc/apt/sources.list.d/google.list&#39;</span>
-</pre></div>
-</div>
-<p>Finally install google-chrome.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get update
-<span class="nv">$ </span>sudo apt-get install google-chrome-stable
+    <div class="section" id="mount-windows-file-system-remotely">
+<h1>mount windows file system remotely</h1>
+<p>Sometime you would like to mount Windows File System from ubuntu so that you are able to Windows files by making use of command line tools of linux.</p>
+<p>You can access via CIFS and here is a quick procedure to do so.</p>
+<div class="section" id="create-share">
+<h2>Create share</h2>
+<p>Create File Share on on Windows side, which is the target of reference.
+You can check share properties by.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>net share &lt;shareName&gt;
 </pre></div>
 </div>
 </div>
-<div class="section" id="summary">
-<h2>Summary</h2>
-<p>Software package related items are stored under /etc/apt directory.
-In case that you add new software package, which are not listed in default repository, you need to add.</p>
-<ul class="simple">
-<li>public key (trusted.gpg)</li>
-<li>package location (&lt;package&gt;.list)</li>
-</ul>
+<div class="section" id="cifs-utility">
+<h2>CIFS utility</h2>
+<p>Then install tools necessary for mounting with CIFS on ubuntu side.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install cifs-utils
+</pre></div>
+</div>
+</div>
+<div class="section" id="mount">
+<h2>mount</h2>
+<p>Create mount point.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo mkdir -p /windows/server1
+</pre></div>
+</div>
+<p>Prepare password file for authentication, say, named &#8220;passwd&#8221; under ~/cifs directory with content as follows:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">username</span><span class="o">=</span>&lt;MS_UID&gt;
+<span class="nv">password</span><span class="o">=</span>&lt;MS_PASSWD&gt;
+</pre></div>
+</div>
+<p>Add following line in /etc/fstab so that one can mount shared folder from ubuntu</p>
+<div class="highlight-bash"><div class="highlight"><pre>//&lt;MS_HOST&gt;/&lt;ShareName&gt;  /windows/server1  cifs <span class="nv">credentials</span><span class="o">=</span>&lt;HOME&gt;/cifs/passwd,iocharset<span class="o">=</span>utf8,sec<span class="o">=</span>ntlm  0  0
+</pre></div>
+</div>
+<p>Now it&#8217;s ready for mounting.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo mount -v -a
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -138,21 +126,21 @@ In case that you add new software package, which are not listed in default repos
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+                <a href="../../../tags/cifs.html">cifs</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../10/how_to_notify_core_file_creation.html">how to notify core file creation</a></li>
-            <li class="right"><a href="../07/vmplayer_abnormal_exit_on_ubuntu.html">vmplayer abnormal exit on ubuntu</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../12/view_next_line_of_matched_one.html">view next line of matched word</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../11/17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
+            <a href="#">mount windows file system remotely</a>
         </li><li>
-            <a href="../../11/12/view_next_line_of_matched_one.html">view next line of matched word</a>
+            <a href="../12/view_next_line_of_matched_one.html">view next line of matched word</a>
         </li><li>
-            <a href="../../11/11/x_window_trouble.html">a X window trouble</a>
+            <a href="../11/x_window_trouble.html">a X window trouble</a>
         </li><li>
             <a href="../../10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
         </li><li>

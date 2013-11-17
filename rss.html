@@ -5,8 +5,55 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Tue, 12 Nov 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sun, 17 Nov 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/11/17/mount_windows_file_system_remotely.html</link>
+            <guid>http://skyhigh71.github.io/2013/11/17/mount_windows_file_system_remotely.html</guid>
+            <title><![CDATA[mount windows file system remotely]]></title>
+            <description><![CDATA[<div class="section" id="mount-windows-file-system-remotely">
+<h1>mount windows file system remotely</h1>
+<p>Sometime you would like to mount Windows File System from ubuntu so that you are able to Windows files by making use of command line tools of linux.</p>
+<p>You can access via CIFS and here is a quick procedure to do so.</p>
+<div class="section" id="create-share">
+<h2>Create share</h2>
+<p>Create File Share on on Windows side, which is the target of reference.
+You can check share properties by.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>net share &lt;shareName&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="cifs-utility">
+<h2>CIFS utility</h2>
+<p>Then install tools necessary for mounting with CIFS on ubuntu side.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install cifs-utils
+</pre></div>
+</div>
+</div>
+<div class="section" id="mount">
+<h2>mount</h2>
+<p>Create mount point.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo mkdir -p /windows/server1
+</pre></div>
+</div>
+<p>Prepare password file for authentication, say, named “passwd” under ~/cifs directory with content as follows:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">username</span><span class="o">=</span>&lt;MS_UID&gt;
+<span class="nv">password</span><span class="o">=</span>&lt;MS_PASSWD&gt;
+</pre></div>
+</div>
+<p>Add following line in /etc/fstab so that one can mount shared folder from ubuntu</p>
+<div class="highlight-bash"><div class="highlight"><pre>//&lt;MS_HOST&gt;/&lt;ShareName&gt;  /windows/server1  cifs <span class="nv">credentials</span><span class="o">=</span>&lt;HOME&gt;/cifs/passwd,iocharset<span class="o">=</span>utf8,sec<span class="o">=</span>ntlm  0  0
+</pre></div>
+</div>
+<p>Now it’s ready for mounting.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo mount -v -a
+</pre></div>
+</div>
+</div>
+</div>]]></description>
+             <pubDate>Sun, 17 Nov 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/11/12/view_next_line_of_matched_one.html</link>
             <guid>http://skyhigh71.github.io/2013/11/12/view_next_line_of_matched_one.html</guid>
