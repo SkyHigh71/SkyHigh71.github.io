@@ -1,0 +1,23 @@
+cifs continued
+==============
+
+In addition to previous post as to CIFS.
+
+You may encounter "permission denied" error upon adding or modifying files.
+
+You can avoid this error by adding following options in /etc/fstab.
+
+.. code-block:: bash
+
+    uid=<user>,gid=<group> 
+
+Replace each value respectively by your own user and default group.
+
+.. code-block:: bash
+
+    //<MS_HOST>/<ShareName>  /windows/server1  cifs credentials=<HOME>/cifs/passwd,uid=<user>,gid=<group>,iocharset=utf8,sec=ntlm  0  0
+
+.. author:: default
+.. categories:: none
+.. tags:: cifs
+.. comments::

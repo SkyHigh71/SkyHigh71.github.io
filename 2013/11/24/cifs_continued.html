@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>Name Server &mdash; sakana</title>
+        <title>cifs continued &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="Directory Server" href="../25/directory_server_in_lxc.html" /><link rel="prev" title="change IP address range" href="../29/change_ip_address_range.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="root your android" href="root_your_android.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>9月 28, 2013</span>
+            <span>11月 24, 2013</span>
         </div>
     </div>
     
@@ -77,140 +77,17 @@
     
     </div>
     
-    <div class="section" id="name-server">
-<h1>Name Server</h1>
-<p>Now let&#8217;s move on to Name Server.
-Sometimes you would like to have your own name services to manipulate protocol like SMTP.</p>
-<p>I hereby demonstrate procedure to set up BIND (version 9).
-In this example, we use fictitious domain, example.org.</p>
-<p>We disregard redundancy and focus on primary server.
-That is, we omit secondary server :-).</p>
-<p>By the way, following articles are good reference for you.</p>
-<ul class="simple">
-<li><a class="reference external" href="http://www.centos.org/docs/5/html/Deployment_Guide-en-US/ch-bind.html">Redhat Doc</a></li>
-<li><a class="reference external" href="https://help.ubuntu.com/lts/serverguide/dns.html">Ubuntu Doc</a></li>
-</ul>
-<p>In this sample, we Ubuntu as platform.
-And goal is to setup instance as follows.</p>
-<p class="nwdiag">
-<img src="../../../_images/nwdiag-17483a1d749db81f98701368ac67bfcee9b9384d.png" alt="None" width="608" height="444" />
-</p>
-<div class="section" id="installation">
-<h2>Installation</h2>
-<p>Installation is quite simple.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install bind9 dnsutils
+    <div class="section" id="cifs-continued">
+<h1>cifs continued</h1>
+<p>In addition to previous post as to CIFS.</p>
+<p>You may encounter &#8220;permission denied&#8221; error upon adding or modifying files.</p>
+<p>You can avoid this error by adding following options in /etc/fstab.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">uid</span><span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;
 </pre></div>
 </div>
-<p>That&#8217;s all.</p>
-</div>
-<div class="section" id="server-configurations">
-<h2>Server Configurations</h2>
-<p>Configuration files are stored under /etc/bind directory.
-You will modify some file and add zone files for forward/reverse lookup.</p>
-<div class="highlight-bash"><div class="highlight"><pre>├── bind.keys
-├── db.0
-├── db.127
-├── db.255
-├── db.empty
-├── db.local
-├── db.root
-├── named.conf
-├── named.conf.default-zones
-├── named.conf.local
-├── named.conf.options
-├── rndc.key
-└── zones.rfc1918
+<p>Replace each value respectively by your own user and default group.</p>
+<div class="highlight-bash"><div class="highlight"><pre>//&lt;MS_HOST&gt;/&lt;ShareName&gt;  /windows/server1  cifs <span class="nv">credentials</span><span class="o">=</span>&lt;HOME&gt;/cifs/passwd,uid<span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;,iocharset<span class="o">=</span>utf8,sec<span class="o">=</span>ntlm  0  0
 </pre></div>
-</div>
-</div>
-<div class="section" id="forward-zone">
-<h2>Forward Zone</h2>
-<p>Append following lines into named.conf.local file so as to specify your domain name and its zone file.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">zone</span> <span class="s">&quot;example.org&quot;</span> <span class="p">{</span>
-        <span class="kn">type</span> <span class="s">master</span><span class="p">;</span>
-    <span class="kn">file</span> <span class="s">&quot;/etc/bind/db.example.org&quot;</span><span class="p">;</span>
-<span class="p">}</span>;
-</pre></div>
-</div>
-<p>Create zone file, db.example.org, so as to describe host in the domain.</p>
-<div class="highlight-bash"><div class="highlight"><pre>;
-; BIND data file <span class="k">for </span>example.org
-;
-<span class="nv">$TTL</span>    604800
-@       IN      SOA     example.org. root.example.org. <span class="o">(</span>
-                       20130928         ; Serial
-                         604800         ; Refresh
-                          86400         ; Retry
-                        2419200         ; Expire
-                         604800 <span class="o">)</span>       ; Negative Cache TTL
-        IN      A       10.0.3.10
-;
-@       IN      NS      dns.example.org.
-@       IN      A       10.0.3.10
-@       IN      AAAA    ::1
-dns     IN      A       10.0.3.10
-;MTA
-        IN      MX 10   mta.example.org.
-mta     IN      A       10.0.3.20
-</pre></div>
-</div>
-</div>
-<div class="section" id="reverse-zone">
-<h2>Reverse Zone</h2>
-<p>And now configure for reverse lookup.
-Same as forward lookup, append following lines into named.conf.local.file.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">zone</span> <span class="s">&quot;3.0.10.in-addr.arpa&quot;</span> <span class="p">{</span>
-        <span class="kn">type</span> <span class="s">master</span><span class="p">;</span>
-        <span class="kn">file</span> <span class="s">&quot;/etc/bind/db.10&quot;</span><span class="p">;</span>
-<span class="p">}</span>;
-</pre></div>
-</div>
-<p>And create a file named db.10 as follows.</p>
-<div class="highlight-bash"><div class="highlight"><pre>;
-; BIND reverse data file <span class="k">for </span>network 10.0.3.0
-;
-<span class="nv">$TTL</span>    604800
-@       IN      SOA     example.org. root.example.org. <span class="o">(</span>
-                       20130928         ; Serial
-                         604800         ; Refresh
-                          86400         ; Retry
-                        2419200         ; Expire
-                         604800 <span class="o">)</span>       ; Negative Cache TTL
-;
-@       IN      NS      dns.
-10      IN      PTR     dns.example.org.
-20      IN      PTR     mta.example.org.
-</pre></div>
-</div>
-</div>
-<div class="section" id="logging">
-<h2>Logging</h2>
-<p>Log message has been and will be your friend for debugging problem.
-Append following lines to named.conf.local file.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">logging</span> <span class="p">{</span>
-    <span class="kn">channel</span> <span class="s">query.log</span> <span class="p">{</span>
-        <span class="kn">file</span> <span class="s">&quot;/var/log/query.log&quot;</span><span class="p">;</span>
-        <span class="kn">severity</span> <span class="s">debug</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="p">}</span>;
-    <span class="kn">category</span> <span class="s">queries</span> <span class="p">{</span> <span class="kn">query.log</span><span class="p">;</span> <span class="p">}</span>;
-<span class="p">}</span>;
-</pre></div>
-</div>
-<p>And create a log file and change file owner to bind user.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">$</span> <span class="s">sudo</span> <span class="s">touch</span> <span class="s">/var/log/query.log</span>
-$ <span class="s">sudo</span> <span class="s">chown</span> <span class="s">bind</span> <span class="s">/var/log/query.log</span>
-</pre></div>
-</div>
-<p>You will see log messages like this.</p>
-<div class="highlight-bash"><div class="highlight"><pre>client 127.0.0.1#34060 <span class="o">(</span>mta.example.org<span class="o">)</span>: query: mta.example.org IN A +E <span class="o">(</span>127.0.0.1<span class="o">)</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="start-service">
-<h2>start service</h2>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo service bind9 restart
-</pre></div>
-</div>
 </div>
 </div>
 
@@ -222,25 +99,25 @@ $ <span class="s">sudo</span> <span class="s">chown</span> <span class="s">bind<
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/dns.html">DNS</a></span>
+                <a href="../../../tags/cifs.html">cifs</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../29/change_ip_address_range.html">change IP address range</a></li>
-            <li class="right"><a href="../25/directory_server_in_lxc.html">Directory Server</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="root_your_android.html">root your android</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../11/24/cifs_continued.html">cifs continued</a>
+            <a href="#">cifs continued</a>
         </li><li>
-            <a href="../../11/24/root_your_android.html">root your android</a>
+            <a href="root_your_android.html">root your android</a>
         </li><li>
-            <a href="../../11/17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
+            <a href="../17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
         </li><li>
-            <a href="../../11/12/view_next_line_of_matched_one.html">view next line of matched word</a>
+            <a href="../12/view_next_line_of_matched_one.html">view next line of matched word</a>
         </li><li>
-            <a href="../../11/11/x_window_trouble.html">a X window trouble</a>
+            <a href="../11/x_window_trouble.html">a X window trouble</a>
         </li><li>
             <a href="../../10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
         </li><li>

@@ -8,6 +8,26 @@
         <pubDate>Sun, 24 Nov 2013 00:00:00 +0900</pubDate>
         
         <item>
+            <link>http://skyhigh71.github.io/2013/11/24/cifs_continued.html</link>
+            <guid>http://skyhigh71.github.io/2013/11/24/cifs_continued.html</guid>
+            <title><![CDATA[cifs continued]]></title>
+            <description><![CDATA[<div class="section" id="cifs-continued">
+<h1>cifs continued</h1>
+<p>In addition to previous post as to CIFS.</p>
+<p>You may encounter “permission denied” error upon adding or modifying files.</p>
+<p>You can avoid this error by adding following options in /etc/fstab.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">uid</span><span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;
+</pre></div>
+</div>
+<p>Replace each value respectively by your own user and default group.</p>
+<div class="highlight-bash"><div class="highlight"><pre>//&lt;MS_HOST&gt;/&lt;ShareName&gt;  /windows/server1  cifs <span class="nv">credentials</span><span class="o">=</span>&lt;HOME&gt;/cifs/passwd,uid<span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;,iocharset<span class="o">=</span>utf8,sec<span class="o">=</span>ntlm  0  0
+</pre></div>
+</div>
+</div>]]></description>
+             <pubDate>Sun, 24 Nov 2013 00:00:00 +0900</pubDate>
+        </item>
+    
+        <item>
             <link>http://skyhigh71.github.io/2013/11/24/root_your_android.html</link>
             <guid>http://skyhigh71.github.io/2013/11/24/root_your_android.html</guid>
             <title><![CDATA[root your android]]></title>

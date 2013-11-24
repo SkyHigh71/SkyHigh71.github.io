@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="_static/plugins.js"></script>
         <script src="_static/main.js"></script>
-        <link rel="prev" title="Newer" href="page18.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+        <link rel="next" title="Older" href="page20.html" /><link rel="prev" title="Newer" href="page18.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.2.1',
@@ -62,6 +62,57 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>8月 22, 2013</span>
+        </div>
+        <div class="section" id="enable-sshd">
+<h1><a href="2013/08/22/enable_sshd.html">enable sshd</a></h1>
+<p>By default, sshd is disabled on ubuntu desktop.
+Therefore you need to install &amp; enable sshd if you would like to access host remotely via ssh.</p>
+<p>Here is short memo for this sake.</p>
+<p>First, search for sshd package via apt-cache command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-cache search sshd
+openssh-server - secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
+
+<span class="nv">$ </span>sudo apt-cache show openssh-server
+Package: openssh-server
+...
+Description-en: secure shell <span class="o">(</span>SSH<span class="o">)</span> server, <span class="k">for </span>secure access from remote machines
+...
+This package provides the sshd server.
+</pre></div>
+</div>
+<p>OK, openssh-server seems to be what we are looking for.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install openssh-server
+</pre></div>
+</div>
+<p>Installation will automatically start sshd daemon.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lsof -nPi:22
+COMMAND  PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+sshd    3557    root    3u  IPv4  35564      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
+sshd    3557    root    4u  IPv6  35566      0t0  TCP *:22 <span class="o">(</span>LISTEN<span class="o">)</span>
+
+<span class="nv">$ </span>sudo service ssh status
+ssh start/running, process 3557
+</pre></div>
+</div>
+<p>Please be noted, sshd daemon is registered not as sshd but as ssh.</p>
+<p>sshd configuration can be set in /etc/ssh/sshd_config.
+In case that you would like to disable remote root access, then change parameter PermitRootLogin value from yes to no.</p>
+<div class="highlight-bash"><div class="highlight"><pre>PermitRootLogin no
+</pre></div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>8月 21, 2013</span>
         </div>
         <div class="section" id="swap-caps-lock-key-with-ctrl-key">
@@ -292,27 +343,16 @@ After a while, you can access your blog with URL of <a class="reference external
                 Tags:
                 <a href="tags/tinkerer.html">tinkerer</a>, <a href="tags/github.html">github</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>8月 11, 2013</span>
-        </div>
-        <div class="section" id="hello-world">
-<h1><a href="2013/08/11/hello_world.html">Hello World</a></h1>
-<p>How are you doing?</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
             <li class="left"> &laquo; <a href="page18.html">Newer</a></li>
-            <li class="right"></li>
+            <li class="right"><a href="page20.html">Older</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/11/24/cifs_continued.html">cifs continued</a>
+        </li><li>
             <a href="2013/11/24/root_your_android.html">root your android</a>
         </li><li>
             <a href="2013/11/17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
@@ -330,8 +370,6 @@ After a while, you can access your blog with URL of <a class="reference external
             <a href="2013/10/19/caching_content_on_nginx.html">caching content on nginx</a>
         </li><li>
             <a href="2013/10/19/password_authentication_on_nginx.html">password authentication on nginx</a>
-        </li><li>
-            <a href="2013/10/17/enable_ssl_on_nginx.html">enable encryption on nginx</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -341,7 +379,7 @@ After a while, you can access your blog with URL of <a class="reference external
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
