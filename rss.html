@@ -5,8 +5,60 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sun, 17 Nov 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sun, 24 Nov 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/11/24/root_your_android.html</link>
+            <guid>http://skyhigh71.github.io/2013/11/24/root_your_android.html</guid>
+            <title><![CDATA[root your android]]></title>
+            <description><![CDATA[<div class="section" id="root-your-android">
+<h1>root your android</h1>
+<p>Sometimes you would like to obtain root privilege on android device.
+For example, in case that you install applications, which requires root privilege (e.g. bash).</p>
+<p>I hereby share with you a quick procedure to do so.</p>
+<p>Please be note that unlocking boot loader will lose warrant of your device.
+I remind you that this procedure shall be done totally under your own risk :-)</p>
+<div class="section" id="backup">
+<h2>backup</h2>
+<p>You have to backup your precious data of device before you start.
+Take your time so that you will not lose your treasure.</p>
+</div>
+<div class="section" id="unlock-boot-loader">
+<h2>unlock boot loader</h2>
+<p>Shutdown your device and boot into boot loader mode by pressing “-” button upon start-up.
+And then connect android device to your ubuntu and execute following command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo fastboot oem unlock
+</pre></div>
+</div>
+<p>This command execution will unlock boot loader.
+And lock state will change from “locked” to “unlocked”.</p>
+</div>
+<div class="section" id="install-root-application">
+<h2>install root application</h2>
+<p>Download CFA-Auto-Root package, which matches your device and install it.</p>
+<p>For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>fastboot boot image/CF-Auto-Root-&lt;device_name&gt;-nakasi-nexus&lt;*&gt;.img
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-application">
+<h2>install application</h2>
+<p>Now your android device is capable of allowing applications to have root privilege.</p>
+<p>For example I have installed following applications (some do not require root) to manipulate android.</p>
+<ul class="simple">
+<li>terminal emulator</li>
+<li>BusyBox</li>
+<li>hacker keyboard</li>
+<li>bash</li>
+<li>vim_touch</li>
+</ul>
+<p>Fine.
+Now I can play with my android any time I want!</p>
+</div>
+</div>]]></description>
+             <pubDate>Sun, 24 Nov 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/11/17/mount_windows_file_system_remotely.html</link>
             <guid>http://skyhigh71.github.io/2013/11/17/mount_windows_file_system_remotely.html</guid>

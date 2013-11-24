@@ -1,0 +1,61 @@
+root your android
+=================
+
+Sometimes you would like to obtain root privilege on android device.
+For example, in case that you install applications, which requires root privilege (e.g. bash).
+
+I hereby share with you a quick procedure to do so.
+
+Please be note that unlocking boot loader will lose warrant of your device.
+I remind you that this procedure shall be done totally under your own risk :-)
+
+backup
+------
+
+You have to backup your precious data of device before you start.
+Take your time so that you will not lose your treasure.
+
+unlock boot loader
+------------------
+
+Shutdown your device and boot into boot loader mode by pressing "-" button upon start-up.
+And then connect android device to your ubuntu and execute following command.
+
+.. code-block:: bash
+
+    $ sudo fastboot oem unlock
+
+This command execution will unlock boot loader.
+And lock state will change from "locked" to "unlocked".
+
+install root application
+------------------------
+
+Download CFA-Auto-Root package, which matches your device and install it.
+
+For example,
+
+.. code-block:: bash
+
+    $ fastboot boot image/CF-Auto-Root-<device_name>-nakasi-nexus<*>.img 
+
+install application
+-------------------
+
+Now your android device is capable of allowing applications to have root privilege.
+
+For example I have installed following applications (some do not require root) to manipulate android. 
+
+- terminal emulator
+- BusyBox
+- hacker keyboard
+- bash
+- vim_touch
+
+Fine.
+Now I can play with my android any time I want!
+
+.. author:: default
+.. categories:: none
+.. tags:: android
+.. comments::

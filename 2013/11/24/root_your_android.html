@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>symbol table reference &mdash; sakana</title>
+        <title>root your android &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="spell check in vim" href="spell_check_in_vim.html" /><link rel="prev" title="source code reference" href="../13/source_code_reference.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="mount windows file system remotely" href="../17/mount_windows_file_system_remotely.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>9月 12, 2013</span>
+            <span>11月 24, 2013</span>
         </div>
     </div>
     
@@ -77,55 +77,50 @@
     
     </div>
     
-    <div class="section" id="symbol-table-reference">
-<h1>symbol table reference</h1>
-<p>Now the time has come that we can debug core file.
-In this case, dropbox seems to have yielded core file.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /var/cores/core.dropbox.2172.1378900464
-/var/cores/core.dropbox.2172.1378900464: ELF 32-bit LSB core file Intel 80386, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, SVR4-style, from <span class="s1">&#39;&lt;HOME&gt;/.dropbox-dist/dropbox&#39;</span>
+    <div class="section" id="root-your-android">
+<h1>root your android</h1>
+<p>Sometimes you would like to obtain root privilege on android device.
+For example, in case that you install applications, which requires root privilege (e.g. bash).</p>
+<p>I hereby share with you a quick procedure to do so.</p>
+<p>Please be note that unlocking boot loader will lose warrant of your device.
+I remind you that this procedure shall be done totally under your own risk :-)</p>
+<div class="section" id="backup">
+<h2>backup</h2>
+<p>You have to backup your precious data of device before you start.
+Take your time so that you will not lose your treasure.</p>
+</div>
+<div class="section" id="unlock-boot-loader">
+<h2>unlock boot loader</h2>
+<p>Shutdown your device and boot into boot loader mode by pressing &#8220;-&#8221; button upon start-up.
+And then connect android device to your ubuntu and execute following command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo fastboot oem unlock
 </pre></div>
 </div>
-<p>But some dependent libraries (e.g. libc.so) are stripped and they do not have symbol table.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /lib/i386-linux-gnu/libc-2.17.so
-/lib/i386-linux-gnu/libc-2.17.so: ELF 32-bit LSB shared object, Intel 80386, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked <span class="o">(</span>uses shared libs<span class="o">)</span>, BuildID<span class="o">[</span>sha1<span class="o">]=</span>0x81a55e819c61f581e6a9179eaf59726dd80aea31, <span class="k">for </span>GNU/Linux 2.6.24, stripped
-<span class="nv">$ </span>objdump -t /lib/i386-linux-gnu/libc-2.17.so
-
-/lib/i386-linux-gnu/libc-2.17.so:     file format elf32-i386
-
-SYMBOL TABLE:
-no symbols
+<p>This command execution will unlock boot loader.
+And lock state will change from &#8220;locked&#8221; to &#8220;unlocked&#8221;.</p>
+</div>
+<div class="section" id="install-root-application">
+<h2>install root application</h2>
+<p>Download CFA-Auto-Root package, which matches your device and install it.</p>
+<p>For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>fastboot boot image/CF-Auto-Root-&lt;device_name&gt;-nakasi-nexus&lt;*&gt;.img
 </pre></div>
 </div>
-<p>On linux we do not replace stripped library with non-stripped one.
-Instead we install separate debug information file and configure debugger to reference it.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-cache search libc-
-libc6-dbg - Embedded GNU C Library: detached debugging symbols
-<span class="nv">$ </span>sudo apt-get install libc6-dbg
-</pre></div>
 </div>
-<p>Packages for debug information has suffix of -dbg (it seems to be so).
-Installation will deploy files under /usr/lib/debug directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so
-/usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so: ELF 32-bit LSB shared object, Intel 80386, version 1 <span class="o">(</span>SYSV<span class="o">)</span>, dynamically linked <span class="o">(</span>uses shared libs<span class="o">)</span>, BuildID<span class="o">[</span>sha1<span class="o">]=</span>0x81a55e819c61f581e6a9179eaf59726dd80aea31, <span class="k">for </span>GNU/Linux 2.6.24, not stripped
-<span class="nv">$ </span>objdump -t /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so
-
-/usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so:     file format elf32-i386
-
-SYMBOL TABLE:
-00000174 l    d  .note.gnu.build-id 00000000 .note.gnu.build-id
-00000198 l    d  .note.ABI-tag      00000000 .note.ABI-tag
-</pre></div>
+<div class="section" id="install-application">
+<h2>install application</h2>
+<p>Now your android device is capable of allowing applications to have root privilege.</p>
+<p>For example I have installed following applications (some do not require root) to manipulate android.</p>
+<ul class="simple">
+<li>terminal emulator</li>
+<li>BusyBox</li>
+<li>hacker keyboard</li>
+<li>bash</li>
+<li>vim_touch</li>
+</ul>
+<p>Fine.
+Now I can play with my android any time I want!</p>
 </div>
-<p>gdb is wise enough to automatically detect debug information (as long as libc6 and libc6-dbg match) and applies it!</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> <span class="nb">set </span>verbose on
-<span class="o">(</span>gdb<span class="o">)</span> run
-...
-Reading symbols from /lib/i386-linux-gnu/libc.so.6...Reading symbols from /usr/lib/debug/lib/i386-linux-gnu/libc-2.17.so...done.
-<span class="k">done</span>.
-</pre></div>
-</div>
-<p><a class="reference external" href="http://stackoverflow.com/questions/10000335/how-to-use-debug-version-of-libc">This entry</a> is quite of help for debug information.</p>
-<p>Now we can see precise stack!</p>
 </div>
 
     <div class="postmeta">
@@ -136,23 +131,23 @@ Reading symbols from /lib/i386-linux-gnu/libc.so.6...Reading symbols from /usr/l
         <div class="tags">
             <span>
                 Tags:
-                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
+                <a href="../../../tags/android.html">android</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../13/source_code_reference.html">source code reference</a></li>
-            <li class="right"><a href="spell_check_in_vim.html">spell check in vim</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../17/mount_windows_file_system_remotely.html">mount windows file system remotely</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
-            <a href="../../11/24/root_your_android.html">root your android</a>
+            <a href="#">root your android</a>
         </li><li>
-            <a href="../../11/17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
+            <a href="../17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
         </li><li>
-            <a href="../../11/12/view_next_line_of_matched_one.html">view next line of matched word</a>
+            <a href="../12/view_next_line_of_matched_one.html">view next line of matched word</a>
         </li><li>
-            <a href="../../11/11/x_window_trouble.html">a X window trouble</a>
+            <a href="../11/x_window_trouble.html">a X window trouble</a>
         </li><li>
             <a href="../../10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
         </li><li>

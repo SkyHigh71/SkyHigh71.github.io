@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/11/24/root_your_android
    2013/11/17/mount_windows_file_system_remotely
    2013/11/12/view_next_line_of_matched_one
    2013/11/11/x_window_trouble

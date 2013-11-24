@@ -62,6 +62,89 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>10月 17, 2013</span>
+        </div>
+        <div class="section" id="enable-encryption-on-nginx">
+<h1><a href="2013/10/17/enable_ssl_on_nginx.html">enable encryption on nginx</a></h1>
+<p>Sometimes you would like to configure nginx instance to communicate with clients in secured connection.
+You can issue self signed certificate and make use of it for encryption.</p>
+<p>Here is a quick procedure to do it.</p>
+<div class="section" id="issue-certificate">
+<h2>issue certificate</h2>
+<p>Create a directory to store key and certificate.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /etc/nginx
+<span class="nv">$ </span>sudo mkdir cert
+<span class="nv">$ </span><span class="nb">cd </span>cert
+</pre></div>
+</div>
+<p>Install openssl package if not there.
+And create private key named “server.key”.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install openssl
+<span class="nv">$ </span>sudo openssl genrsa -des3 -out server.key 1024
+Generating RSA private key, 1024 bit long modulus
+......................................++++++
+............................++++++
+e is 65537 <span class="o">(</span>0x10001<span class="o">)</span>
+Enter pass phrase <span class="k">for </span>server.key:
+Verifying - Enter pass phrase <span class="k">for </span>server.key:
+<span class="nv">$ </span>file server.key
+server.key: PEM RSA private key
+</pre></div>
+</div>
+<p>And then create CSR named “server.csr”.
+Answer as appropriate to inquiries given by command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo openssl req -new -key server.key -out server.csr
+<span class="nv">$ </span>file server.csr
+server.csr: PEM certificate request
+</pre></div>
+</div>
+<p>Rename private key and request certificate against forged CA.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo cp server.key server.key.org
+<span class="nv">$ </span>sudo openssl rsa -in server.key.org -out server.key
+</pre></div>
+</div>
+<p>Finally issue certificate named, “server.cert”.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.cert
+<span class="nv">$ </span>file server.cert
+server.cert: PEM certificate
+</pre></div>
+</div>
+<p>Now you have your own server certificate for your encryption.</p>
+</div>
+<div class="section" id="enable-ssl">
+<h2>enable SSL</h2>
+<p>Incorporate server certificate into nginx’s configuration by pointing its location.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">server</span> <span class="p">{</span>
+
+    <span class="kn">listen</span> <span class="mi">443</span> <span class="s">ssl</span><span class="p">;</span>
+
+    <span class="kn">ssl</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">ssl_certificate</span>     <span class="s">cert/server.cert</span><span class="p">;</span>
+    <span class="kn">ssl_certificate_key</span> <span class="s">cert/server.key</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now you see that nginx listens on HTTPS port.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">$</span> <span class="s">sudo</span> <span class="s">lsof</span> <span class="s">-nPi:443</span>
+<span class="s">COMMAND</span> <span class="s">PID</span>     <span class="s">USER</span>   <span class="s">FD</span>   <span class="s">TYPE</span> <span class="s">DEVICE</span> <span class="s">SIZE/OFF</span> <span class="s">NODE</span> <span class="s">NAME</span>
+<span class="s">nginx</span>   <span class="mi">385</span>     <span class="s">root</span>    <span class="s">8u</span>  <span class="s">IPv4</span> <span class="mi">127726</span>      <span class="s">0t0</span>  <span class="s">TCP</span> <span class="s">\*:443</span> <span class="s">(LISTEN)</span>
+<span class="s">nginx</span>   <span class="mi">387</span> <span class="s">www-data</span>    <span class="s">8u</span>  <span class="s">IPv4</span> <span class="mi">127726</span>      <span class="s">0t0</span>  <span class="s">TCP</span> <span class="s">\*:443</span> <span class="s">(LISTEN)</span>
+</pre></div>
+</div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/nginx.html">nginx</a>, <a href="tags/ssl.html">ssl</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>10月 14, 2013</span>
         </div>
         <div class="section" id="reverse-proxy">
@@ -183,124 +266,6 @@ nohup /home/ubuntu/script/build.sh 1&gt; /dev/null 2&gt;&amp;1 &amp;
                 Tags:
                 <a href="tags/sphinx.html">sphinx</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>10月 12, 2013</span>
-        </div>
-        <div class="section" id="static-web-server-in-lxc">
-<h1><a href="2013/10/12/web_server_in_lxc.html">static web server in lxc</a></h1>
-<p>Let us create web site in lxc environment.
-That is, with rough design as follows.</p>
-<div class="section" id="design">
-<h2>design</h2>
-<ul class="simple">
-<li>network</li>
-</ul>
-<p class="nwdiag">
-<img alt="None" height="444" src="_images/nwdiag-dd22924438686a0348c6627f44853ce71631c8ab.png" width="608"/>
-</p>
-<ul class="simple">
-<li>traffic flow</li>
-</ul>
-<p class="blockdiag">
-<img alt="None" height="120" src="_images/blockdiag-b2d3d3816cd2846f1744a61dc8ddb9fd907dfa13.png" width="640"/>
-</p>
-</div>
-<div class="section" id="web-server">
-<h2>web server</h2>
-<p>Create an instance of ubuntu under the name of “web”.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-create -n web -t ubuntu
-<span class="nv">$ </span>sudo lxc-start -n web -d
-<span class="nv">$ </span>ssh -l ubuntu <span class="sb">`</span>cut -d <span class="s2">&quot; &quot;</span> -f3 /var/lib/misc/dnsmasq.lxcbr0.leases<span class="sb">`</span>
-</pre></div>
-</div>
-<p>Let us configure timezone to JST and network interface to static one.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
-<span class="nv">$ </span>tail -8 /etc/network/interfaces
-auto eth0
-<span class="c">#iface eth0 inet dhcp</span>
-iface eth0 inet static
-address 10.0.3.21
-network 10.0.3.0
-netmask 255.255.255.0
-broadcast 10.0.3.255
-gateway 10.0.3.1
-</pre></div>
-</div>
-</div>
-<div class="section" id="nginx">
-<h2>nginx</h2>
-<p>Now install and configure nginx as container of static content.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install nginx
-</pre></div>
-</div>
-<p>Configuration files related to nginx are deployed under /etc/nginx directory.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>tree
-.
-├── conf.d
-├── fastcgi_params
-├── koi-utf
-├── koi-win
-├── mime.types
-├── naxsi_core.rules
-├── naxsi.rules
-├── nginx.conf
-├── proxy_params
-├── scgi_params
-├── sites-available
-│   └── default
-├── sites-enabled
-│   └── default -&gt; /etc/nginx/sites-available/default
-├── uwsgi_params
-└── win-utf
-</pre></div>
-</div>
-<p>Decrease number of worker process.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>diff nginx.conf nginx.conf.org
-2c2
-&lt; worker_processes 1;
----
-&gt; worker_processes 4;
-</pre></div>
-</div>
-<p>(It may not be necessary though,) configure nginx so as to start upon boot time.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>update-rc.d nginx defaults
-</pre></div>
-</div>
-</div>
-<div class="section" id="virtual-host">
-<h2>virtual host</h2>
-<p>Create a virtual host configuration file, say, “wiki” under /etc/nginx/sites-available directory.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">server</span> <span class="p">{</span>
-    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
-
-    <span class="kn">access_log</span>  <span class="s">/home/ubuntu/wiki/logs/access.log</span><span class="p">;</span>
-    <span class="kn">error_log</span>   <span class="s">/home/ubuntu/wiki/logs/error.log</span> <span class="s">debug</span><span class="p">;</span>
-
-    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
-        <span class="kn">root</span>   <span class="s">/home/ubuntu/wiki/build/html/</span><span class="p">;</span>
-        <span class="kn">index</span>  <span class="s">index.html</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>Make a symbolic link from under /etc/nginx/sites-enabled directory.
-And remove default configuration if not necessary.</p>
-<div class="highlight-nginx"><div class="highlight"><pre><span class="k">$</span> <span class="s">sudo</span> <span class="s">ln</span> <span class="s">-s</span> <span class="s">/etc/nginx/sites-available/wiki</span> <span class="s">.</span>
-$ <span class="s">rm</span> <span class="s">-i</span> <span class="s">default</span>
-</pre></div>
-</div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/lxc.html">lxc</a>, <a href="tags/nginx.html">nginx</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -309,6 +274,8 @@ $ <span class="s">rm</span> <span class="s">-i</span> <span class="s">default</s
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/11/24/root_your_android.html">root your android</a>
+        </li><li>
             <a href="2013/11/17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
         </li><li>
             <a href="2013/11/12/view_next_line_of_matched_one.html">view next line of matched word</a>
@@ -326,8 +293,6 @@ $ <span class="s">rm</span> <span class="s">-i</span> <span class="s">default</s
             <a href="2013/10/19/password_authentication_on_nginx.html">password authentication on nginx</a>
         </li><li>
             <a href="2013/10/17/enable_ssl_on_nginx.html">enable encryption on nginx</a>
-        </li><li>
-            <a href="2013/10/14/reverse_proxy.html">reverse proxy</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -337,7 +302,7 @@ $ <span class="s">rm</span> <span class="s">-i</span> <span class="s">default</s
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

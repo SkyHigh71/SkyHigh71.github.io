@@ -62,6 +62,64 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>11月 24, 2013</span>
+        </div>
+        <div class="section" id="root-your-android">
+<h1><a href="2013/11/24/root_your_android.html">root your android</a></h1>
+<p>Sometimes you would like to obtain root privilege on android device.
+For example, in case that you install applications, which requires root privilege (e.g. bash).</p>
+<p>I hereby share with you a quick procedure to do so.</p>
+<p>Please be note that unlocking boot loader will lose warrant of your device.
+I remind you that this procedure shall be done totally under your own risk :-)</p>
+<div class="section" id="backup">
+<h2>backup</h2>
+<p>You have to backup your precious data of device before you start.
+Take your time so that you will not lose your treasure.</p>
+</div>
+<div class="section" id="unlock-boot-loader">
+<h2>unlock boot loader</h2>
+<p>Shutdown your device and boot into boot loader mode by pressing “-” button upon start-up.
+And then connect android device to your ubuntu and execute following command.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo fastboot oem unlock
+</pre></div>
+</div>
+<p>This command execution will unlock boot loader.
+And lock state will change from “locked” to “unlocked”.</p>
+</div>
+<div class="section" id="install-root-application">
+<h2>install root application</h2>
+<p>Download CFA-Auto-Root package, which matches your device and install it.</p>
+<p>For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>fastboot boot image/CF-Auto-Root-&lt;device_name&gt;-nakasi-nexus&lt;*&gt;.img
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-application">
+<h2>install application</h2>
+<p>Now your android device is capable of allowing applications to have root privilege.</p>
+<p>For example I have installed following applications (some do not require root) to manipulate android.</p>
+<ul class="simple">
+<li>terminal emulator</li>
+<li>BusyBox</li>
+<li>hacker keyboard</li>
+<li>bash</li>
+<li>vim_touch</li>
+</ul>
+<p>Fine.
+Now I can play with my android any time I want!</p>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>Posted by SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                Tags:
+                <a href="tags/android.html">android</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>11月 17, 2013</span>
         </div>
         <div class="section" id="mount-windows-file-system-remotely">
@@ -140,44 +198,6 @@ For example, if you would like to show the next line, which contains specific wo
                 Tags:
                 <a href="tags/grep.html">grep</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>11月 11, 2013</span>
-        </div>
-        <div class="section" id="a-x-window-trouble">
-<h1><a href="2013/11/11/x_window_trouble.html">a X window trouble</a></h1>
-<p>When I connected from localhost to an instance of ubuntu in lxc, I encountered following message upon login via ssh.</p>
-<div class="highlight-bash"><div class="highlight"><pre>X11 forwarding request failed on channel 0
-</pre></div>
-</div>
-<p>That is, I connected to this host with -X option for the purpose of X forwarding. (so as to use gvim)</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh -X -l ubuntu &lt;lxc_instance_IP&gt;
-</pre></div>
-</div>
-<p>Let us dig into further by adding verbose option, -v as argument of ssh.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh -X -v -l ubuntu &lt;lxc_instance_IP&gt;
-</pre></div>
-</div>
-<p>Then I found following debug message, which states that relevant xauth application does not exist.</p>
-<div class="highlight-bash"><div class="highlight"><pre>debug1: Remote: No xauth program; cannot forward with spoofing.
-</pre></div>
-</div>
-<p>Ok, let us install xauth on target host side.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install xauth
-</pre></div>
-</div>
-<p>After installation of xauth, this message never comes up.
-And I am able to forward X sessions to host without any problem.</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/x.html">X</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
     </div><ul class="related clearfix">
@@ -186,6 +206,8 @@ And I am able to forward X sessions to host without any problem.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Recent Posts</h1>
     <ul><li>
+            <a href="2013/11/24/root_your_android.html">root your android</a>
+        </li><li>
             <a href="2013/11/17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
         </li><li>
             <a href="2013/11/12/view_next_line_of_matched_one.html">view next line of matched word</a>
@@ -203,8 +225,6 @@ And I am able to forward X sessions to host without any problem.</p>
             <a href="2013/10/19/password_authentication_on_nginx.html">password authentication on nginx</a>
         </li><li>
             <a href="2013/10/17/enable_ssl_on_nginx.html">enable encryption on nginx</a>
-        </li><li>
-            <a href="2013/10/14/reverse_proxy.html">reverse proxy</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -214,7 +234,7 @@ And I am able to forward X sessions to host without any problem.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>Tags</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (1), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
