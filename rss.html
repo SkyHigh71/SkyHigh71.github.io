@@ -5,8 +5,55 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sun, 24 Nov 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sun, 01 Dec 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/12/01/vmplayer_on_ubuntu_13_10.html</link>
+            <guid>http://skyhigh71.github.io/2013/12/01/vmplayer_on_ubuntu_13_10.html</guid>
+            <title><![CDATA[vmplayer on ubuntu 13.10]]></title>
+            <description><![CDATA[<div class="section" id="vmplayer-on-ubuntu-13-10">
+<h1>vmplayer on ubuntu 13.10</h1>
+<p>I have recently upgrade ubuntu machine from 13.04 to 13.10.
+(As has been anticipated,) vmplayer would not start up stating that it requires to build.</p>
+<p>Ok, let us build as we have been doing for a while upon upgrade of Kernel.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>uname -r
+3.11.0-13-generic
+<span class="nv">$ </span>sudo ln -s /usr/src/linux-headers-<span class="sb">`</span>uname -r<span class="sb">`</span>/include/generated/uapi/linux/version.h /usr/src/linux-headers-<span class="sb">`</span>uname -r<span class="sb">`</span>/include/linux/version.h
+<span class="nv">$ </span>sudo vmware-modconfig --console --install-all
+</pre></div>
+</div>
+<p>Mmmmm, something strange.
+Build would not succeed and abort in the middle.</p>
+<p>Googling with this symptom and found <a class="reference external" href="http://askubuntu.com/questions/372016/vmware-player-compiling-server-modules-ubuntu-13-10">similar report</a>.</p>
+<p>Ok, I need to patch some code change before building vmplayer module.
+Here is what I followed.</p>
+<p>Download following files at first.</p>
+<ul class="simple">
+<li>procfs.patch</li>
+<li>vmblock.3.10.patch</li>
+<li>vmblock.3.11.patch</li>
+</ul>
+<p>And then,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /usr/lib/vmware/modules/source
+<span class="nv">$ </span>sudo tar -xf vmnet.tar
+<span class="nv">$ </span>sudo tar -xf vmblock.tar
+<span class="nv">$ </span><span class="nb">cd </span>vmnet-only
+<span class="nv">$ </span>sudo patch -p1 &lt; ~/Downloads/procfs.patch
+<span class="nv">$ </span><span class="nb">cd</span> ../vmblock-only
+<span class="nv">$ </span>sudo patch -p1 &lt; ~/Downloads/vmblock.3.10.patch
+<span class="nv">$ </span>sudo patch -p1 &lt; ~/Downloads/vmblock.3.11.patch
+<span class="nv">$ </span><span class="nb">cd</span> ..
+<span class="nv">$ </span>sudo tar -cf vmblock.tar vmblock-only
+<span class="nv">$ </span>tar -cf vmnet.tar vmnet-only
+<span class="nv">$ </span>vmware-modconfig --console --install-all
+</pre></div>
+</div>
+<p>Ok, now my vmplayer comes up without any problem.
+And original issue has been reported in <a class="reference external" href="https://communities.vmware.com/message/2282385">vm communities</a>.</p>
+</div>]]></description>
+             <pubDate>Sun, 01 Dec 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/11/24/cifs_continued.html</link>
             <guid>http://skyhigh71.github.io/2013/11/24/cifs_continued.html</guid>

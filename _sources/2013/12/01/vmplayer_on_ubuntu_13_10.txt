@@ -1,0 +1,57 @@
+vmplayer on ubuntu 13.10
+========================
+
+I have recently upgrade ubuntu machine from 13.04 to 13.10.
+(As has been anticipated,) vmplayer would not start up stating that it requires to build.
+
+Ok, let us build as we have been doing for a while upon upgrade of Kernel.
+
+.. code-block:: bash
+
+    $ uname -r
+    3.11.0-13-generic
+    $ sudo ln -s /usr/src/linux-headers-`uname -r`/include/generated/uapi/linux/version.h /usr/src/linux-headers-`uname -r`/include/linux/version.h
+    $ sudo vmware-modconfig --console --install-all
+
+Mmmmm, something strange.
+Build would not succeed and abort in the middle.
+
+Googling with this symptom and found `similar report`_.
+
+.. _similar report: http://askubuntu.com/questions/372016/vmware-player-compiling-server-modules-ubuntu-13-10
+
+Ok, I need to patch some code change before building vmplayer module.
+Here is what I followed.
+
+Download following files at first.
+
+- procfs.patch
+- vmblock.3.10.patch
+- vmblock.3.11.patch
+
+And then, 
+
+.. code-block:: bash
+
+    $ cd /usr/lib/vmware/modules/source
+    $ sudo tar -xf vmnet.tar
+    $ sudo tar -xf vmblock.tar
+    $ cd vmnet-only
+    $ sudo patch -p1 < ~/Downloads/procfs.patch
+    $ cd ../vmblock-only
+    $ sudo patch -p1 < ~/Downloads/vmblock.3.10.patch
+    $ sudo patch -p1 < ~/Downloads/vmblock.3.11.patch
+    $ cd ..
+    $ sudo tar -cf vmblock.tar vmblock-only
+    $ tar -cf vmnet.tar vmnet-only
+    $ vmware-modconfig --console --install-all
+
+Ok, now my vmplayer comes up without any problem.
+And original issue has been reported in `vm communities`_.
+
+.. _vm communities: https://communities.vmware.com/message/2282385
+
+.. author:: default
+.. categories:: none
+.. tags:: vmplayer
+.. comments::
