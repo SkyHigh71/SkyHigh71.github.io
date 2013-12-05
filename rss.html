@@ -5,8 +5,45 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sun, 01 Dec 2013 00:00:00 +0900</pubDate>
+        <pubDate>Thu, 05 Dec 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/12/05/automatic_upgrade.html</link>
+            <guid>http://skyhigh71.github.io/2013/12/05/automatic_upgrade.html</guid>
+            <title><![CDATA[automatic upgrade]]></title>
+            <description><![CDATA[<div class="section" id="automatic-upgrade">
+<h1>automatic upgrade</h1>
+<p>Sometimes you would like to configure your ubuntu host to upgrade automatically without any manual intervention.</p>
+<p>You can achieve this by unattended-upgrades package.  Here is a short memo to do so.</p>
+<p>Install unattended-upgrades package (if not there).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install unattended-upgrades
+</pre></div>
+</div>
+<p>Enable automatic upgrade.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo dpkg-reconfigure unattended-upgrades
+</pre></div>
+</div>
+<p>You will be prompted and see message like this.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Applying updates on a frequent basis is an important part of keeping systems secure. By default, updates need to be applied manually using package management tools. Alternatively, you can choose to have this system automatically download and install security updates.
+Automatically download and install stable updates?
+</pre></div>
+</div>
+<p>After enabling unattended-upgrades, you will have configuration like this.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>more /etc/apt/apt.conf.d/20auto-upgrades
+APT::Periodic::Update-Package-Lists <span class="s2">&quot;1&quot;</span>;
+APT::Periodic::Unattended-Upgrade <span class="s2">&quot;1&quot;</span>;
+</pre></div>
+</div>
+<p>According to history records yielded in /var/log/apt/history.log, it seems that automatic update may take place around 08:00.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Start-Date: 2013-12-05  07:58:10
+Install: linux-headers-3.11.0-14-generic:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>, linux-headers-3.11.0-14:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>, linux-image-extra-3.11.0-14-generic:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>, linux-image-3.11.0-14-generic:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>
+End-Date: 2013-12-05  08:00:54
+</pre></div>
+</div>
+</div>]]></description>
+             <pubDate>Thu, 05 Dec 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/12/01/vmplayer_on_ubuntu_13_10.html</link>
             <guid>http://skyhigh71.github.io/2013/12/01/vmplayer_on_ubuntu_13_10.html</guid>

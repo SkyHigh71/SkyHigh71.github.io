@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>cifs continued &mdash; sakana</title>
+        <title>automatic upgrade &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="root your android" href="root_your_android.html" /><link rel="prev" title="vmplayer on ubuntu 13.10" href="../../12/01/vmplayer_on_ubuntu_13_10.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="vmplayer on ubuntu 13.10" href="../01/vmplayer_on_ubuntu_13_10.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>2013/11/24</span>
+            <span>2013/12/05</span>
         </div>
     </div>
     
@@ -77,16 +77,33 @@
     
     </div>
     
-    <div class="section" id="cifs-continued">
-<h1>cifs continued</h1>
-<p>In addition to previous post as to CIFS.</p>
-<p>You may encounter &#8220;permission denied&#8221; error upon adding or modifying files.</p>
-<p>You can avoid this error by adding following options in /etc/fstab.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">uid</span><span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;
+    <div class="section" id="automatic-upgrade">
+<h1>automatic upgrade</h1>
+<p>Sometimes you would like to configure your ubuntu host to upgrade automatically without any manual intervention.</p>
+<p>You can achieve this by unattended-upgrades package.  Here is a short memo to do so.</p>
+<p>Install unattended-upgrades package (if not there).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install unattended-upgrades
 </pre></div>
 </div>
-<p>Replace each value respectively by your own user and default group.</p>
-<div class="highlight-bash"><div class="highlight"><pre>//&lt;MS_HOST&gt;/&lt;ShareName&gt;  /windows/server1  cifs <span class="nv">credentials</span><span class="o">=</span>&lt;HOME&gt;/cifs/passwd,uid<span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;,iocharset<span class="o">=</span>utf8,sec<span class="o">=</span>ntlm  0  0
+<p>Enable automatic upgrade.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo dpkg-reconfigure unattended-upgrades
+</pre></div>
+</div>
+<p>You will be prompted and see message like this.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Applying updates on a frequent basis is an important part of keeping systems secure. By default, updates need to be applied manually using package management tools. Alternatively, you can choose to have this system automatically download and install security updates.
+Automatically download and install stable updates?
+</pre></div>
+</div>
+<p>After enabling unattended-upgrades, you will have configuration like this.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>more /etc/apt/apt.conf.d/20auto-upgrades
+APT::Periodic::Update-Package-Lists <span class="s2">&quot;1&quot;</span>;
+APT::Periodic::Unattended-Upgrade <span class="s2">&quot;1&quot;</span>;
+</pre></div>
+</div>
+<p>According to history records yielded in /var/log/apt/history.log, it seems that automatic update may take place around 08:00.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Start-Date: 2013-12-05  07:58:10
+Install: linux-headers-3.11.0-14-generic:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>, linux-headers-3.11.0-14:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>, linux-image-extra-3.11.0-14-generic:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>, linux-image-3.11.0-14-generic:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>
+End-Date: 2013-12-05  08:00:54
 </pre></div>
 </div>
 </div>
@@ -99,29 +116,29 @@
         <div class="tags">
             <span>
                 タグ:
-                <a href="../../../tags/cifs.html">cifs</a></span>
+                <a href="../../../tags/ubuntu.html">ubuntu</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../../12/01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a></li>
-            <li class="right"><a href="root_your_android.html">root your android</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>最近の投稿</h1>
     <ul><li>
-            <a href="../../12/05/automatic_upgrade.html">automatic upgrade</a>
+            <a href="#">automatic upgrade</a>
         </li><li>
-            <a href="../../12/01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a>
+            <a href="../01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a>
         </li><li>
-            <a href="#">cifs continued</a>
+            <a href="../../11/24/cifs_continued.html">cifs continued</a>
         </li><li>
-            <a href="root_your_android.html">root your android</a>
+            <a href="../../11/24/root_your_android.html">root your android</a>
         </li><li>
-            <a href="../17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
+            <a href="../../11/17/mount_windows_file_system_remotely.html">mount windows file system remotely</a>
         </li><li>
-            <a href="../12/view_next_line_of_matched_one.html">view next line of matched word</a>
+            <a href="../../11/12/view_next_line_of_matched_one.html">view next line of matched word</a>
         </li><li>
-            <a href="../11/x_window_trouble.html">a X window trouble</a>
+            <a href="../../11/11/x_window_trouble.html">a X window trouble</a>
         </li><li>
             <a href="../../10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
         </li><li>

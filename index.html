@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>Home &mdash; sakana</title>
+        <title>ホーム &mdash; sakana</title>
             <link rel="stylesheet" href="_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="_static/plugins.js"></script>
         <script src="_static/main.js"></script>
-        <link rel="next" title="Older" href="page2.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+        <link rel="next" title="前の投稿" href="page2.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.2.1',
@@ -58,11 +58,54 @@
           </header>
       <nav>
             <ul><li class="main-nav">
-                  <a href="#">Home</a>
+                  <a href="#">ホーム</a>
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
-            <span>12月 01, 2013</span>
+            <span>2013/12/05</span>
+        </div>
+        <div class="section" id="automatic-upgrade">
+<h1><a href="2013/12/05/automatic_upgrade.html">automatic upgrade</a></h1>
+<p>Sometimes you would like to configure your ubuntu host to upgrade automatically without any manual intervention.</p>
+<p>You can achieve this by unattended-upgrades package.  Here is a short memo to do so.</p>
+<p>Install unattended-upgrades package (if not there).</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install unattended-upgrades
+</pre></div>
+</div>
+<p>Enable automatic upgrade.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo dpkg-reconfigure unattended-upgrades
+</pre></div>
+</div>
+<p>You will be prompted and see message like this.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Applying updates on a frequent basis is an important part of keeping systems secure. By default, updates need to be applied manually using package management tools. Alternatively, you can choose to have this system automatically download and install security updates.
+Automatically download and install stable updates?
+</pre></div>
+</div>
+<p>After enabling unattended-upgrades, you will have configuration like this.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>more /etc/apt/apt.conf.d/20auto-upgrades
+APT::Periodic::Update-Package-Lists <span class="s2">&quot;1&quot;</span>;
+APT::Periodic::Unattended-Upgrade <span class="s2">&quot;1&quot;</span>;
+</pre></div>
+</div>
+<p>According to history records yielded in /var/log/apt/history.log, it seems that automatic update may take place around 08:00.</p>
+<div class="highlight-bash"><div class="highlight"><pre>Start-Date: 2013-12-05  07:58:10
+Install: linux-headers-3.11.0-14-generic:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>, linux-headers-3.11.0-14:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>, linux-image-extra-3.11.0-14-generic:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>, linux-image-3.11.0-14-generic:amd64 <span class="o">(</span>3.11.0-14.21, automatic<span class="o">)</span>
+End-Date: 2013-12-05  08:00:54
+</pre></div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>投稿者 SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                タグ:
+                <a href="tags/ubuntu.html">ubuntu</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>2013/12/01</span>
         </div>
         <div class="section" id="vmplayer-on-ubuntu-13-10">
 <h1><a href="2013/12/01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a></h1>
@@ -106,16 +149,16 @@ And original issue has been reported in <a class="reference external" href="http
 </div>
         <div class="postmeta">
         <div class="author">
-            <span>Posted by SkyHigh71</span>
+            <span>投稿者 SkyHigh71</span>
         </div>
         
         <div class="tags">
             <span>
-                Tags:
+                タグ:
                 <a href="tags/vmplayer.html">vmplayer</a></span>
         </div>
         </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>11月 24, 2013</span>
+            <span>2013/11/24</span>
         </div>
         <div class="section" id="cifs-continued">
 <h1><a href="2013/11/24/cifs_continued.html">cifs continued</a></h1>
@@ -132,80 +175,24 @@ And original issue has been reported in <a class="reference external" href="http
 </div>
         <div class="postmeta">
         <div class="author">
-            <span>Posted by SkyHigh71</span>
+            <span>投稿者 SkyHigh71</span>
         </div>
         
         <div class="tags">
             <span>
-                Tags:
+                タグ:
                 <a href="tags/cifs.html">cifs</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>11月 24, 2013</span>
-        </div>
-        <div class="section" id="root-your-android">
-<h1><a href="2013/11/24/root_your_android.html">root your android</a></h1>
-<p>Sometimes you would like to obtain root privilege on android device.
-For example, in case that you install applications, which requires root privilege (e.g. bash).</p>
-<p>I hereby share with you a quick procedure to do so.</p>
-<p>Please be note that unlocking boot loader will lose warrant of your device.
-I remind you that this procedure shall be done totally under your own risk :-)</p>
-<div class="section" id="backup">
-<h2>backup</h2>
-<p>You have to backup your precious data of device before you start.
-Take your time so that you will not lose your treasure.</p>
-</div>
-<div class="section" id="unlock-boot-loader">
-<h2>unlock boot loader</h2>
-<p>Shutdown your device and boot into boot loader mode by pressing “-” button upon start-up.
-And then connect android device to your ubuntu and execute following command.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo fastboot oem unlock
-</pre></div>
-</div>
-<p>This command execution will unlock boot loader.
-And lock state will change from “locked” to “unlocked”.</p>
-</div>
-<div class="section" id="install-root-application">
-<h2>install root application</h2>
-<p>Download CFA-Auto-Root package, which matches your device and install it.</p>
-<p>For example,</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>fastboot boot image/CF-Auto-Root-&lt;device_name&gt;-nakasi-nexus&lt;*&gt;.img
-</pre></div>
-</div>
-</div>
-<div class="section" id="install-application">
-<h2>install application</h2>
-<p>Now your android device is capable of allowing applications to have root privilege.</p>
-<p>For example I have installed following applications (some do not require root) to manipulate android.</p>
-<ul class="simple">
-<li>terminal emulator</li>
-<li>BusyBox</li>
-<li>hacker keyboard</li>
-<li>bash</li>
-<li>vim_touch</li>
-</ul>
-<p>Fine.
-Now I can play with my android any time I want!</p>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Posted by SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                Tags:
-                <a href="tags/android.html">android</a></span>
-        </div>
         </div><div class="archive_link">
-        <a href="archive.html"> &mdash; Blog Archive &mdash; </a>
+        <a href="archive.html"> &mdash; ブログアーカイブ &mdash; </a>
     </div><ul class="related clearfix">
             <li class="left"></li>
-            <li class="right"><a href="page2.html">Older</a> &raquo; </li>
+            <li class="right"><a href="page2.html">前の投稿</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
-    <h1>Recent Posts</h1>
+    <h1>最近の投稿</h1>
     <ul><li>
+            <a href="2013/12/05/automatic_upgrade.html">automatic upgrade</a>
+        </li><li>
             <a href="2013/12/01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a>
         </li><li>
             <a href="2013/11/24/cifs_continued.html">cifs continued</a>
@@ -223,8 +210,6 @@ Now I can play with my android any time I want!</p>
             <a href="2013/10/27/start_mongo.html">start mongo</a>
         </li><li>
             <a href="2013/10/19/port_forwarding.html">port forwarding</a>
-        </li><li>
-            <a href="2013/10/19/caching_content_on_nginx.html">caching content on nginx</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -234,7 +219,7 @@ Now I can play with my android any time I want!</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>Tags</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (20), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

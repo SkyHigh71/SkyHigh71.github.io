@@ -1,0 +1,46 @@
+automatic upgrade
+=================
+
+Sometimes you would like to configure your ubuntu host to upgrade automatically without any manual intervention.
+
+You can achieve this by unattended-upgrades package.  Here is a short memo to do so.
+
+Install unattended-upgrades package (if not there).
+
+.. code-block:: bash
+
+    $ sudo apt-get install unattended-upgrades
+
+Enable automatic upgrade.
+
+.. code-block:: bash
+
+    $ sudo dpkg-reconfigure unattended-upgrades
+
+You will be prompted and see message like this.
+
+.. code-block:: bash
+
+    Applying updates on a frequent basis is an important part of keeping systems secure. By default, updates need to be applied manually using package management tools. Alternatively, you can choose to have this system automatically download and install security updates. 
+    Automatically download and install stable updates? 
+
+After enabling unattended-upgrades, you will have configuration like this.
+
+.. code-block:: bash
+
+    $ more /etc/apt/apt.conf.d/20auto-upgrades
+    APT::Periodic::Update-Package-Lists "1";
+    APT::Periodic::Unattended-Upgrade "1";
+
+According to history records yielded in /var/log/apt/history.log, it seems that automatic update may take place around 08:00.
+
+.. code-block:: bash
+
+    Start-Date: 2013-12-05  07:58:10
+    Install: linux-headers-3.11.0-14-generic:amd64 (3.11.0-14.21, automatic), linux-headers-3.11.0-14:amd64 (3.11.0-14.21, automatic), linux-image-extra-3.11.0-14-generic:amd64 (3.11.0-14.21, automatic), linux-image-3.11.0-14-generic:amd64 (3.11.0-14.21, automatic)
+    End-Date: 2013-12-05  08:00:54
+
+.. author:: default
+.. categories:: none
+.. tags:: ubuntu
+.. comments::
