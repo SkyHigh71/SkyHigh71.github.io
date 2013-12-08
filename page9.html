@@ -62,6 +62,155 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>2013/09/28</span>
+        </div>
+        <div class="section" id="name-server">
+<h1><a href="2013/09/28/name_server.html">Name Server</a></h1>
+<p>Now let’s move on to Name Server.
+Sometimes you would like to have your own name services to manipulate protocol like SMTP.</p>
+<p>I hereby demonstrate procedure to set up BIND (version 9).
+In this example, we use fictitious domain, example.org.</p>
+<p>We disregard redundancy and focus on primary server.
+That is, we omit secondary server :-).</p>
+<p>By the way, following articles are good reference for you.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.centos.org/docs/5/html/Deployment_Guide-en-US/ch-bind.html">Redhat Doc</a></li>
+<li><a class="reference external" href="https://help.ubuntu.com/lts/serverguide/dns.html">Ubuntu Doc</a></li>
+</ul>
+<p>In this sample, we Ubuntu as platform.
+And goal is to setup instance as follows.</p>
+<p class="nwdiag">
+<img alt="None" height="444" src="_images/nwdiag-17483a1d749db81f98701368ac67bfcee9b9384d.png" width="608"/>
+</p>
+<div class="section" id="installation">
+<h2>Installation</h2>
+<p>Installation is quite simple.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install bind9 dnsutils
+</pre></div>
+</div>
+<p>That’s all.</p>
+</div>
+<div class="section" id="server-configurations">
+<h2>Server Configurations</h2>
+<p>Configuration files are stored under /etc/bind directory.
+You will modify some file and add zone files for forward/reverse lookup.</p>
+<div class="highlight-bash"><div class="highlight"><pre>├── bind.keys
+├── db.0
+├── db.127
+├── db.255
+├── db.empty
+├── db.local
+├── db.root
+├── named.conf
+├── named.conf.default-zones
+├── named.conf.local
+├── named.conf.options
+├── rndc.key
+└── zones.rfc1918
+</pre></div>
+</div>
+</div>
+<div class="section" id="forward-zone">
+<h2>Forward Zone</h2>
+<p>Append following lines into named.conf.local file so as to specify your domain name and its zone file.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">zone</span> <span class="s">&quot;example.org&quot;</span> <span class="p">{</span>
+        <span class="kn">type</span> <span class="s">master</span><span class="p">;</span>
+    <span class="kn">file</span> <span class="s">&quot;/etc/bind/db.example.org&quot;</span><span class="p">;</span>
+<span class="p">}</span>;
+</pre></div>
+</div>
+<p>Create zone file, db.example.org, so as to describe host in the domain.</p>
+<div class="highlight-bash"><div class="highlight"><pre>;
+; BIND data file <span class="k">for </span>example.org
+;
+<span class="nv">$TTL</span>    604800
+@       IN      SOA     example.org. root.example.org. <span class="o">(</span>
+                       20130928         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 <span class="o">)</span>       ; Negative Cache TTL
+        IN      A       10.0.3.10
+;
+@       IN      NS      dns.example.org.
+@       IN      A       10.0.3.10
+@       IN      AAAA    ::1
+dns     IN      A       10.0.3.10
+;MTA
+        IN      MX 10   mta.example.org.
+mta     IN      A       10.0.3.20
+</pre></div>
+</div>
+</div>
+<div class="section" id="reverse-zone">
+<h2>Reverse Zone</h2>
+<p>And now configure for reverse lookup.
+Same as forward lookup, append following lines into named.conf.local.file.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">zone</span> <span class="s">&quot;3.0.10.in-addr.arpa&quot;</span> <span class="p">{</span>
+        <span class="kn">type</span> <span class="s">master</span><span class="p">;</span>
+        <span class="kn">file</span> <span class="s">&quot;/etc/bind/db.10&quot;</span><span class="p">;</span>
+<span class="p">}</span>;
+</pre></div>
+</div>
+<p>And create a file named db.10 as follows.</p>
+<div class="highlight-bash"><div class="highlight"><pre>;
+; BIND reverse data file <span class="k">for </span>network 10.0.3.0
+;
+<span class="nv">$TTL</span>    604800
+@       IN      SOA     example.org. root.example.org. <span class="o">(</span>
+                       20130928         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 <span class="o">)</span>       ; Negative Cache TTL
+;
+@       IN      NS      dns.
+10      IN      PTR     dns.example.org.
+20      IN      PTR     mta.example.org.
+</pre></div>
+</div>
+</div>
+<div class="section" id="logging">
+<h2>Logging</h2>
+<p>Log message has been and will be your friend for debugging problem.
+Append following lines to named.conf.local file.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">logging</span> <span class="p">{</span>
+    <span class="kn">channel</span> <span class="s">query.log</span> <span class="p">{</span>
+        <span class="kn">file</span> <span class="s">&quot;/var/log/query.log&quot;</span><span class="p">;</span>
+        <span class="kn">severity</span> <span class="s">debug</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="p">}</span>;
+    <span class="kn">category</span> <span class="s">queries</span> <span class="p">{</span> <span class="kn">query.log</span><span class="p">;</span> <span class="p">}</span>;
+<span class="p">}</span>;
+</pre></div>
+</div>
+<p>And create a log file and change file owner to bind user.</p>
+<div class="highlight-nginx"><div class="highlight"><pre><span class="k">$</span> <span class="s">sudo</span> <span class="s">touch</span> <span class="s">/var/log/query.log</span>
+$ <span class="s">sudo</span> <span class="s">chown</span> <span class="s">bind</span> <span class="s">/var/log/query.log</span>
+</pre></div>
+</div>
+<p>You will see log messages like this.</p>
+<div class="highlight-bash"><div class="highlight"><pre>client 127.0.0.1#34060 <span class="o">(</span>mta.example.org<span class="o">)</span>: query: mta.example.org IN A +E <span class="o">(</span>127.0.0.1<span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="start-service">
+<h2>start service</h2>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo service bind9 restart
+</pre></div>
+</div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>投稿者 SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                タグ:
+                <a href="tags/dns.html">DNS</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>2013/09/25</span>
         </div>
         <div class="section" id="directory-server">
@@ -191,49 +340,6 @@ By the way, default root password is password.</p>
                 タグ:
                 <a href="tags/lxc.html">lxc</a>, <a href="tags/ubuntu.html">ubuntu</a>, <a href="tags/centos.html">centos</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>2013/09/22</span>
-        </div>
-        <div class="section" id="lxc-continued">
-<h1><a href="2013/09/22/lxc_cont.html">lxc continued</a></h1>
-<p>Let us create virtual machine of your choice.
-Suppose that you would like to create an instance of ubuntu.
-(Please do not ask me reason why I need to run ubuntu on unbutu :-)).</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-create -t ubuntu -n ubuntu01
-</pre></div>
-</div>
-<p>As this command execution will download files, therefore first time execution may take time.
-So please wait for a while, say, by drinking coffee.</p>
-<p>After successful execution, you will have an ubuntu instance named “ubuntu01”.</p>
-<p>Ok, let us start lxc as daemon.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo lxc-start -n ubuntu01 -d
-</pre></div>
-</div>
-<p>According to dhcp server (dnsmasq), 10.0.3.198 may have been leased.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat /var/lib/misc/dnsmasq.lxcbr0.leases
-1379835957 00:16:3e:08:50:7f 10.0.3.198 ubuntu01 *
-</pre></div>
-</div>
-<p>Let us login via ssh.
-Default uid/password combination is ubuntu/ubuntu.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh -l ubuntu 10.0.3.198
-</pre></div>
-</div>
-<p>Ok, network plan would be like this.</p>
-<p class="nwdiag">
-<img alt="None" height="444" src="_images/nwdiag-7a9b63d8453e24f5c7d131a87aaf68d7ee723457.png" width="456"/>
-</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>投稿者 SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                タグ:
-                <a href="tags/ubuntu.html">ubuntu</a>, <a href="tags/lxc.html">lxc</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; ブログアーカイブ &mdash; </a>
     </div><ul class="related clearfix">
@@ -242,6 +348,8 @@ Default uid/password combination is ubuntu/ubuntu.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>最近の投稿</h1>
     <ul><li>
+            <a href="2013/12/08/public_key_authentication.html">public key authentication</a>
+        </li><li>
             <a href="2013/12/05/automatic_upgrade.html">automatic upgrade</a>
         </li><li>
             <a href="2013/12/01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a>
@@ -259,8 +367,6 @@ Default uid/password combination is ubuntu/ubuntu.</p>
             <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
         </li><li>
             <a href="2013/10/27/start_mongo.html">start mongo</a>
-        </li><li>
-            <a href="2013/10/19/port_forwarding.html">port forwarding</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -270,7 +376,7 @@ Default uid/password combination is ubuntu/ubuntu.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (2), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

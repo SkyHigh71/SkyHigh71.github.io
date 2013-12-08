@@ -1,0 +1,60 @@
+public key authentication
+=========================
+
+Sometimes you would like to login remote system without password authentication.
+You can make use of public key authentication for this sake.
+
+Here is a short memo to set up local & remote system.
+
+Let us generate rsa key in case that you have none on localhost.
+
+.. code-block:: bash
+
+    $ ssh-keygen
+    Generating public/private rsa key pair.
+    Enter file in which to save the key (~/.ssh/id_rsa): <ENTER>
+    Enter passphrase (empty for no passphrase): <ENTER>
+    Enter same passphrase again: <ENTER>
+    Your identification has been saved in ~/.ssh/id_rsa.
+    Your public key has been saved in ~/.ssh/id_rsa.pub.
+    The key fingerprint is:
+    ab:6b:44:71:2f:48:22:09:85:d2:1b:18:a5:93:03:97 USER@HOST
+
+As seen, private key (id_rsa) and public key (id_rsa.pub) is generated respectively.
+
+.. code-block:: bash
+
+    $ file .ssh/*
+    .ssh/id_rsa:      PEM RSA private key
+    .ssh/id_rsa.pub:  OpenSSH RSA public key
+    .ssh/known_hosts: ASCII text
+
+Now create .ssh directory on target host.
+
+.. code-block:: bash
+
+    $ ssh USER@TARGET_HOST mkdir -p .ssh
+
+Copy public key of localhost onto remote target host and save it as authorized_keys so that remote host shall recognize localhost as authorized one. 
+
+.. code-block:: bash
+
+    $ cat .ssh/id_rsa.pub |ssh USER@TARGET_HOST 'cat >> .ssh/authorized_keys'
+
+Now you can connect target host without password.
+Here is an excerpt from debug message yielded by ssh command!
+
+.. code-block:: bash
+
+    debug1: Authentications that can continue: publickey,password
+    debug1: Next authentication method: publickey
+    debug1: Offering RSA public key: ~/.ssh/id_rsa
+    debug1: Server accepts key: pkalg ssh-rsa blen 279
+    debug1: read PEM private key done: type RSA
+    debug1: Authentication succeeded (publickey).
+    Authenticated to TARGET_HOST ([TARGET_HOST]:22).
+
+.. author:: default
+.. categories:: none
+.. tags:: ssh
+.. comments::

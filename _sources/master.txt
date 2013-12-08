@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2013/12/08/public_key_authentication
    2013/12/05/automatic_upgrade
    2013/12/01/vmplayer_on_ubuntu_13_10
    2013/11/24/cifs_continued

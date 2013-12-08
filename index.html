@@ -62,6 +62,63 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>2013/12/08</span>
+        </div>
+        <div class="section" id="public-key-authentication">
+<h1><a href="2013/12/08/public_key_authentication.html">public key authentication</a></h1>
+<p>Sometimes you would like to login remote system without password authentication.
+You can make use of public key authentication for this sake.</p>
+<p>Here is a short memo to set up local &amp; remote system.</p>
+<p>Let us generate rsa key in case that you have none on localhost.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key <span class="o">(</span>~/.ssh/id_rsa<span class="o">)</span>: &lt;ENTER&gt;
+Enter passphrase <span class="o">(</span>empty <span class="k">for </span>no passphrase<span class="o">)</span>: &lt;ENTER&gt;
+Enter same passphrase again: &lt;ENTER&gt;
+Your identification has been saved in ~/.ssh/id_rsa.
+Your public key has been saved in ~/.ssh/id_rsa.pub.
+The key fingerprint is:
+ab:6b:44:71:2f:48:22:09:85:d2:1b:18:a5:93:03:97 USER@HOST
+</pre></div>
+</div>
+<p>As seen, private key (id_rsa) and public key (id_rsa.pub) is generated respectively.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file .ssh/*
+.ssh/id_rsa:      PEM RSA private key
+.ssh/id_rsa.pub:  OpenSSH RSA public key
+.ssh/known_hosts: ASCII text
+</pre></div>
+</div>
+<p>Now create .ssh directory on target host.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh USER@TARGET_HOST mkdir -p .ssh
+</pre></div>
+</div>
+<p>Copy public key of localhost onto remote target host and save it as authorized_keys so that remote host shall recognize localhost as authorized one.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat .ssh/id_rsa.pub |ssh USER@TARGET_HOST <span class="s1">'cat &gt;&gt; .ssh/authorized_keys'</span>
+</pre></div>
+</div>
+<p>Now you can connect target host without password.
+Here is an excerpt from debug message yielded by ssh command!</p>
+<div class="highlight-bash"><div class="highlight"><pre>debug1: Authentications that can <span class="k">continue</span>: publickey,password
+debug1: Next authentication method: publickey
+debug1: Offering RSA public key: ~/.ssh/id_rsa
+debug1: Server accepts key: pkalg ssh-rsa blen 279
+debug1: <span class="nb">read </span>PEM private key <span class="k">done</span>: <span class="nb">type </span>RSA
+debug1: Authentication succeeded <span class="o">(</span>publickey<span class="o">)</span>.
+Authenticated to TARGET_HOST <span class="o">([</span>TARGET_HOST<span class="o">]</span>:22<span class="o">)</span>.
+</pre></div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>投稿者 SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                タグ:
+                <a href="tags/ssh.html">ssh</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>2013/12/05</span>
         </div>
         <div class="section" id="automatic-upgrade">
@@ -157,32 +214,6 @@ And original issue has been reported in <a class="reference external" href="http
                 タグ:
                 <a href="tags/vmplayer.html">vmplayer</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>2013/11/24</span>
-        </div>
-        <div class="section" id="cifs-continued">
-<h1><a href="2013/11/24/cifs_continued.html">cifs continued</a></h1>
-<p>In addition to previous post as to CIFS.</p>
-<p>You may encounter “permission denied” error upon adding or modifying files.</p>
-<p>You can avoid this error by adding following options in /etc/fstab.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">uid</span><span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;
-</pre></div>
-</div>
-<p>Replace each value respectively by your own user and default group.</p>
-<div class="highlight-bash"><div class="highlight"><pre>//&lt;MS_HOST&gt;/&lt;ShareName&gt;  /windows/server1  cifs <span class="nv">credentials</span><span class="o">=</span>&lt;HOME&gt;/cifs/passwd,uid<span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;,iocharset<span class="o">=</span>utf8,sec<span class="o">=</span>ntlm  0  0
-</pre></div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>投稿者 SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                タグ:
-                <a href="tags/cifs.html">cifs</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; ブログアーカイブ &mdash; </a>
     </div><ul class="related clearfix">
@@ -191,6 +222,8 @@ And original issue has been reported in <a class="reference external" href="http
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>最近の投稿</h1>
     <ul><li>
+            <a href="2013/12/08/public_key_authentication.html">public key authentication</a>
+        </li><li>
             <a href="2013/12/05/automatic_upgrade.html">automatic upgrade</a>
         </li><li>
             <a href="2013/12/01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a>
@@ -208,8 +241,6 @@ And original issue has been reported in <a class="reference external" href="http
             <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
         </li><li>
             <a href="2013/10/27/start_mongo.html">start mongo</a>
-        </li><li>
-            <a href="2013/10/19/port_forwarding.html">port forwarding</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -219,7 +250,7 @@ And original issue has been reported in <a class="reference external" href="http
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (2), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

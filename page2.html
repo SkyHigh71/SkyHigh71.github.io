@@ -64,6 +64,32 @@
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
             <span>2013/11/24</span>
         </div>
+        <div class="section" id="cifs-continued">
+<h1><a href="2013/11/24/cifs_continued.html">cifs continued</a></h1>
+<p>In addition to previous post as to CIFS.</p>
+<p>You may encounter “permission denied” error upon adding or modifying files.</p>
+<p>You can avoid this error by adding following options in /etc/fstab.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">uid</span><span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;
+</pre></div>
+</div>
+<p>Replace each value respectively by your own user and default group.</p>
+<div class="highlight-bash"><div class="highlight"><pre>//&lt;MS_HOST&gt;/&lt;ShareName&gt;  /windows/server1  cifs <span class="nv">credentials</span><span class="o">=</span>&lt;HOME&gt;/cifs/passwd,uid<span class="o">=</span>&lt;user&gt;,gid<span class="o">=</span>&lt;group&gt;,iocharset<span class="o">=</span>utf8,sec<span class="o">=</span>ntlm  0  0
+</pre></div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>投稿者 SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                タグ:
+                <a href="tags/cifs.html">cifs</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
+            <span>2013/11/24</span>
+        </div>
         <div class="section" id="root-your-android">
 <h1><a href="2013/11/24/root_your_android.html">root your android</a></h1>
 <p>Sometimes you would like to obtain root privilege on android device.
@@ -172,32 +198,6 @@ You can check share properties by.</p>
                 タグ:
                 <a href="tags/cifs.html">cifs</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>2013/11/12</span>
-        </div>
-        <div class="section" id="view-next-line-of-matched-word">
-<h1><a href="2013/11/12/view_next_line_of_matched_one.html">view next line of matched word</a></h1>
-<p>You sometimes would like to show the very next line(s), which contain specific word(s).</p>
-<p>I have to confess that I did not know there is a useful option in grep to achieve this sake...
-I have been using, say, some script to extract lines, which I would like to check.</p>
-<p>You can achieve this with -A option.
-For example, if you would like to show the next line, which contains specific word, then following command give you the answer:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>grep &lt;WORD&gt; -A 1 &lt;FILE&gt;
-</pre></div>
-</div>
-<p>If you would like to see more line(s), increase argument after -A option.</p>
-<p>So easy...</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>投稿者 SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                タグ:
-                <a href="tags/grep.html">grep</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; ブログアーカイブ &mdash; </a>
     </div><ul class="related clearfix">
@@ -206,6 +206,8 @@ For example, if you would like to show the next line, which contains specific wo
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>最近の投稿</h1>
     <ul><li>
+            <a href="2013/12/08/public_key_authentication.html">public key authentication</a>
+        </li><li>
             <a href="2013/12/05/automatic_upgrade.html">automatic upgrade</a>
         </li><li>
             <a href="2013/12/01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a>
@@ -223,8 +225,6 @@ For example, if you would like to show the next line, which contains specific wo
             <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
         </li><li>
             <a href="2013/10/27/start_mongo.html">start mongo</a>
-        </li><li>
-            <a href="2013/10/19/port_forwarding.html">port forwarding</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -234,7 +234,7 @@ For example, if you would like to show the next line, which contains specific wo
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (1), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (2), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 
