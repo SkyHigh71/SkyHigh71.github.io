@@ -5,8 +5,63 @@
         <link>http://skyhigh71.github.io/</link>
         <description>very short memo</description>
         <language>en-us</language>
-        <pubDate>Sun, 08 Dec 2013 00:00:00 +0900</pubDate>
+        <pubDate>Sun, 22 Dec 2013 00:00:00 +0900</pubDate>
         
+        <item>
+            <link>http://skyhigh71.github.io/2013/12/22/ipython_setup_on_windows.html</link>
+            <guid>http://skyhigh71.github.io/2013/12/22/ipython_setup_on_windows.html</guid>
+            <title><![CDATA[ipython setup on windows]]></title>
+            <description><![CDATA[<div class="section" id="ipython-setup-on-windows">
+<h1>ipython setup on windows</h1>
+<p>Your life on windows platform will be much more convenient with ipython.
+Here is a short memo to setup ipython with enhanced console.</p>
+<div class="section" id="install-python">
+<h2>install python</h2>
+<p>Download current python installer.
+Python 3.3.1 seems to be one for now.</p>
+</div>
+<div class="section" id="path-environment-variable">
+<h2>PATH environment variable</h2>
+<p>Append “C:Python33” to the end of PATH environment variable, so that one call python.</p>
+</div>
+<div class="section" id="easy-install-pip">
+<h2>easy_install &amp; pip</h2>
+<p>Obtain install script of easy_install and launch it for installation.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ez_setup.py
+</pre></div>
+</div>
+<p>Append script folder, “C:Python33Scripts” to PATH environment variable as well.
+Now you can call easy_install.</p>
+<p>Then install pip by easy_install.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>easy_install pip
+</pre></div>
+</div>
+</div>
+<div class="section" id="pyreadline">
+<h2>pyreadline</h2>
+<p>ipython requires pyreadline package, so install pyreadline.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install pyreadline
+</pre></div>
+</div>
+</div>
+<div class="section" id="ipython">
+<h2>ipython</h2>
+<p>Now it’s ready for ipython installation.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install ipython
+</pre></div>
+</div>
+</div>
+<div class="section" id="console-enhancement">
+<h2>console enhancement</h2>
+<p>Install console enhancement.
+You can obtain current binary from <a class="reference external" href="http://sourceforge.net/projects/console">project page</a>.</p>
+<p>Put it under, say, C:Console2 folder.
+And add this path to PATH environment variable so that you can start by calling “console”.</p>
+</div>
+</div>]]></description>
+             <pubDate>Sun, 22 Dec 2013 00:00:00 +0900</pubDate>
+        </item>
+    
         <item>
             <link>http://skyhigh71.github.io/2013/12/08/public_key_authentication.html</link>
             <guid>http://skyhigh71.github.io/2013/12/08/public_key_authentication.html</guid>

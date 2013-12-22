@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="SkyHigh71's blog">
         <meta name="viewport" content="width=device-width">
-        <title>public key authentication &mdash; sakana</title>
+        <title>ipython setup on windows &mdash; sakana</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="next" title="automatic upgrade" href="../05/automatic_upgrade.html" /><link rel="prev" title="ipython setup on windows" href="../22/ipython_setup_on_windows.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="next" title="public key authentication" href="../08/public_key_authentication.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.2.1',
@@ -65,7 +65,7 @@
     <div class="section_head">
     <div class="timestamp_layout">
       <div class="timestamp postmeta">
-            <span>2013/12/08</span>
+            <span>2013/12/22</span>
         </div>
     </div>
     
@@ -77,48 +77,52 @@
     
     </div>
     
-    <div class="section" id="public-key-authentication">
-<h1>public key authentication</h1>
-<p>Sometimes you would like to login remote system without password authentication.
-You can make use of public key authentication for this sake.</p>
-<p>Here is a short memo to set up local &amp; remote system.</p>
-<p>Let us generate rsa key in case that you have none on localhost.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh-keygen
-Generating public/private rsa key pair.
-Enter file in which to save the key <span class="o">(</span>~/.ssh/id_rsa<span class="o">)</span>: &lt;ENTER&gt;
-Enter passphrase <span class="o">(</span>empty <span class="k">for </span>no passphrase<span class="o">)</span>: &lt;ENTER&gt;
-Enter same passphrase again: &lt;ENTER&gt;
-Your identification has been saved in ~/.ssh/id_rsa.
-Your public key has been saved in ~/.ssh/id_rsa.pub.
-The key fingerprint is:
-ab:6b:44:71:2f:48:22:09:85:d2:1b:18:a5:93:03:97 USER@HOST
+    <div class="section" id="ipython-setup-on-windows">
+<h1>ipython setup on windows</h1>
+<p>Your life on windows platform will be much more convenient with ipython.
+Here is a short memo to setup ipython with enhanced console.</p>
+<div class="section" id="install-python">
+<h2>install python</h2>
+<p>Download current python installer.
+Python 3.3.1 seems to be one for now.</p>
+</div>
+<div class="section" id="path-environment-variable">
+<h2>PATH environment variable</h2>
+<p>Append &#8220;C:Python33&#8221; to the end of PATH environment variable, so that one call python.</p>
+</div>
+<div class="section" id="easy-install-pip">
+<h2>easy_install &amp; pip</h2>
+<p>Obtain install script of easy_install and launch it for installation.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ez_setup.py
 </pre></div>
 </div>
-<p>As seen, private key (id_rsa) and public key (id_rsa.pub) is generated respectively.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>file .ssh/*
-.ssh/id_rsa:      PEM RSA private key
-.ssh/id_rsa.pub:  OpenSSH RSA public key
-.ssh/known_hosts: ASCII text
+<p>Append script folder, &#8220;C:Python33Scripts&#8221; to PATH environment variable as well.
+Now you can call easy_install.</p>
+<p>Then install pip by easy_install.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>easy_install pip
 </pre></div>
 </div>
-<p>Now create .ssh directory on target host.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>ssh USER@TARGET_HOST mkdir -p .ssh
+</div>
+<div class="section" id="pyreadline">
+<h2>pyreadline</h2>
+<p>ipython requires pyreadline package, so install pyreadline.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install pyreadline
 </pre></div>
 </div>
-<p>Copy public key of localhost onto remote target host and save it as authorized_keys so that remote host shall recognize localhost as authorized one.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>cat .ssh/id_rsa.pub |ssh USER@TARGET_HOST <span class="s1">&#39;cat &gt;&gt; .ssh/authorized_keys&#39;</span>
+</div>
+<div class="section" id="ipython">
+<h2>ipython</h2>
+<p>Now it&#8217;s ready for ipython installation.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install ipython
 </pre></div>
 </div>
-<p>Now you can connect target host without password.
-Here is an excerpt from debug message yielded by ssh command!</p>
-<div class="highlight-bash"><div class="highlight"><pre>debug1: Authentications that can <span class="k">continue</span>: publickey,password
-debug1: Next authentication method: publickey
-debug1: Offering RSA public key: ~/.ssh/id_rsa
-debug1: Server accepts key: pkalg ssh-rsa blen 279
-debug1: <span class="nb">read </span>PEM private key <span class="k">done</span>: <span class="nb">type </span>RSA
-debug1: Authentication succeeded <span class="o">(</span>publickey<span class="o">)</span>.
-Authenticated to TARGET_HOST <span class="o">([</span>TARGET_HOST<span class="o">]</span>:22<span class="o">)</span>.
-</pre></div>
+</div>
+<div class="section" id="console-enhancement">
+<h2>console enhancement</h2>
+<p>Install console enhancement.
+You can obtain current binary from <a class="reference external" href="http://sourceforge.net/projects/console/">project page</a>.</p>
+<p>Put it under, say, C:Console2 folder.
+And add this path to PATH environment variable so that you can start by calling &#8220;console&#8221;.</p>
 </div>
 </div>
 
@@ -130,19 +134,19 @@ Authenticated to TARGET_HOST <span class="o">([</span>TARGET_HOST<span class="o"
         <div class="tags">
             <span>
                 タグ:
-                <a href="../../../tags/ssh.html">ssh</a></span>
+                <a href="../../../tags/ipython.html">ipython</a>, <a href="../../../tags/windows.html">windows</a></span>
         </div>
         </div>
     
 <ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../22/ipython_setup_on_windows.html">ipython setup on windows</a></li>
-            <li class="right"><a href="../05/automatic_upgrade.html">automatic upgrade</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../08/public_key_authentication.html">public key authentication</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>最近の投稿</h1>
     <ul><li>
-            <a href="../22/ipython_setup_on_windows.html">ipython setup on windows</a>
+            <a href="#">ipython setup on windows</a>
         </li><li>
-            <a href="#">public key authentication</a>
+            <a href="../08/public_key_authentication.html">public key authentication</a>
         </li><li>
             <a href="../05/automatic_upgrade.html">automatic upgrade</a>
         </li><li>

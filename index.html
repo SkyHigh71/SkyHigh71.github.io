@@ -62,6 +62,67 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>2013/12/22</span>
+        </div>
+        <div class="section" id="ipython-setup-on-windows">
+<h1><a href="2013/12/22/ipython_setup_on_windows.html">ipython setup on windows</a></h1>
+<p>Your life on windows platform will be much more convenient with ipython.
+Here is a short memo to setup ipython with enhanced console.</p>
+<div class="section" id="install-python">
+<h2>install python</h2>
+<p>Download current python installer.
+Python 3.3.1 seems to be one for now.</p>
+</div>
+<div class="section" id="path-environment-variable">
+<h2>PATH environment variable</h2>
+<p>Append “C:Python33” to the end of PATH environment variable, so that one call python.</p>
+</div>
+<div class="section" id="easy-install-pip">
+<h2>easy_install &amp; pip</h2>
+<p>Obtain install script of easy_install and launch it for installation.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python ez_setup.py
+</pre></div>
+</div>
+<p>Append script folder, “C:Python33Scripts” to PATH environment variable as well.
+Now you can call easy_install.</p>
+<p>Then install pip by easy_install.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>easy_install pip
+</pre></div>
+</div>
+</div>
+<div class="section" id="pyreadline">
+<h2>pyreadline</h2>
+<p>ipython requires pyreadline package, so install pyreadline.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install pyreadline
+</pre></div>
+</div>
+</div>
+<div class="section" id="ipython">
+<h2>ipython</h2>
+<p>Now it’s ready for ipython installation.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install ipython
+</pre></div>
+</div>
+</div>
+<div class="section" id="console-enhancement">
+<h2>console enhancement</h2>
+<p>Install console enhancement.
+You can obtain current binary from <a class="reference external" href="http://sourceforge.net/projects/console">project page</a>.</p>
+<p>Put it under, say, C:Console2 folder.
+And add this path to PATH environment variable so that you can start by calling “console”.</p>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>投稿者 SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                タグ:
+                <a href="tags/ipython.html">ipython</a>, <a href="tags/windows.html">windows</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>2013/12/08</span>
         </div>
         <div class="section" id="public-key-authentication">
@@ -161,59 +222,6 @@ End-Date: 2013-12-05  08:00:54
                 タグ:
                 <a href="tags/ubuntu.html">ubuntu</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>2013/12/01</span>
-        </div>
-        <div class="section" id="vmplayer-on-ubuntu-13-10">
-<h1><a href="2013/12/01/vmplayer_on_ubuntu_13_10.html">vmplayer on ubuntu 13.10</a></h1>
-<p>I have recently upgrade ubuntu machine from 13.04 to 13.10.
-(As has been anticipated,) vmplayer would not start up stating that it requires to build.</p>
-<p>Ok, let us build as we have been doing for a while upon upgrade of Kernel.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>uname -r
-3.11.0-13-generic
-<span class="nv">$ </span>sudo ln -s /usr/src/linux-headers-<span class="sb">`</span>uname -r<span class="sb">`</span>/include/generated/uapi/linux/version.h /usr/src/linux-headers-<span class="sb">`</span>uname -r<span class="sb">`</span>/include/linux/version.h
-<span class="nv">$ </span>sudo vmware-modconfig --console --install-all
-</pre></div>
-</div>
-<p>Mmmmm, something strange.
-Build would not succeed and abort in the middle.</p>
-<p>Googling with this symptom and found <a class="reference external" href="http://askubuntu.com/questions/372016/vmware-player-compiling-server-modules-ubuntu-13-10">similar report</a>.</p>
-<p>Ok, I need to patch some code change before building vmplayer module.
-Here is what I followed.</p>
-<p>Download following files at first.</p>
-<ul class="simple">
-<li>procfs.patch</li>
-<li>vmblock.3.10.patch</li>
-<li>vmblock.3.11.patch</li>
-</ul>
-<p>And then,</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">cd</span> /usr/lib/vmware/modules/source
-<span class="nv">$ </span>sudo tar -xf vmnet.tar
-<span class="nv">$ </span>sudo tar -xf vmblock.tar
-<span class="nv">$ </span><span class="nb">cd </span>vmnet-only
-<span class="nv">$ </span>sudo patch -p1 &lt; ~/Downloads/procfs.patch
-<span class="nv">$ </span><span class="nb">cd</span> ../vmblock-only
-<span class="nv">$ </span>sudo patch -p1 &lt; ~/Downloads/vmblock.3.10.patch
-<span class="nv">$ </span>sudo patch -p1 &lt; ~/Downloads/vmblock.3.11.patch
-<span class="nv">$ </span><span class="nb">cd</span> ..
-<span class="nv">$ </span>sudo tar -cf vmblock.tar vmblock-only
-<span class="nv">$ </span>tar -cf vmnet.tar vmnet-only
-<span class="nv">$ </span>vmware-modconfig --console --install-all
-</pre></div>
-</div>
-<p>Ok, now my vmplayer comes up without any problem.
-And original issue has been reported in <a class="reference external" href="https://communities.vmware.com/message/2282385">vm communities</a>.</p>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>投稿者 SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                タグ:
-                <a href="tags/vmplayer.html">vmplayer</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; ブログアーカイブ &mdash; </a>
     </div><ul class="related clearfix">
@@ -222,6 +230,8 @@ And original issue has been reported in <a class="reference external" href="http
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>最近の投稿</h1>
     <ul><li>
+            <a href="2013/12/22/ipython_setup_on_windows.html">ipython setup on windows</a>
+        </li><li>
             <a href="2013/12/08/public_key_authentication.html">public key authentication</a>
         </li><li>
             <a href="2013/12/05/automatic_upgrade.html">automatic upgrade</a>
@@ -239,8 +249,6 @@ And original issue has been reported in <a class="reference external" href="http
             <a href="2013/11/11/x_window_trouble.html">a X window trouble</a>
         </li><li>
             <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
-        </li><li>
-            <a href="2013/10/27/start_mongo.html">start mongo</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -250,7 +258,7 @@ And original issue has been reported in <a class="reference external" href="http
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (2), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/ipython.html">ipython</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (2), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/windows.html">windows</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

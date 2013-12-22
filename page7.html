@@ -62,6 +62,87 @@
                 </li>
               </ul>
           </nav><div class="main-container"><div class="main wrapper clearfix"><article><div class="timestamp postmeta">
+            <span>2013/10/09</span>
+        </div>
+        <div class="section" id="search-for-package">
+<h1><a href="2013/10/09/search_for_package.html">search for package</a></h1>
+<p>You may encounter such a situation that some shared libraries are stripped when you debug core file.
+For example,</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> info shared
+From        To          Syms Read   Shared Object Library
+0xb778f430  0xb77a6054  Yes <span class="o">(</span>*<span class="o">)</span>     /lib/i386-linux-gnu/libncurses.so.5
+0xb75ef350  0xb7728f4e  Yes         /lib/i386-linux-gnu/libc.so.6
+0xb75d2ad0  0xb75d3a9c  Yes         /lib/i386-linux-gnu/libdl.so.2
+0xb75b87d0  0xb75c2c24  Yes <span class="o">(</span>*<span class="o">)</span>     /lib/i386-linux-gnu/libtinfo.so.5
+0xb77c9830  0xb77e1e7c  Yes         /lib/ld-linux.so.2
+<span class="o">(</span>*<span class="o">)</span>: Shared library is missing debugging information.
+</pre></div>
+</div>
+<p>You would like to search for package, which relevant shared object is included.
+With library, which contains symbol table and you can examine more closely core file.</p>
+<div class="section" id="install">
+<h2>install</h2>
+<p>You need to have apt-file command for searching packages.
+Let’s install apt-file, as it is not installed by default.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install apt-file
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-cache">
+<h2>update cache</h2>
+<p>So as to search for packages, you need to have local cache.
+Let’s download cache from repository and update cache.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-file update
+</pre></div>
+</div>
+</div>
+<div class="section" id="search-install">
+<h2>search &amp; install</h2>
+<p>Now you are ready for searching packages.
+Take sample quoted above and search for “libncurses.so.5”.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>apt-file search libncurses.so.5
+lib64ncurses5: /lib64/libncurses.so.5
+lib64ncurses5: /lib64/libncurses.so.5.9
+libncurses5: /lib/i386-linux-gnu/libncurses.so.5
+libncurses5: /lib/i386-linux-gnu/libncurses.so.5.9
+libncurses5-dbg: /usr/lib/debug/lib/i386-linux-gnu/libncurses.so.5.9
+libncurses5-dbg: /usr/lib/debug/lib64/libncurses.so.5.9
+libncurses5-dbg: /usr/lib/debug/libncurses.so.5
+libncurses5-dbg: /usr/lib/debug/libncurses.so.5.9
+libncurses5-dbg: /usr/lib/debug/usr/libx32/libncurses.so.5.9
+libx32ncurses5: /usr/libx32/libncurses.so.5
+libx32ncurses5: /usr/libx32/libncurses.so.5.9
+</pre></div>
+</div>
+<p>libncurses5-dbg must be our target package.
+Ok, let’s install it.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>sudo apt-get install libncurses5-dbg
+</pre></div>
+</div>
+<p>Now you can see stacks with function names and arguments.
+And checking status of shared libraries, you will confirm libraries not stripped.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="o">(</span>gdb<span class="o">)</span> info shared
+From        To          Syms Read   Shared Object Library
+0xb778f430  0xb77a6054  Yes         /lib/i386-linux-gnu/libncurses.so.5
+0xb75ef350  0xb7728f4e  Yes         /lib/i386-linux-gnu/libc.so.6
+0xb75d2ad0  0xb75d3a9c  Yes         /lib/i386-linux-gnu/libdl.so.2
+0xb75b87d0  0xb75c2c24  Yes         /lib/i386-linux-gnu/libtinfo.so.5
+0xb77c9830  0xb77e1e7c  Yes         /lib/ld-linux.so.2
+</pre></div>
+</div>
+</div>
+</div>
+        <div class="postmeta">
+        <div class="author">
+            <span>投稿者 SkyHigh71</span>
+        </div>
+        
+        <div class="tags">
+            <span>
+                タグ:
+                <a href="tags/ubuntu.html">ubuntu</a>, <a href="tags/apt.html">apt</a></span>
+        </div>
+        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
             <span>2013/10/08</span>
         </div>
         <div class="section" id="resize-disk-size-of-guest-on-kvm">
@@ -213,107 +294,6 @@ lines are consisted of,</p>
                 タグ:
                 <a href="tags/python.html">python</a>, <a href="tags/matplotlib.html">matplotlib</a></span>
         </div>
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>2013/10/05</span>
-        </div>
-        <div class="section" id="back-up-files">
-<h1><a href="2013/10/05/back_up_files.html">back up files</a></h1>
-<p>Here is another approach for creating back up files onto dropbox on regular basis by cron.
-A quite simple script though, here are some remark.</p>
-<div class="section" id="hostname">
-<h2>hostname</h2>
-<p>There are multiple approaches for obtaining hostname though, here I use socket.gethostname(), which seems to be a transliteration of gethostname() system call.</p>
-</div>
-<div class="section" id="compression">
-<h2>compression</h2>
-<p>Here I use bzip2 as compression algorithm, which seems to achieve more effective compression rate against files like plain text in comparison to other algorithm like gzip. But as a trade off to good compression rate, compression process seems to take longer time.</p>
-</div>
-<div class="section" id="temporary-file">
-<h2>temporary file</h2>
-<p>I create backup file first under temporary directory and then move it under directory under dropbox in case that there is/are any change(s). As creating backup file directly under dropbox directory is quite slow due to traffic.</p>
-</div>
-<div class="section" id="checksum">
-<h2>checksum</h2>
-<p>Finally I compare temporary backup file and existing file by value of MD5 checksum of each file. If they do not match, it indicates that some change(s) of file(s) may have arisen. If they are identical, then there was no change in files under target directory, so do nothing.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">hashlib</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">os.path</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">tarfile</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-
-    <span class="c"># base directory, which is one level upper than target directory</span>
-    <span class="n">base</span>      <span class="o">=</span> <span class="s">&quot;&lt;BASE_DIRECTORY_OF_YOUR_CHOICE&gt;&quot;</span>
-    <span class="c"># backup target directory under base directory</span>
-    <span class="n">target</span>    <span class="o">=</span> <span class="s">&quot;&lt;BACK_UP_TARGET_DIRECTORY&gt;&quot;</span>
-    <span class="c"># directories to exclude from backup file</span>
-    <span class="n">exclude</span>   <span class="o">=</span> <span class="p">[</span><span class="s">&quot;&lt;DIRECTORY_TO_EXCLUDE&gt;&quot;</span><span class="p">]</span>
-
-    <span class="c"># backup file name / HOSTNAME_DAY.tar.bz2</span>
-    <span class="n">backup</span>    <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;_&quot;</span> <span class="o">+</span>\
-                <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%A&quot;</span><span class="p">)</span> <span class="o">+</span>\
-                <span class="s">&quot;.tar.bz2&quot;</span>
-    <span class="c"># temporary directory &amp; temporary file</span>
-    <span class="n">temp_dir</span>  <span class="o">=</span> <span class="s">&quot;/tmp&quot;</span>
-    <span class="n">temp_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">backup</span><span class="p">)</span>
-    <span class="c"># destination directory</span>
-    <span class="n">dest_dir</span>  <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s">&quot;Dropbox/&lt;TARGET_DIRECTORY&gt;&quot;</span><span class="p">)</span>
-    <span class="n">dest_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dest_dir</span><span class="p">,</span> <span class="n">backup</span><span class="p">)</span>
-
-    <span class="c"># let's start backup</span>
-
-    <span class="c"># first create a backup file under temporary file</span>
-    <span class="n">tar</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="s">&quot;w:bz2&quot;</span><span class="p">)</span>
-
-    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">):</span>  
-                <span class="k">if</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">:</span>
-                    <span class="k">break</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">tar</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
-    
-    <span class="n">tar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="c"># backup file creation has finished</span>
-    <span class="c"># now determine if file replacement is required or not</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dest_file</span><span class="p">):</span>
-        <span class="c"># dictionary to store md5 checksum of each file</span>
-        <span class="n">md5</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">temp_file</span><span class="p">,</span> <span class="n">dest_file</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_to_check</span><span class="p">:</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">file_to_check</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                <span class="n">md5</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-        <span class="c"># compare checksum value of each file</span>
-        <span class="c"># copy temporary file under destination directory</span>
-        <span class="k">if</span> <span class="n">md5</span><span class="p">[</span><span class="n">temp_file</span><span class="p">]</span> <span class="o">!=</span> <span class="n">md5</span><span class="p">[</span><span class="n">dest_file</span><span class="p">]:</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c"># somehow backup of same name does not exist, do copy</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">temp_file</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>If you would like to take backup, say, every one hour, then add such a line as follows in cron table.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>crontab -l
-0 * * * * python &lt;PATH_TO_SCRIPT&gt;/backup.py
-</pre></div>
-</div>
-</div>
-</div>
-        <div class="postmeta">
-        <div class="author">
-            <span>投稿者 SkyHigh71</span>
-        </div>
-        
-        <div class="tags">
-            <span>
-                タグ:
-                <a href="tags/ubuntu.html">ubuntu</a>, <a href="tags/python.html">python</a></span>
-        </div>
         </div><div class="archive_link">
         <a href="archive.html"> &mdash; ブログアーカイブ &mdash; </a>
     </div><ul class="related clearfix">
@@ -322,6 +302,8 @@ A quite simple script though, here are some remark.</p>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>最近の投稿</h1>
     <ul><li>
+            <a href="2013/12/22/ipython_setup_on_windows.html">ipython setup on windows</a>
+        </li><li>
             <a href="2013/12/08/public_key_authentication.html">public key authentication</a>
         </li><li>
             <a href="2013/12/05/automatic_upgrade.html">automatic upgrade</a>
@@ -339,8 +321,6 @@ A quite simple script though, here are some remark.</p>
             <a href="2013/11/11/x_window_trouble.html">a X window trouble</a>
         </li><li>
             <a href="2013/10/28/insert_characters_in_multiple_lines.html">insert characters in multiple lines</a>
-        </li><li>
-            <a href="2013/10/27/start_mongo.html">start mongo</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox">
@@ -350,7 +330,7 @@ A quite simple script though, here are some remark.</p>
         <button type="submit"><span class="webfont">L</span></button>
     </form>
 </div></section><section><div class="widget">
-    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (2), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+    <h1>タグ</h1><a href="tags/android.html">android</a> (1), <a href="tags/apache.html">apache</a> (1), <a href="tags/apt.html">apt</a> (1), <a href="tags/bitbucket.html">bitbucket</a> (1), <a href="tags/blockdiag.html">blockdiag</a> (2), <a href="tags/centos.html">centos</a> (1), <a href="tags/cifs.html">cifs</a> (2), <a href="tags/command.html">command</a> (2), <a href="tags/dns.html">DNS</a> (1), <a href="tags/dnsmasq.html">dnsmasq</a> (1), <a href="tags/gdb.html">gdb</a> (1), <a href="tags/github.html">github</a> (2), <a href="tags/gparted.html">gparted</a> (1), <a href="tags/grep.html">grep</a> (1), <a href="tags/hg.html">hg</a> (1), <a href="tags/iptables.html">iptables</a> (1), <a href="tags/ipython.html">ipython</a> (1), <a href="tags/kvm.html">kvm</a> (1), <a href="tags/ldap.html">ldap</a> (1), <a href="tags/linux.html">linux</a> (1), <a href="tags/lxc.html">lxc</a> (7), <a href="tags/matplotlib.html">matplotlib</a> (1), <a href="tags/minecraft.html">minecraft</a> (1), <a href="tags/mongodb.html">mongodb</a> (1), <a href="tags/network.html">network</a> (1), <a href="tags/nginx.html">nginx</a> (5), <a href="tags/python.html">python</a> (3), <a href="tags/sl.html">sl</a> (1), <a href="tags/sphinx.html">sphinx</a> (5), <a href="tags/ssh.html">ssh</a> (2), <a href="tags/ssl.html">ssl</a> (1), <a href="tags/tinkerer.html">tinkerer</a> (5), <a href="tags/ubuntu.html">ubuntu</a> (21), <a href="tags/vim.html">vim</a> (2), <a href="tags/vmplayer.html">vmplayer</a> (2), <a href="tags/windows.html">windows</a> (1), <a href="tags/x.html">X</a> (1)</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
 
         <div class="footer-container"><footer class="wrapper">&copy; Copyright 2013-, SkyHigh71. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
 

@@ -1,0 +1,69 @@
+ipython setup on windows
+========================
+
+Your life on windows platform will be much more convenient with ipython.
+Here is a short memo to setup ipython with enhanced console.
+
+install python
+--------------
+
+Download current python installer.
+Python 3.3.1 seems to be one for now.
+
+PATH environment variable
+-------------------------
+
+Append "C:\Python33" to the end of PATH environment variable, so that one call python.
+
+easy_install & pip
+------------------
+
+Obtain install script of easy_install and launch it for installation.
+
+.. code-block:: bash
+ 
+    $ python ez_setup.py
+
+Append script folder, "C:\Python33\Scripts" to PATH environment variable as well.
+Now you can call easy_install.
+
+Then install pip by easy_install.
+
+.. code-block:: bash
+
+    $ easy_install pip
+
+pyreadline
+----------
+
+ipython requires pyreadline package, so install pyreadline.
+
+.. code-block:: bash
+
+    $ pip install pyreadline
+
+ipython
+-------
+
+Now it's ready for ipython installation.
+
+.. code-block:: bash
+
+    $ pip install ipython
+
+console enhancement
+-------------------
+
+Install console enhancement.
+You can obtain current binary from `project page`_.
+
+.. _project page: http://sourceforge.net/projects/console/
+
+Put it under, say, C:\Console2 folder.
+And add this path to PATH environment variable so that you can start by calling "console".
+
+
+.. author:: default
+.. categories:: none
+.. tags:: ipython, windows
+.. comments::
